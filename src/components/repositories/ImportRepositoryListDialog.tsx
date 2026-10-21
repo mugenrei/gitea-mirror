@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
-import { parseRepositoryList, type RepositoryListEntry } from "@/lib/repository-list";
+import { parseRepositoryList, trackedDestinationIssue, type RepositoryListEntry } from "@/lib/repository-list";
 import { withBase } from "@/lib/base-path";
-import type { RepositoryApiResponse } from "@/types/Repository";
 
 type Tracked = {
   id: string;
@@ -83,12 +82,6 @@ function findTracked(repos: Tracked[], entry: RepositoryListEntry): Tracked | un
   });
 }
 
-function destinationConflict(existing: Tracked, desired: string | null): boolean {
-  if (!desired) return false;
-  const current = existing.mirroredLocation?.split("/")[0] || existing.destinationOrg;
-  return !!current && current.toLowerCase() !== desired.toLowerCase();
-}
-
 async function waitForMirror(entry: RepositoryListEntry, id: string, stop: () => boolean): Promise<"mirrored" | "failed" | "paused"> {
   const deadline = Date.now() + 15 * 60_000;
   while (Date.now() < deadline) {
@@ -155,9 +148,10 @@ export default function ImportRepositoryListDialog({
         counts.current = entry.url;
         setProgress({ ...counts });
         let row = findTracked(tracked, entry);
-        if (row && destinationConflict(row, entry.destinationOrg)) {
+        const destinationIssue = row ? trackedDestinationIssue(entry.destinationOrg, row) : null;
+        if (destinationIssue) {
           counts.failed++;
-          addMessage("CONFLICT: " + entry.url + " already targets a different organization");
+          addMessage("CONFLICT: " + entry.url + " — " + destinationIssue);
           counts.done++;
           setProgress({ ...counts });
           continue;
