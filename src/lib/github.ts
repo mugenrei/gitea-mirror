@@ -44,6 +44,21 @@ const MyOctokit: any = (Octokit as any)?.plugin?.call
  */
 export const RATE_LIMIT_FAST_FAIL_THRESHOLD_SECONDS = 120;
 
+/**
+ * Manual "add repository" API calls are user-facing requests. Never make
+ * them wait through Octokit's potentially minute-long rate-limit sleep.
+ * The bulk importer can retry later after receiving the error.
+ */
+export function isSingleRepositoryMetadataRequest(method?: string, url?: string): boolean {
+  if (method?.toUpperCase() !== "GET" || !url) return false;
+  try {
+    const pathname = new URL(url, "https://api.github.com").pathname;
+    return /(?:^|\\/)repos\\/[^/]+\\/[^/]+\\/?$/.test(pathname);
+  } catch {
+    return false;
+  }
+}
+
 export type RateLimitRetryAction = "retry" | "fail-fast" | "give-up";
 
 /**
@@ -93,6 +108,12 @@ export function githubThrottleOptions(userId?: string) {
       const maxRetries = isSearch ? 5 : 3; // Search endpoints get more retries
       const action = decideRateLimitRetry({ retryAfter, retryCount, maxRetries });
       const resetAt = new Date(Date.now() + retryAfter * 1000);
+
+      if (isSingleRepositoryMetadataRequest(options.method, options.url)) {
+        markRateLimited(rateLimitGateKey(userId), resetAt);
+        console.warn(`[GitHub] Repository metadata lookup rate-limited; returning immediately (retry after ${retryAfter}s)`);
+        return false;
+      }
 
       if (action === "fail-fast") {
         // Record the reset for the whole source, not just this request: every
@@ -182,6 +203,10 @@ export function githubThrottleOptions(userId?: string) {
           },
         });
       }
+
+      // An interactive metadata import must not hold an HTTP request open
+      // through a secondary rate-limit sleep.
+      if (isSingleRepositoryMetadataRequest(options.method, options.url)) return false;
 
       // Retry up to 2 times for secondary rate limits
       if (retryCount < 2) {
