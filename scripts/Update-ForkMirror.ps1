@@ -61,7 +61,7 @@ try {
     $mountsJson = & docker inspect gitea-mirror --format '{{json .Mounts}}'
     Assert-Docker 'Inspect container mounts'
     $mounts = @($mountsJson | ConvertFrom-Json)
-    if (-not @($mounts | Where-Object { $_.Destination -eq '/app/data' }).Count) {
+    if (@($mounts | Where-Object { $_.Destination -eq '/app/data' }).Count -eq 0) {
         throw 'Existing container has no /app/data mount. Aborting to avoid losing the companion database.'
     }
     $oldImage = (& docker inspect gitea-mirror --format '{{.Image}}').Trim()
