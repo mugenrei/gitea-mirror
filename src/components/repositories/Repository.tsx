@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, RefreshCw, FlipHorizontal, RotateCcw, X, Filter, Ban, Check, LoaderCircle, Trash2, Download } from "lucide-react";
+import { Search, RefreshCw, FlipHorizontal, RotateCcw, X, Filter, Ban, Check, LoaderCircle, Trash2, Download, FileUp } from "lucide-react";
 import type { MirrorRepoRequest, MirrorRepoResponse } from "@/types/mirror";
 import {
   Drawer,
@@ -46,6 +46,7 @@ import { OwnerCombobox, OrganizationCombobox } from "./RepositoryComboboxes";
 import type { RetryRepoRequest, RetryRepoResponse } from "@/types/retry";
 import type { ResetMetadataRequest, ResetMetadataResponse } from "@/types/reset-metadata";
 import AddRepositoryDialog from "./AddRepositoryDialog";
+import ImportRepositoryListDialog from "./ImportRepositoryListDialog";
 
 import { useLiveRefresh } from "@/hooks/useLiveRefresh";
 import { useConfigStatus } from "@/hooks/useConfigStatus";
@@ -74,6 +75,7 @@ export default function Repository() {
     sort: "imported-desc",
   });
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [selectedRepoIds, setSelectedRepoIds] = useState<Set<string>>(new Set());
 
   // Read organization filter from URL when component mounts
@@ -1305,6 +1307,11 @@ export default function Repository() {
             </a>
           </Button>
 
+          <Button variant="outline" size="icon" title="Import repository list"
+            className="h-10 w-10 shrink-0" onClick={() => setIsImportDialogOpen(true)}>
+            <FileUp className="h-4 w-4" />
+          </Button>
+
           <Button
             variant="default"
             size="icon"
@@ -1371,6 +1378,12 @@ export default function Repository() {
               <Download className="h-4 w-4 xl:mr-2" />
               <span className="hidden xl:inline">Export CSV</span>
             </a>
+          </Button>
+
+          <Button variant="outline" className="h-10 shrink-0" title="Import JSON, CSV, or URL list"
+            onClick={() => setIsImportDialogOpen(true)}>
+            <FileUp className="h-4 w-4 xl:mr-2" />
+            <span className="hidden xl:inline">Import List</span>
           </Button>
 
           {/* Mirror All action */}
@@ -1631,6 +1644,12 @@ export default function Repository() {
           onDismissSync={handleDismissSyncAction}
         />
       )}
+
+      <ImportRepositoryListDialog
+        open={isImportDialogOpen}
+        onOpenChange={setIsImportDialogOpen}
+        onFinished={() => { void fetchRepositories(false); }}
+      />
 
       <AddRepositoryDialog
         onAddRepository={handleAddRepository}
