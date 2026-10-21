@@ -221,3 +221,27 @@ export function parseRepositoryList(raw: string): RepositoryListResult {
   }
   return { format, entries, issues };
 }
+
+/**
+ * Do not start an existing record at a guessed destination. A repository
+ * without an explicit stored destination can inherit any current mirror
+ * strategy, which may differ from what this manifest requests.
+ */
+export function trackedDestinationIssue(
+  desired: string | null,
+  existing: { destinationOrg?: string | null; mirroredLocation?: string | null }
+): string | null {
+  if (!desired) return null;
+  const configured = existing.destinationOrg?.trim() || null;
+  const actual = existing.mirroredLocation?.split("/")[0]?.trim() || null;
+  if (actual && actual.toLowerCase() !== desired.toLowerCase()) {
+    return "existing mirror belongs to " + actual + ", not " + desired;
+  }
+  if (configured && configured.toLowerCase() !== desired.toLowerCase()) {
+    return "existing repository is configured for " + configured + ", not " + desired;
+  }
+  if (!actual && !configured) {
+    return "existing repository has no explicit destination; review its current mirror strategy before continuing";
+  }
+  return null;
+}
