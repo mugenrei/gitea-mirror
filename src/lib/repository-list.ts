@@ -63,7 +63,7 @@ function parseUrl(raw: string): Pick<RepositoryListEntry, "url" | "host" | "path
     throw new Error("repository URL must be HTTPS without credentials, query, port or fragment");
   }
   const path = u.pathname.split("/").filter(Boolean).map((part) => decodeURIComponent(part));
-  if (path.length < 2 || path.some((part) => !part || part === "." || part === ".." || part.includes("/") || part.includes("\\"))) {
+  if (path.length < 2 || path.some((part) => !part || part === "." || part === ".." || part.includes("/") || part.includes("\\") || !/^[A-Za-z0-9._-]+$/.test(part))) {
     throw new Error("URL must identify a repository (owner and name)");
   }
   if (u.hostname.toLowerCase() === "github.com" && path.length !== 2) {
@@ -131,6 +131,10 @@ export function parseRepositoryList(raw: string): RepositoryListResult {
       throw new Error("JSON requires version: 1 and a repositories array");
     }
     defaults = root.defaults == null ? {} : (record(root.defaults) ?? (() => { throw new Error("defaults must be an object"); })());
+    const rootKeys = new Set(["version", "defaults", "repositories"]);
+    if (Object.keys(root).some((key) => !rootKeys.has(key))) throw new Error("Unknown JSON list field");
+    const defaultKeys = new Set(["destinationOrg", "mirror"]);
+    if (Object.keys(defaults).some((key) => !defaultKeys.has(key))) throw new Error("Unknown JSON defaults field");
     root.repositories.forEach((value, i) => objects.push({ value, row: i + 1 }));
   } else if (/^\s*url\s*,/i.test(text)) {
     format = "csv";
@@ -174,6 +178,10 @@ export function parseRepositoryList(raw: string): RepositoryListResult {
     try {
       const item = record(value);
       if (!item) throw new Error("entry must be an object");
+      const allowedKeys = new Set(["url", "destinationOrg", "mirror", "category", "notes"]);
+      if (Object.keys(item).some((key) => !allowedKeys.has(key))) {
+        throw new Error("unknown repository-list entry field");
+      }
       const url = optionalText(item.url, "url");
       const parsed = parseUrl(url);
       const destinationOrg = optionalText(item.destinationOrg, "destinationOrg") || defaultOrg || null;
