@@ -122,6 +122,14 @@ export default function ImportRepositoryListDialog({
   }, [content]);
   const result = parsed?.result ?? null;
   const validationErrors = result?.issues.filter((item) => item.level === "error") ?? [];
+  const destinationCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const entry of result?.entries ?? []) {
+      const org = entry.destinationOrg ?? "(companion default)";
+      counts.set(org, (counts.get(org) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [result]);
   const addMessage = (message: string) => {
     setMessages((prev) => [...prev.slice(-99), message]);
   };
@@ -272,6 +280,9 @@ export default function ImportRepositoryListDialog({
                 Format: <strong>{result.format}</strong> · {result.entries.length} distinct repositories ·
                 {validationErrors.length} errors · {result.issues.length - validationErrors.length} warnings
               </p>
+              <p className="text-xs text-muted-foreground">
+                Destination preview: {destinationCounts.slice(0, 8).map(([org, count]) => org + " (" + count + ")").join(" · ")}
+              </p>
               {result.issues.slice(0, 12).map((issue, i) => (
                 <p key={i} className={"text-xs " + (issue.level === "error" ? "text-destructive" : "text-muted-foreground")}>
                   Row {issue.row}: {issue.message}
@@ -283,6 +294,7 @@ export default function ImportRepositoryListDialog({
                     <span className="truncate" title={entry.url}>{entry.url}</span>
                     <span className="shrink-0 text-muted-foreground">
                       {entry.destinationOrg ?? "default"} · {entry.mirror ? "mirror" : "track only"}
+                      {entry.category ? " · " + entry.category : ""}
                     </span>
                   </div>
                 ))}
