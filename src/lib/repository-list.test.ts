@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { parseRepositoryList } from "./repository-list";
+import { parseRepositoryList, trackedDestinationIssue } from "./repository-list";
 
 describe("repository-list v1", () => {
   test("JSON defaults and per-repository overrides", () => {
@@ -87,4 +87,29 @@ describe("repository-list v1", () => {
     expect(() => parseRepositoryList('{"version":2,"repositories":[]}')).toThrow();
     expect(() => parseRepositoryList('url,destinationOrg\n"https://github.com/a/b,decomps')).toThrow();
   });
+  test("rejects unknown fields and malformed encoded URL path", () => {
+    for (const value of [
+      { version: 1, defalts: { destinationOrg: "decomps" }, repositories: [] },
+      { version: 1, defaults: { destinationOrgg: "decomps" }, repositories: [] },
+      { version: 1, repositories: [{ url: "https://github.com/a/b", destinationOrgg: "decomps" }] },
+      { version: 1, repositories: [{ url: "https://github.com/a/b%23hidden" }] },
+    ]) {
+      try {
+        const parsed = parseRepositoryList(JSON.stringify(value));
+        expect(parsed.issues.some((issue) => issue.level === "error")).toBe(true);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+      }
+    }
+  });
+
+  test("never assumes a missing destination for already-tracked repositories", () => {
+    expect(trackedDestinationIssue("decomps", {})).not.toBeNull();
+    expect(trackedDestinationIssue("decomps", { destinationOrg: "mirrors" })).not.toBeNull();
+    expect(trackedDestinationIssue("decomps", { mirroredLocation: "mirrors/repo" })).not.toBeNull();
+    expect(trackedDestinationIssue("decomps", { destinationOrg: "decomps" })).toBeNull();
+    expect(trackedDestinationIssue("decomps", { mirroredLocation: "decomps/repo" })).toBeNull();
+    expect(trackedDestinationIssue(null, {})).toBeNull();
+  });
+
 });
