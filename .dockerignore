@@ -35,6 +35,15 @@ www
 .DS_Store
 Thumbs.db
 
+# Runtime state (never package the companion's SQLite database or secrets)
+data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-wal
+*.db-shm
+
 # Test coverage
 coverage
 .nyc_output

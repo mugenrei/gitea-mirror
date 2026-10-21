@@ -30,6 +30,10 @@ let recoveryInitialized = false;
 // Once a recovery run has started, the latch is held until that run
 // settles, even if the request that started it stops waiting.
 let recoveryInFlight = false;
+// Recovery detection is relatively expensive and must not query SQLite for every
+// request during a bulk import or a busy dashboard session.
+let lastRuntimeRecoveryCheckAt = 0;
+const RUNTIME_RECOVERY_CHECK_INTERVAL_MS = 30_000;
 let cleanupServiceStarted = false;
 let schedulerServiceStarted = false;
 let repositoryCleanupServiceStarted = false;
@@ -39,6 +43,15 @@ let envConfigCheckCount = 0; // Track attempts to avoid excessive checking
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const basePath = getBasePath();
+  const requestPath = new URL(context.request.url).pathname;
+  const requestStartedAt = performance.now();
+
+  // Liveness must not depend on Better Auth, SQLite, job recovery, or upstream
+  // GitHub. This route is deliberately tiny and unauthenticated; it reports
+  // only whether the HTTP process can serve requests.
+  if (requestPath === `${basePath === "/" ? "" : basePath}/api/health/live`) {
+    return next();
+  }
 
   // Set-Cookie headers we mint during the header-auth bridge below.
   // Forwarded onto the outbound response after `next()` so the browser
@@ -141,7 +154,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // stays held until the recovery promise itself settles. Releasing
   // it on the request timeout let later requests start overlapping
   // attempts against the same jobs (issue #372).
-  if (!recoveryInFlight) {
+  if (!recoveryInFlight && (!recoveryInitialized || Date.now() - lastRuntimeRecoveryCheckAt >= RUNTIME_RECOVERY_CHECK_INTERVAL_MS)) {
+    lastRuntimeRecoveryCheckAt = Date.now();
     recoveryInFlight = true;
     let latchFollowsRecovery = false;
 
@@ -272,7 +286,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   // Continue with the request
-  const response = await next();
+  const handlerStartedAt = performance.now();
+  let response: Response;
+  try {
+    response = await next();
+  } finally {
+    const totalMs = performance.now() - requestStartedAt;
+    if (totalMs >= 2_000) {
+      const middlewareMs = handlerStartedAt - requestStartedAt;
+      const handlerMs = performance.now() - handlerStartedAt;
+      // Log the pathname only, never query parameters, cookies or API keys.
+      console.warn(`[HTTP Slow] ${context.request.method} ${requestPath} total=${Math.round(totalMs)}ms middleware=${Math.round(middlewareMs)}ms handler=${Math.round(handlerMs)}ms`);
+    }
+  }
 
   // Forward any Set-Cookie headers minted by the header-auth bridge
   // onto the outbound response. Done before the early returns below so
