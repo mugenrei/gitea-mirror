@@ -53,7 +53,9 @@ export function isSingleRepositoryMetadataRequest(method?: string, url?: string)
   if (method?.toUpperCase() !== "GET" || !url) return false;
   try {
     const pathname = new URL(url, "https://api.github.com").pathname;
-    return /(?:^|\\/)repos\\/[^/]+\\/[^/]+\\/?$/.test(pathname);
+    const segments = pathname.split("/").filter(Boolean);
+    const reposIndex = segments.indexOf("repos");
+    return reposIndex >= 0 && segments.length === reposIndex + 3;
   } catch {
     return false;
   }
