@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { jsonResponse, createSecureErrorResponse } from "@/lib/utils";
 import { db } from "@/lib/db";
 import { getRecoveryStatus, hasJobsNeedingRecovery } from "@/lib/recovery";
-import { httpGet } from "@/lib/http-client";
+import { httpRequest } from "@/lib/http-client";
 
 // Cache for the latest version to avoid frequent GitHub API calls
 interface VersionCache {
@@ -12,6 +12,9 @@ interface VersionCache {
 
 let versionCache: VersionCache | null = null;
 const CACHE_TTL = 3600000; // 1 hour in milliseconds
+const VERSION_RETRY_INTERVAL_MS = 60_000;
+let lastVersionAttemptAt = 0;
+let versionRefreshInFlight: Promise<void> | null = null;
 
 export const GET: APIRoute = async () => {
   try {
@@ -20,7 +23,9 @@ export const GET: APIRoute = async () => {
 
     // Get current and latest versions
     const currentVersion = process.env.npm_package_version || "unknown";
-    const latestVersion = await checkLatestVersion();
+    // Never put GitHub availability on the critical path of a health check.
+    // Return a cached value and refresh asynchronously with a short timeout.
+    const latestVersion = getLatestVersionWithoutWaiting();
 
     // Get recovery system status
     const recoveryStatus = await getRecoverySystemStatus();
@@ -133,6 +138,22 @@ function compareVersions(v1: string, v2: string): number {
 }
 
 /**
+ * Health checks must remain responsive when GitHub is slow or unreachable.
+ * Only one refresh runs at a time; failures are retried no sooner than 60s.
+ */
+function getLatestVersionWithoutWaiting(): string {
+  const now = Date.now();
+  const expired = !versionCache || now - versionCache.timestamp >= CACHE_TTL;
+  if (expired && !versionRefreshInFlight && now - lastVersionAttemptAt >= VERSION_RETRY_INTERVAL_MS) {
+    lastVersionAttemptAt = now;
+    versionRefreshInFlight = checkLatestVersion()
+      .then(() => undefined)
+      .finally(() => { versionRefreshInFlight = null; });
+  }
+  return versionCache?.latestVersion ?? "unknown";
+}
+
+/**
  * Check for the latest version from GitHub releases
  */
 async function checkLatestVersion(): Promise<string> {
@@ -143,9 +164,13 @@ async function checkLatestVersion(): Promise<string> {
 
   try {
     // Fetch the latest release from GitHub
-    const response = await httpGet(
+    const response = await httpRequest(
       'https://api.github.com/repos/RayLabsHQ/gitea-mirror/releases/latest',
-      { 'Accept': 'application/vnd.github.v3+json' }
+      {
+        method: "GET",
+        headers: { Accept: "application/vnd.github.v3+json" },
+        signal: AbortSignal.timeout(5_000),
+      }
     );
 
     // Extract version from tag_name (remove 'v' prefix if present)
