@@ -258,7 +258,13 @@ export class GitHubSourceProvider implements SourceProvider {
 
   async getRepository(owner: string, name: string): Promise<GitRepo | null> {
     try {
-      const { data } = await this.octokit.rest.repos.get({ owner, repo: name });
+      // Imports serve an interactive HTTP request. Cancel slow upstream I/O
+      // rather than keeping the dashboard/importer waiting indefinitely.
+      const { data } = await this.octokit.rest.repos.get({
+        owner,
+        repo: name,
+        request: { signal: AbortSignal.timeout(12_000) },
+      });
       return mapGithubRestRepository(data as GithubRestRepository, this.connection);
     } catch (error) {
       if (statusOf(error) === 404) return null;
