@@ -66,11 +66,6 @@
       "category": "n64-decompilation"
     },
     {
-      "url": "https://github.com/fabioap-cpu/Tekken3Recomp",
-      "destinationOrg": "decomps",
-      "category": "ps1-static-recomp"
-    },
-    {
       "url": "https://github.com/josiahg2502-glitch/NewSuperPaperBros",
       "destinationOrg": "decomps",
       "category": "wii-static-recomp"
@@ -1639,11 +1634,6 @@
       "url": "https://github.com/ThePlayerRolo/Super-Mario-All-Star-Decomp",
       "destinationOrg": "decomps",
       "category": "wii-decompilation"
-    },
-    {
-      "url": "https://github.com/carlosrmz009/littleplanet",
-      "destinationOrg": "decomps",
-      "category": "segacd-static-recomp"
     },
     {
       "url": "https://github.com/OpenRAC/rac3-uya-decomp",
