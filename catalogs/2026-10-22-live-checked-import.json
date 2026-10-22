@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/GetLostIn/CTR-NitroFueled-PC",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/FelipePrado0/SpartanPort",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/bc160201983/medievil_2019_pc_port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/saulob/dragons-crown-pro-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/deadinside28/bloodborne_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/OverkillLabs3/SoS-PS5",
+      "destinationOrg": "decomps",
+      "category": "ps5-native-port"
+    },
+    {
+      "url": "https://github.com/andrebrumdev/gow2-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/simpsonsarcade-ps3",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/danisandoval/fukami",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/KIexster/god-of-war-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/z3xox/Tenkaichi3Decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/SlickAmogus/silent-hill-decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/CTR-tools/ctr-native",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/elmasas/lcs-recomp",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    }
+  ]
+}
