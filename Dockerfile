@@ -94,7 +94,11 @@ ENV DATABASE_URL=file:data/gitea-mirror.db
 ENV BASE_URL=/
 
 # Create directories and setup permissions
+# Normalize a Windows checkout's CRLF entrypoint and verify its shebang.
 RUN mkdir -p /app/certs && \
+  sed -i 's/\r$//' ./docker-entrypoint.sh && \
+  sh -n ./docker-entrypoint.sh && \
+  test "$(head -n 1 ./docker-entrypoint.sh)" = '#!/bin/sh' && \
   chmod +x ./docker-entrypoint.sh && \
   mkdir -p /app/data && \
   groupadd --system --gid 1001 nodejs && \

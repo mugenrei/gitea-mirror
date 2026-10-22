@@ -78,6 +78,10 @@ try {
 
     Step "Pulling the new image BEFORE stopping the existing installation"
     & docker pull $Image
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Cannot download $Image. Check Actions -> Docker Build, Push & Security Scan -> Run workflow (main)."
+        Write-Warning "Once the build publishes the image, ensure its GHCR package is public or authenticate with docker login ghcr.io."
+    }
     Assert-Docker 'Pull fork image'
 
     if (-not $Yes) {
