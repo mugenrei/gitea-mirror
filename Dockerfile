@@ -95,6 +95,11 @@ ENV BASE_URL=/
 
 # Create directories and setup permissions
 RUN mkdir -p /app/certs && \
+  # Windows checkouts may pass a CRLF entrypoint into Docker's COPY layer.
+  # Fix CRLF defensively and verify the shebang before publishing an image.
+  sed -i 's/\r$//' ./docker-entrypoint.sh && \
+  sh -n ./docker-entrypoint.sh && \
+  test "$(head -n 1 ./docker-entrypoint.sh)" = '#!/bin/sh' && \
   chmod +x ./docker-entrypoint.sh && \
   mkdir -p /app/data && \
   groupadd --system --gid 1001 nodejs && \
