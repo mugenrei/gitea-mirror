@@ -299,6 +299,76 @@
       "url": "https://github.com/OpenCommunityEdition/OpenCE",
       "destinationOrg": "decomps",
       "category": "xbox-decompilation"
+    },
+    {
+      "url": "https://github.com/yowari/sonic-j2me-decompilation",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/cvghivebrain/s1disasm",
+      "destinationOrg": "mirrors",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SonicTheHedgehogRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SonicTheHedgehog2Recomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/spindisasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/Sonic3AndKnucklesRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/ktes2",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/YesterMester/TheSimpsonsGameRecomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-static-recomp"
+    },
+    {
+      "url": "https://github.com/alphanu1/daytona-arcade-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/Masterllgod/naruto-storm-3-full-burst-port-nativo",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/tmcleroy/cps2recomp",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/GuillianSeed/MetalGear",
+      "destinationOrg": "decomps",
+      "category": "msx-decompilation"
+    },
+    {
+      "url": "https://github.com/itsmattkc/RunnersDecomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/mahmoud-mess/tekken6-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
     }
   ]
 }
