@@ -1,0 +1,564 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/YesterMester/TheSimpsonsGameRecomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-static-recomp"
+    },
+    {
+      "url": "https://github.com/alphanu1/daytona-arcade-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/Masterllgod/naruto-storm-3-full-burst-port-nativo",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/tmcleroy/cps2recomp",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/GuillianSeed/MetalGear",
+      "destinationOrg": "decomps",
+      "category": "msx-decompilation"
+    },
+    {
+      "url": "https://github.com/itsmattkc/RunnersDecomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/mahmoud-mess/tekken6-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/Iso-Kilo/Sonic-1-J2ME-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/naari3/mkgp2-decomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/Erick194/DoomRPG-RE",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/cglmrfreeman/stfdisasm",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/dev-camo/project-lucid",
+      "destinationOrg": "decomps",
+      "category": "mac-decompilation"
+    },
+    {
+      "url": "https://github.com/biggestsonicfan/stfdecomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/fr3dsp/Sonic4Ep1-Decomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/RSDKModding/RSDKv4-Script-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/TheInfiniteLegend/f-0-ax",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/ArchiverXP/sncdecomp",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/biggestsonicfan/stfdisasm",
+      "destinationOrg": "mirrors",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/Erick194/DoomIIRPG-RE",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/viciious/d32xr",
+      "destinationOrg": "decomps",
+      "category": "atarijaguar-native-port"
+    },
+    {
+      "url": "https://github.com/yuriolive/PortPS5",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool"
+    },
+    {
+      "url": "https://github.com/N64Recomp/N64Recomp",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool"
+    },
+    {
+      "url": "https://github.com/hedge-dev/XenonRecomp",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool"
+    },
+    {
+      "url": "https://github.com/GarrettGunnell/Steamless",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool"
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool"
+    },
+    {
+      "url": "https://github.com/neuromancer/wc1-re",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/xandoxan65/segarally95-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/mcolom/arkanoid_msx_disasm",
+      "destinationOrg": "decomps",
+      "category": "msx-decompilation"
+    },
+    {
+      "url": "https://github.com/watsonmw/fe2-intro",
+      "destinationOrg": "decomps",
+      "category": "amiga-decompilation"
+    },
+    {
+      "url": "https://github.com/connieprice/Terminator-Salvation-Lua",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/3dge7161/Jiggle-or-Physics",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/crimsonmagick/lotr-rotk",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/HopeAero/MLBPowerPros2008Recomp",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/elyosh/OpenXW",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/banteg/snail",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/nmlgc/ReC98",
+      "destinationOrg": "decomps",
+      "category": "pc98-decompilation"
+    },
+    {
+      "url": "https://github.com/mwenge/uridium",
+      "destinationOrg": "decomps",
+      "category": "c64-decompilation"
+    },
+    {
+      "url": "https://github.com/N0zoM1z0/th04",
+      "destinationOrg": "decomps",
+      "category": "pc98-decompilation"
+    },
+    {
+      "url": "https://github.com/blondie7575/ChoplifterReverse",
+      "destinationOrg": "decomps",
+      "category": "apple2-decompilation"
+    },
+    {
+      "url": "https://github.com/Lindarychwalski/Defenders-Dragons",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/jevarg/re-virtua-cop-2",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/Bingies24/cuttherope-dx",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/fr3dsp/TheImpossibleGame-Decomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/caramelcupcakes842/On-The-Run-2-Decomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/caramelcupcakes842/On-The-Run-Vegas-Decomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/Erick194/WolfensteinRPG-RE",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/seilweiss/incredibles",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/elite-source-code-6502-second-processor",
+      "destinationOrg": "decomps",
+      "category": "bbcmicro-decompilation"
+    },
+    {
+      "url": "https://github.com/spacestate1/namco22-decompile",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/DiaLight/Flame",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/elite-source-code-commodore-64",
+      "destinationOrg": "decomps",
+      "category": "c64-decompilation"
+    },
+    {
+      "url": "https://github.com/Paulie68000/ZXSpectrumCobra",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/elite-source-code-bbc-master",
+      "destinationOrg": "decomps",
+      "category": "bbcmicro-decompilation"
+    },
+    {
+      "url": "https://github.com/spongeis5/ToS-Decomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/iestyn129/DOMADays",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/skoolkid/manicminer",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-decompilation"
+    },
+    {
+      "url": "https://github.com/Joshua-1248/Alien-V.S.-Predator-Atari-Jaguar-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "atarijaguar-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/elite-source-code-bbc-micro-disc",
+      "destinationOrg": "decomps",
+      "category": "bbcmicro-decompilation"
+    },
+    {
+      "url": "https://github.com/Paulie68000/ZXSpectrumHyperActive",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-decompilation"
+    },
+    {
+      "url": "https://github.com/InfiniteC0re/OpenBarnyard",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/Costume-Quest-Modding/CostumeQuest-Decomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/elite-a-source-code-bbc-micro",
+      "destinationOrg": "decomps",
+      "category": "bbcmicro-decompilation"
+    },
+    {
+      "url": "https://github.com/unspDecomp/abcParkDecomp",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/g-guthrie/topspin4-decomp",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/distilledorion-sketch/Initial-D-Arcade-Stage-3-Native-SH-4-Recompilation-WIP-",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/crowded-street/3s-decomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/tmcleroy/sfa2-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/elyosh/OpenTIE",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/fuerchter/rayman-ps1-decomp",
+      "destinationOrg": "decomps",
+      "category": "atarijaguar-decompilation"
+    },
+    {
+      "url": "https://github.com/synamaxmusic/sinistar",
+      "destinationOrg": "decomps",
+      "category": "arcade-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/c64-elite-flicker-free",
+      "destinationOrg": "decomps",
+      "category": "bbcmicro-decompilation"
+    },
+    {
+      "url": "https://github.com/mr-finster/vf3-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/Afterflash/HappyWheels",
+      "destinationOrg": "decomps",
+      "category": "web-decompilation"
+    },
+    {
+      "url": "https://github.com/AnthonyBongers/GhostsAndGraves",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/mitsevox/tw2004",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/krazyjakee/ninja-master",
+      "destinationOrg": "decomps",
+      "category": "other-decompilation"
+    },
+    {
+      "url": "https://github.com/spita90/konami-viper-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/tmcleroy/vampire-savior-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/mr-finster/vf1-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/Vawlpe/BakuganDotC-decomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/mcolom/boogaboo_disasm_msx",
+      "destinationOrg": "decomps",
+      "category": "msx-decompilation"
+    },
+    {
+      "url": "https://github.com/kernaltrap8/WoR-Plus",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/Paulie68000/ZXSpectrumChuckieEgg",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-decompilation"
+    },
+    {
+      "url": "https://github.com/Vesuri/stuntcarracer",
+      "destinationOrg": "decomps",
+      "category": "amiga-decompilation"
+    },
+    {
+      "url": "https://github.com/XekriRedmane/lode_runner_reveng",
+      "destinationOrg": "decomps",
+      "category": "apple2-decompilation"
+    },
+    {
+      "url": "https://github.com/sean-gugler/u4remasteredA2",
+      "destinationOrg": "decomps",
+      "category": "apple2-decompilation"
+    },
+    {
+      "url": "https://github.com/cScarletter/MK-3D-Era-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation"
+    },
+    {
+      "url": "https://github.com/Piddewitt/Loderunner",
+      "destinationOrg": "decomps",
+      "category": "apple2-decompilation"
+    },
+    {
+      "url": "https://github.com/jonathanopalise/lotus-ste",
+      "destinationOrg": "decomps",
+      "category": "atarist-decompilation"
+    },
+    {
+      "url": "https://github.com/ergonomy-joe/u4-decompiled",
+      "destinationOrg": "decomps",
+      "category": "apple2-decompilation"
+    },
+    {
+      "url": "https://github.com/kmatveev/zx-sof-reveng",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-decompilation"
+    },
+    {
+      "url": "https://github.com/sidneycadot/Atari8bit_StarRaiders",
+      "destinationOrg": "decomps",
+      "category": "atari8-decompilation"
+    },
+    {
+      "url": "https://github.com/simon-frankau/speedball2-re-amiga",
+      "destinationOrg": "decomps",
+      "category": "amiga-decompilation"
+    },
+    {
+      "url": "https://github.com/C64-Mark/Attack-of-the-Mutant-Camels",
+      "destinationOrg": "decomps",
+      "category": "c64-decompilation"
+    },
+    {
+      "url": "https://github.com/simon-frankau/head-over-heels",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-decompilation"
+    },
+    {
+      "url": "https://github.com/jonathanopalise/stunt-car-racer-ste",
+      "destinationOrg": "decomps",
+      "category": "amiga-decompilation"
+    },
+    {
+      "url": "https://github.com/pcercuei/glfrontier",
+      "destinationOrg": "decomps",
+      "category": "amiga-decompilation"
+    },
+    {
+      "url": "https://github.com/gondur/ReDMCSB_Release2",
+      "destinationOrg": "decomps",
+      "category": "atarist-decompilation"
+    },
+    {
+      "url": "https://github.com/Falcury/rayverse",
+      "destinationOrg": "decomps",
+      "category": "atarijaguar-native-port"
+    },
+    {
+      "url": "https://github.com/Vheissu/hit-and-run-web",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-native-port"
+    },
+    {
+      "url": "https://github.com/mrcook/manic-miner",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-native-port"
+    },
+    {
+      "url": "https://github.com/river-raid/river-raid-disasm",
+      "destinationOrg": "decomps",
+      "category": "atari2600-disassembly"
+    },
+    {
+      "url": "https://github.com/MarkyTurtle/Batman---Amiga",
+      "destinationOrg": "decomps",
+      "category": "amiga-disassembly"
+    },
+    {
+      "url": "https://github.com/mrcook/jetpac-disassembly",
+      "destinationOrg": "decomps",
+      "category": "zxspectrum-disassembly"
+    },
+    {
+      "url": "https://github.com/mikedailly/MercenaryDisassembly",
+      "destinationOrg": "decomps",
+      "category": "atari8-disassembly"
+    },
+    {
+      "url": "https://github.com/mwenge/iridisalpha",
+      "destinationOrg": "decomps",
+      "category": "c64-disassembly"
+    },
+    {
+      "url": "https://github.com/MarkRdgOx/crossroads-2-disassembly",
+      "destinationOrg": "decomps",
+      "category": "c64-disassembly"
+    },
+    {
+      "url": "https://github.com/Esshahn/Ghost-Town",
+      "destinationOrg": "decomps",
+      "category": "c64-disassembly"
+    },
+    {
+      "url": "https://github.com/magical/CHIPS.EXE",
+      "destinationOrg": "decomps",
+      "category": "atarilynx-disassembly"
+    },
+    {
+      "url": "https://github.com/brandonrobertz/haunted_house_disassembly",
+      "destinationOrg": "decomps",
+      "category": "atari2600-disassembly"
+    },
+    {
+      "url": "https://github.com/neogeodev/mslug-disasm",
+      "destinationOrg": "decomps",
+      "category": "neogeo-disassembly"
+    }
+  ]
+}
