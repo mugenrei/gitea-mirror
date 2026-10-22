@@ -1,0 +1,899 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/GetLostIn/CTR-NitroFueled-PC",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/FelipePrado0/SpartanPort",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/elmasas/lcs-recomp",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/fabioap-cpu/Tekken3Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/bc160201983/medievil_2019_pc_port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/saulob/dragons-crown-pro-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/danisandoval/fukami",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/deadinside28/bloodborne_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/Supermedo/uncharted_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/SlickAmogus/silent-hill-decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/CTR-tools/ctr-native",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Matteo842/CrashBandicoot-Launcher",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/BlackLabelHQ/SymphonyRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/MegaManX4Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/HayatoG/tlg_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/snuri00/psp-web-recomp",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/KIexster/god-of-war-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/andrebrumdev/gow2-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/hachi23/unicorn_overlord_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/HayatoG/gr2_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/obaidr1/hercules-recompiled",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/simpsonsarcade-ps3",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/BlackLabelHQ/MediEvilRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/khasinski/rage-racer-pc",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/z3xox/Tenkaichi3Decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/medievil-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/soyjxck/dod3-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/Unchiga/Yu-Gi-Oh-Forbidden-Memories-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/snuri00/ps2-web-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/OverkillLabs3/driveclub-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/z3xox/BT3-Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/flow",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/mlgprorektm8/RyGT",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/sp00nznet/gh3",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/BlackLineInteractive/Driveclub-Port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/BlackLabelHQ/RecompOne",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/ran-j/PS2Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/kem0x/RepsiMan",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/weshayoub92/shadPS4-AYOUB1080p",
+      "destinationOrg": "decomps",
+      "category": "ps4-emulator"
+    },
+    {
+      "url": "https://github.com/C0mposer/spyro1-reverse-engineering",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Awakenchan/LanternEngine",
+      "destinationOrg": "decomps",
+      "category": "ps4-static-recomp"
+    },
+    {
+      "url": "https://github.com/cakehonolulu/Bullseye",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/Drahsid/ffvii",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Simeony2007/VibeRecomp-for-GoW-CoO",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/GirianSeed/zoe3",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/dreamingmoths/mirror-of-alessa",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/ergonomy-joe/ff7-coaster",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/OpenRAC/OpenRAC",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/bluisblu/cttr",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/codepdbh/PSPRecomp-VCS-Android",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/resident-evil-3-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/FishB0nes98/Tekken3Recompiled",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/ergonomy-joe/ff7-worldmap",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/aikatore/recvx-enhanced-port",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/menaman123/Ps2Recomp",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/AsobiCodes/rac-rs",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenRAC/rac2-gc-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/caprado/REOF2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/SlickAmogus/silent-hill-pc-nightly",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/OpenRAC/rac3-uya-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/anzaldoivan/mmx6",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/anzaldoivan/mmx5",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/dreamingmoths/memory-of-alessa",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/coccofresco/mgsone-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/cutarev/sh2-nx",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/canersaka/Yakuza-Dead-Souls-EX",
+      "destinationOrg": "decomps",
+      "category": "ps3-decompilation"
+    },
+    {
+      "url": "https://github.com/BrazilianHobbyist/Project-RE-Visited-RE3",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/canersaka/Yakuza-Dead-Souls-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/KidWizardOfTheWeb/SR2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/calmsacibis995/crash-ps2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/lesca-191204/killzone-shadowfall-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/TOMB5/TOMB5",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/daanhenke/persona-psx",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/ecruells/resident-evil-pc-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/denzi-gh/crashwoc-decomp-ps2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/AshfordFamily/recvx-decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/BodbDearg/PsyDoom",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MegaManX5Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/metal-gear-solid-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/NJH-1001/FinFanTacRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/final-fantasy-viii-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/sozud/mmx4",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Caesar0007/NFSHS-PSX-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Smartkin/twinsanity-reversed",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/arnaldolima1/gow-ascension-pc",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/Yharnam-Hunters/Paleblood",
+      "destinationOrg": "decomps",
+      "category": "ps4-decompilation"
+    },
+    {
+      "url": "https://github.com/TheIndra55/cdcEngine",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/Rinnegatamante/Crash-Team-Racing-High-Octane",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Erick194/PSXDOOM-RE",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/JonathanDC64/DemonsSoulsRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/MegaManX6Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/bloodborne-native/bloodborne-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps4-static-recomp"
+    },
+    {
+      "url": "https://github.com/TechnicallyComputers/MastersOfTerasKasiRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/menaman123/NativeEE",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/reo",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/VELD-Dev/Pyrocitor",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/ficed/Braver",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/TechnicallyComputers/Star-wars---Episode-I---Jedi-Power-Battles-Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/mateuszklysz/Lombyte",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/Zumbo06/Crash2Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/adamrt/fft_decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/diablo-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Spicywonda/castlevania-chronicles-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/OpenRAC/rac1-decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/lombyte-project/Lombyte",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/OverkillLabs3/vice-city-stories-recomp",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/final-fantasy-ix-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/GioPixelGH/Crash-Twinsanity-Windows",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/crash-bandicoot-3-warped-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Akari1982/q-gears_reverse",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/KidWizardOfTheWeb/SRZGDecomp",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/OpenBiohazard2/OpenBiohazard2",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/OpenRAC/rac-deadlocked-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/luizgustavs/Pink-shadPS4",
+      "destinationOrg": "decomps",
+      "category": "ps4-emulator"
+    },
+    {
+      "url": "https://github.com/ChrisNonyminus/mml1",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/mateusfavarin/crashbash",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/endercodezz/P3P3DS",
+      "destinationOrg": "decomps",
+      "category": "psp-native-port"
+    },
+    {
+      "url": "https://github.com/Mrsuss60/bloodborne_pc_windows_port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-port"
+    },
+    {
+      "url": "https://github.com/NyperYuhgard/CTR-PC-Port",
+      "destinationOrg": "decomps",
+      "category": "ps1-native-port"
+    },
+    {
+      "url": "https://github.com/YYOzcan/Tobiichi-Port",
+      "destinationOrg": "decomps",
+      "category": "ps2-native-port"
+    },
+    {
+      "url": "https://github.com/Waffle565/God-Of-War-Native-Port",
+      "destinationOrg": "decomps",
+      "category": "ps2-native-port"
+    },
+    {
+      "url": "https://github.com/Sezzary/SilentEngine",
+      "destinationOrg": "decomps",
+      "category": "ps1-native-port"
+    },
+    {
+      "url": "https://github.com/Drommedhar/mgs-reintegral",
+      "destinationOrg": "decomps",
+      "category": "ps1-native-port"
+    },
+    {
+      "url": "https://github.com/OverkillLabs3/SoS-PS5",
+      "destinationOrg": "decomps",
+      "category": "ps5-native-port"
+    },
+    {
+      "url": "https://github.com/danielgomesvieira2000/burnout3-pc",
+      "destinationOrg": "decomps",
+      "category": "ps2-native-port"
+    },
+    {
+      "url": "https://github.com/daino-selvatico/rac1-native-game",
+      "destinationOrg": "decomps",
+      "category": "ps2-native-port"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/medievil-ii-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/faligame/Parasite-Eve-HD-Remaster",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/z3xox/BT3-Decompiled",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/InconspicuousCactus/SotCStaticRecompilation",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/alien-resurrection-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/NotExactlySiev/aloha",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Colt-Zero/Thousand-Worlds",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/yanm1103/War_of_the_Monsters_recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/drakolordx7/KillzoneRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/parappadev/parappa2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/omegakatana92/Armored-Core-Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Xive080/D-W-3-Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/abelbriggs1/tmb_decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/phoboslab/wipeout-rewrite",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/GalaxyNostalgia/Outbreak-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/TechnicallyComputers/BombermanPartyEditionRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/coalslav/hmbtn-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/elprogramadorloco-arch/jim2-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/0danny/toy2-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/GTTeancum/Vigilante-8-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/Sinan-Karakaya/DQ8-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/digimon-world-2003-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbeavs-ps1-ports/dino-crisis-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/abelbriggs1/tm1_decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/kirby1237/PuyoPuyoBoxRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/simdecomp/ts2c",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/sp00nznet/twistedmetal",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/Unchiga/YuGiOhForbiddenMemoriesRecomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/novapowers0/DB-Final-Bout-Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/Zackmon/lunar2-psx-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/TechnicallyComputers/Bomberman-Fantasy-Race-Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/jcsix694/def-jam-vendetta-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/jacobleeharris/tmhc",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/aaaaaaaaaaway/chulip-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/zm2283145/syphon-filter-omega-strain-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/HaydnTrigg/Castaway",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/Mikompilation/MikuPan",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/Scotho/socom-unzipped",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/TotallyNotMichael-GH/dbz2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/acklavidian/decomp_wots2",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/sal063/Ace-Combat-X-Recompilation",
+      "destinationOrg": "decomps",
+      "category": "psp-decompilation"
+    },
+    {
+      "url": "https://github.com/Harskov/stretch-panic-usa",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/2Tie/mh1j",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/Red-tv141/DC2-PS2RECOMP",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/USED255/artonelico2-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/FastestMolasses/Extermination",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/misterjdrg/Bouncer",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/nathanialf/ico",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/nathanialf/ico-pc",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/sp00nznet/tokyojungle",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/elprogramadorloco-arch/fuc-recomp",
+      "destinationOrg": "decomps",
+      "category": "psp-decompilation"
+    },
+    {
+      "url": "https://github.com/sp00nznet/shadowofthecolossus",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    }
+  ]
+}
