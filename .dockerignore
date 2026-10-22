@@ -37,6 +37,11 @@ Thumbs.db
 
 # Runtime state (never package the companion's SQLite database or secrets)
 data/
+# Backups are often created next to the source checkout on Windows.
+gitea-mirror-backup-*/
+gitea-mirror-backups/
+**/gitea-mirror-backup-*/
+**/gitea-mirror-backups/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
