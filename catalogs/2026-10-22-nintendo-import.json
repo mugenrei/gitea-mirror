@@ -1,0 +1,1559 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/TwilitRealm/dusklight",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/coop-deluxe/sm64coopdx",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/bryanthaboi/gen1recomp",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/UNDERdecoded/Gen2Recomped",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicdcer/MarioKart64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/BanjoRecomp/BanjoRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/Ghostship",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/josiahg2502-glitch/NewSuperPaperBros",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/PaperBoat",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/jkdansereau/goldeneye-pc-port",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/JackandBeans/Snap64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/Odrannnn/MetroidPrimePort",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/sciaschi/CBFD-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/danielgomesvieira2000/wave-race-64-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/cdlewis/snowboardkids2-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/bryantmh/rush2recompiled",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/DahSidiAbdallah/ConkerBFDReloaded",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/sonicdcer/Starfox64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/linkssy2/RoadRash64Recompiled",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/some-scurvy-dog/banjo-tooie-scurvy-dog-port",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/MetroidPrimeHuntersRecomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/Apolinario-coder/SkyRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMetroidRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/coccofresco/TriAevum",
+      "destinationOrg": "decomps",
+      "category": "3ds-static-recomp"
+    },
+    {
+      "url": "https://github.com/patchzyy/Wiicompiled",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/keepvaibin/nebula",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/bluewake",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/ZeldaWWHDRecomp/ZeldaWWHDRecomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMarioWorldRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/chasem-dev/sms-pc-port",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/sunpad",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/peiikai/LASRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/kartpad",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/ZeldaAlttPSNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/MegaManXSNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/WitherBlitz/NSMB-Wii-Multiplayer-Recompilation",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/BelmanteGu/SuperMarioWonderRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/rob646464/luigis-mansion-recompiled",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/999sian/melee-pc",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/jackpoison-prog/RingOut",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/lfarroco/ogre-battle-64-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/klorfmorf/Goemon64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/griches/EternalDarknessRecomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/perfect-dark-pc-port/perfect_dark",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/flyngmt/ACGC-PC-Port",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Coz-0/smo-recomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/Denkishi/ssbu-recomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/K0NL/B2recomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/SNO2207/WindowSmash",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/2ship2harkinian",
+      "destinationOrg": "mirrors",
+      "category": "n64-source-port"
+    },
+    {
+      "url": "https://github.com/BttrDrgn/f-zerox",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/gerbiljames/mario-tennis-gbc-disasm",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pokepinballrs",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/kholdfuzion/GoldenRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pokeruby",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/kh-recoded-decomp/kh-recoded-decomp",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/KooShnoo/pokemon-rumble",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/bigmak94/GalaxyQuest",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/dannye/pokered-gbc",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/999sian/tmc",
+      "destinationOrg": "mirrors",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/gradenGnostic/pokemoon",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/Nathan-R-Og/mother",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/spacefarergames/CV64-Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/GTTeancum/SotE-Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/cypressru/SonicBattleDecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/ThePlayerRolo/KRTDLDecomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/EltyDev/MSM-decomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/Almamu/CrashBandicootXS-decomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/FireRedLeafGreenRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/FantasmaGlad/DQMJ1_Ultimate_Decompilation",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/dougchansan/pkmn-colosseum",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Petexy/Tekken-Tag-2-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMarioRPGRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/pret/pokegold-spaceworld",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/atasro2/sma2",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/omegakatana92/Kirby-Dream-Land-Recomp",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/riidefi/mkw",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/RevoSucks/CV64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/griches/PS5_WindWakerHD",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/Kak2X/wl",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/NewGBAXL/drmario64-gc",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/bgsamm/pbr-dtk",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/k64ret/cv64",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/nstearns96/MLSuperstarSaga",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/vabold/mkw",
+      "destinationOrg": "mirrors",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/hardkiller2565123123/CafeRecomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/omegakatana92/Super-Mario-Land-3-Wario-Land-Recomp-",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/fmil95/recvx-gc-decomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Swiftshine/kdc",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/Edwin2929/sma3-recomp-android.",
+      "destinationOrg": "decomps",
+      "category": "gba-static-recomp"
+    },
+    {
+      "url": "https://github.com/snesrev/smw",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/PokemonStadiumRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/MegaMan64Recomp/MegaMan64Recompiled",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/nsmbu-recomp/nsmbu-recomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMarioAdvance2Recomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/shibbo/3DWDecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pokeemerald-jp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/RubySapphireRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/yannicksuter/smstrikers-decomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/DrMarioNesRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/craigshaw/FZeroRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/Kirby64Ret/Kirby64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/Rainchus/MarioGolf64",
+      "destinationOrg": "mirrors",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/snesrev/sm",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/pmret/papermario",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/ethteck/pokemonstadium",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/sp00nznet/ww",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/DarkRTA/mgolf",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/EmeraldRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/spannerisms/jpdasm",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/ThePlayerRolo/Super-Mario-All-Star-Decomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/nathsou/smb",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/snappad",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/jellees/bkgr",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/SunJaycy/GoldenEye-Recomp-Server",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/charlieduzstuf/pokesword",
+      "destinationOrg": "decomps",
+      "category": "switch-decompilation"
+    },
+    {
+      "url": "https://github.com/tripplyons/pokeemerald-3d",
+      "destinationOrg": "decomps",
+      "category": "gba-static-recomp"
+    },
+    {
+      "url": "https://github.com/Pokabbie/pokeemerald-rogue",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/dorPXP/driftdroid",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/kirby-letsgo/oracles-decomp",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/camthesaxman/mariovsdk",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/n64decomp/banjo-kazooie",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/elliotttate/Wind-Waker-Recomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MarioKartSuperCircuitRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/rages4calm/earthbound-companion",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/ZakyPew/epoch-equinox",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/Mario-and-Luigi-3Ds-R-D/MILLI4C",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MetroidNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/nukep/SMB-Vanilla",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/LegendOfZeldaNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/ethteck/pokemonsnap",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/dreamsailing59-ops/Snapshot",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/FZeroSNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/nlopez99/mssb-decomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/GreenNaugahyde/ZeldaWWHDRecompAndroid",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation"
+    },
+    {
+      "url": "https://github.com/PrimeDecomp/corruption-proto",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/aabrole/HuntersRecomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/blazkowolf/cv64",
+      "destinationOrg": "mirrors",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/T3CHNOLOG1C/BigRed",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/theboy181/drmario64_recomp_plus",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/jnmartin84/mk64-dc",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/swiftshine/key",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/EstebanPdN/zelda-tmc-3ds",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMarioAdvance4Recomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/KarisaAdvynia/sma4-disasm",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/RushRE/SonicRushAdventure-Decomp",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/oliveryasuna/smb-recomp",
+      "destinationOrg": "decomps",
+      "category": "nes-static-recomp"
+    },
+    {
+      "url": "https://github.com/pret/pokestadiumgs",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/zeldaret/oot-vc",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/huderlem/kirbydreamland",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/cruxxxxxx/gdx-3ds",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/dellm-79/mariotennisn64",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/denzi-gh/crashwoc-decomp-gc",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/HayatoG/dusklight",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/dism-exe/bn6f",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/ggdrn/KH-DAYS-VITA",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/LanceSweatpants/Strikers-Quest-MR",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/ExpansionPak/ModernGekko",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/fliperama86/cvlod_recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/Phi1ow/mkwii-ps5",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/kaspermeerts/supermarioland",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/3DWCommunity/3dcomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MinishCapRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/Nycolazs/WindWakerHD-Android-Plus",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/Rainchus/MarioParty3-Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/omegakatana92/Kirby-Pinball-Land-Recomp",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/raulzrrs/letsgo-recomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/Narishma-gb/pokeblue",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/UsernameFodder/pmdsky-debug",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/Tmcg2/rogue_squadron64",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/ant0-blase/goldeneye-rag-decomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/marioparty9",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/pbr-ret/pbr-decomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/alphanu1/msg-twinsnakes-recomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/ThePlayerRolo/LegoCloneWarsWii",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/marioparty8",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/overjt/knidl",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/marioparty7",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/griches/PS5_Sunshine",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/3dsdecomp/redpepper",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/angheloalf/puzzleleague64",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/marioparty6",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/dougchansan/mk8-recomp",
+      "destinationOrg": "decomps",
+      "category": "switch-decompilation"
+    },
+    {
+      "url": "https://github.com/Vashy777/metroid2",
+      "destinationOrg": "decomps",
+      "category": "gb-decompilation"
+    },
+    {
+      "url": "https://github.com/SAT-R/sa1",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/cblock85/GoldenEye64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/marioparty5",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/SAT-R/sa2",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/marioparty4",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/m0ester/SRZGDecomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/sergiomanzur/regaiden-recomp",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/SAT-R/sa3",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/Cacodemontube/DoomSNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/MarioTennisVirtualBoyRecomp",
+      "destinationOrg": "decomps",
+      "category": "virtualboy-decompilation"
+    },
+    {
+      "url": "https://github.com/arefdsg/MK64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/MikeSemicolonD/RogueSquadron64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/zeldaret/oot3d",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/n64decomp/007",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMarioLand2Recomp",
+      "destinationOrg": "decomps",
+      "category": "gb-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/supermario64dsrecomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/pret/pokepuzzle",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/ClickingMaster/ssrecomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/pokemodding/pokeblack",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/JimB16/PokePlat",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/jvipond/super_mario_kart_recompilation",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/ysrdevs/goldeneye-metal",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/ggdrn/KH_COM_VITA",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/Asphaltian/pmd-green",
+      "destinationOrg": "decomps",
+      "category": "gba-static-recomp"
+    },
+    {
+      "url": "https://github.com/RussianManSMWC/Mario-Bros.-Dis",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/jnmartin84/oot-dc",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/roeming/mssb-dtk",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Yokimitsuro/khrecoded-decomp",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/tangosdev/sm64ds-decomp",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/ZeldaWWHDDecomp/wwhd",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation"
+    },
+    {
+      "url": "https://github.com/zeldaret/ss",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/james2doyle/ffta-recomp",
+      "destinationOrg": "decomps",
+      "category": "gba-static-recomp"
+    },
+    {
+      "url": "https://github.com/darxoon/leaflitter",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/annepad",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pokerevo",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/zeldaret/st",
+      "destinationOrg": "mirrors",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pokestadium",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MegaManZeroRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/GlitchedDeveloper/Babil-Decompilation-Project",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/SSunnKing/ZeldaWWHDRecompAndroid---ENHANCED",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation"
+    },
+    {
+      "url": "https://github.com/smiluredev/SonicAdvanceRecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/Vidanox/BanjoTooieRecompiled",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/linkzenic/Zelda64Recomp-Android",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/bates64/papermario-dx",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pmd-red",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/matty45/sm64ds-decomp",
+      "destinationOrg": "mirrors",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/wowjinxy/KAR",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/ellierocks/lsw1-decomp",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/centollOS/SwitchWakerHD",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/Jorge262007/FFTARecomp",
+      "destinationOrg": "decomps",
+      "category": "gba-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/SuperMarioBrosNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/murkantor/Project-Midas",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/SecondaryLifer/StarHaven",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/ricky074game/marioparty9",
+      "destinationOrg": "mirrors",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/BgbrhrWatchinOVO/dusklight-ps4",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/MatyMeatBoy/ReKHCoM",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/Zorkats/G-Diffuser",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/RecompRando/MMRecompRando",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/lucyawrey/Paper_Mario_64_Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/fuddlesworth/pokebw2",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/GoldieLeGenie/DQIV-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/MegamanX3SNESRecomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/Megaman3NESRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-static-recomp"
+    },
+    {
+      "url": "https://github.com/pret/berry-fix",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/cybervisi0n/pokeplatinum",
+      "destinationOrg": "mirrors",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/Rangi42/polishedcrystal",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/pokeemerald",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MegaManX2Recomp",
+      "destinationOrg": "decomps",
+      "category": "snes-decompilation"
+    },
+    {
+      "url": "https://github.com/ChanseyIsTheBest/sa2-nx",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/eltalelibrarian/sote",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/rainchus/partnersintime-decomp",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation"
+    },
+    {
+      "url": "https://github.com/BlackAndBlue95/Strikers-WiiCompiled",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/galaxypad",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/iirg4x/marioparty6",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/JonathanDC64/FFCCEOT-Recomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/fruityloops1/RedCarpet-S",
+      "destinationOrg": "decomps",
+      "category": "switch-decompilation"
+    },
+    {
+      "url": "https://github.com/leoetlino/project-restoration",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/Xkeeper0/smb2",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/pret/colosseum-mb",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/SeekyCt/mkw-structures",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/snailspeed3/SMGDecompilation",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation"
+    },
+    {
+      "url": "https://github.com/mbayonal/tp-port",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/pwsqrd/lynx_smb",
+      "destinationOrg": "decomps",
+      "category": "nes-native-port"
+    },
+    {
+      "url": "https://github.com/Yokimitsuro/khdays-port",
+      "destinationOrg": "decomps",
+      "category": "nds-native-port"
+    },
+    {
+      "url": "https://github.com/centollOS/SwitchWaker",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/YeOldPress/alttp-dx",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/Kyra422/skybreak",
+      "destinationOrg": "decomps",
+      "category": "wii-native-port"
+    },
+    {
+      "url": "https://github.com/MiniBandit/MKW-3DS",
+      "destinationOrg": "decomps",
+      "category": "wii-native-port"
+    },
+    {
+      "url": "https://github.com/new-coke/strikers",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/rumbleminze/castlevania-snes",
+      "destinationOrg": "decomps",
+      "category": "nes-native-port"
+    },
+    {
+      "url": "https://github.com/TekRantGaming/sms-pc-port",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/iirg4x/mp6-native-port",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/mariopartyrd/partyboard",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/RadzPrower/Super-Metroid-Launcher",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/TheRunaway5/Phase-Distorter",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/zeranemesis/Marioparty4",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/MaskeZenY/WindowWaker",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/Herringway/earthbound",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/thibautbus/top",
+      "destinationOrg": "decomps",
+      "category": "gbc-native-port"
+    },
+    {
+      "url": "https://github.com/EstebanPdN/zelda-alttp-3ds",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/MikeWuPing/UEFI_SuperMario",
+      "destinationOrg": "decomps",
+      "category": "nes-native-port"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/ballpad",
+      "destinationOrg": "decomps",
+      "category": "gamecube-native-port"
+    },
+    {
+      "url": "https://github.com/official-kryo-to/ctw-native",
+      "destinationOrg": "decomps",
+      "category": "nds-native-port"
+    },
+    {
+      "url": "https://github.com/CharlesAverill/sm-3ds",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/stephini/SMAS_Launcher",
+      "destinationOrg": "decomps",
+      "category": "snes-native-port"
+    },
+    {
+      "url": "https://github.com/bfbbdecomp/tssm",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Hoshiruna/djv1-2disasm",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/NiyaDev/DWM",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/markmoxon/elite-source-code-nes",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/sbergeron42/ssbu-decomp",
+      "destinationOrg": "decomps",
+      "category": "switch-decompilation"
+    },
+    {
+      "url": "https://github.com/mhvuze/mh4u-decomp",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/FaxanaduRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/animaone/star-ocean-blue-sphere-source-code",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/Moddimation/KinokoDecomp-S",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation"
+    },
+    {
+      "url": "https://github.com/huderlem/carrotcrazy",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/Stewmath/oracles-disasm",
+      "destinationOrg": "mirrors",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/Mr-Shizzy/PacManRecomp",
+      "destinationOrg": "decomps",
+      "category": "nes-static-recomp"
+    },
+    {
+      "url": "https://github.com/sonsegajp/HWDER",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/vermiceli/nes-super-c",
+      "destinationOrg": "decomps",
+      "category": "nes-decompilation"
+    },
+    {
+      "url": "https://github.com/Nintendocustom/Lego-City-Undercover-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation"
+    },
+    {
+      "url": "https://github.com/Ebernacher90/DragonQuestMonstersGerman",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/RussoPhone/tomodachi-ltd-recomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/gage-marshall/lp-engine",
+      "destinationOrg": "decomps",
+      "category": "3ds-static-recomp"
+    },
+    {
+      "url": "https://github.com/ElectroDeoxys/warioland3",
+      "destinationOrg": "decomps",
+      "category": "gbc-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/ZeroRacersVirtualBoyRecomp",
+      "destinationOrg": "decomps",
+      "category": "virtualboy-decompilation"
+    },
+    {
+      "url": "https://github.com/sdlfoundation/splatoon-decomp",
+      "destinationOrg": "mirrors",
+      "category": "wiiu-decompilation"
+    }
+  ]
+}
