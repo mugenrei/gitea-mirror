@@ -1,0 +1,1579 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/LoreanXavier/pt-pc",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-native-runtime"
+    },
+    {
+      "url": "https://github.com/Legend-of-Dragoon-Modding/Severed-Chains",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/codepdbh/nfsu2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Pencea-Flavius/Minecraft-PE-PSP",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Eukaryot/sonic3air",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/dsda-org/dsda-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/yquake2",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/QuestZDoom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/zaero",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Styd051/DOOM64-EX-Plus-Enhanced",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Rinnegatamante/vitaQuake",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/troyedwardsjr/z2rs",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/chocolate-doom/chocolate-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/rogue",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/ArmageddonGames/ZeldaClassic",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/GMH-Code/Qwasm",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/freedoom/freedoom",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/DarkPlacesEngine/DarkPlaces",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/DCRSDK/SonicCD-DC",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jacobenget/doom.wasm",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/suijingfeng/vkQuake3",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/re-rac/rerac-launcher",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/fte-team/fteqw",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/Quake2Quest",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/TheXTech/TheXTech",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Rinnegatamante/ldhewm3-rearmed",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/tripplyons/pokeemerald-wasm",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/SHOEGAZEssb/ooa-godot",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/fabiangreffrath/woof",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/x8BitRain/webXash",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/kumapauz/project-reignition",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/AxioDL/metaforce",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/RobertBeckebans/RBDOOM-3-BFG",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/sezero/quakespasm",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jnmartin84/sonic-r",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/Lambda1VR",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/andreyvelsk/com.mobilerpgpack.phone",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/QW-Group/ezquake-source",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/JHDev2006/Super-Mario-Bros.-Remastered-Public",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/kondrak/vkQuake2",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Henrique194/chocolate-quake",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/GMH-Code/Qwasm2",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/quakeforge/quakeforge",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/EstebanPdN/legend-of-doom-3ds",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/xatrix",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Wargus/war1gus",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Russian-Doom/russian-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/QuakeQuest",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/ctf",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/bradharding/doomretro",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/OpenPhantom/OpenPhantom",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/ec-/Quake3e",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Novum/vkQuake",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/am2r-android/AM2R-Autopatcher-Android",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/JohnImril/diablo_web",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/TheForceEngine/TheForceEngine",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/seedhartha/reone",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/samwhosung/benilla",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/fabiangreffrath/crispy-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/Doom3Quest",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/JKXR",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/GMH-Code/Dwasm",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Brawmario/infinite-mario-64-ever",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/ioquake/ioq3",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/d07RiV/diabloweb",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/libretro/tyrquake",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/ThePhrozenKeep/D2MOO",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/SupSuper/OpenXcom",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/bep1s69/nfsmw-ios",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenNFS/OpenNFS",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/RSDKModding/RSDKv3-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/ThisKwasior/Sonic-Mania-25MB",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/doldecomp/sadx",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/maximqaxd/halflife_dc",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/zaps166/NFSIISE",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/rehlds/ReHLDS",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/ZloiKILLER/nfs3recompiled-android",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/mrxenginner/reVC",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/skc_disasm",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/vasist15-source/nfs-carbon-mac",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Erick194/PSXFINALDOOM-RE",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/motor-dev/nfs-recompiled",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/cutarev/sh3-nx",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/elforeign/nfs-most-wanted-mac",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/RSDKModding/RSDKv3-Script-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/ScriptedSnark/half-life1_win32_722",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/rubymatrix/xi-on-anything",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/ZinexDa/sonic-r-android",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/EliasFever/MarioTeachesTyping3Decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Supermedo/bloodborne_pc",
+      "destinationOrg": "mirrors",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/CriminalRETeam/gta1_re",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/scdpc_disasm",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/swstegall/meteor-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/TombEngine/TombEngine",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/OpenNFS/NFSHSX",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/brotchie/daggerfall-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/veritr1x/nfsmw-recomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/DaCodeChick/DroidWorks-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/sp00nznet/gta",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/RSDKModding/RSDKv2-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/scummvm/scummvm",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/vcmi/vcmi",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/ihhub/fheroes2",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/gemrb/gemrb",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenRA/OpenRA",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/CorsixTH/CorsixTH",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenTTD/OpenTTD",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/btarg/Xash3D-Emscripten",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/inolen/quakejs",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/cloudflare/doom-wasm",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Pixelsuft/hl",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/jnmartin84/64doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/skyjake/Doomsday-Engine",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/JHDev2006/Super-Mario-World-Remastered-Public",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/leanndroguedes/re3-19feb21",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/SonyEntertainmentNetwork/BBPSX-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/team-eternity/calico-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Trxyebeep/TOMB4",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Trxyebeep/TOMB5",
+      "destinationOrg": "mirrors",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Trxyebeep/tomb3",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/lethal-guitar/RigelEngine",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/slqntdevss/kisakcod-port",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/bibendovsky/bstone",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/triplea-game/triplea",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenE2140/OpenE2140",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/frandallfarmer/neohabitat",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/MustaphaTR/Romanovs-Vengeance",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/vladtrc/iw4L",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenTPW/OpenTPW",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenXcom/OpenXcom",
+      "destinationOrg": "mirrors",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/nfroggy/openmadoola",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/themuffinator/openQ4",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/kylofon/acesofthepacific-enhanced",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/stellargames/bakagain",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/MorsGames/MoonChildFE",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/tx00100xt/SeriousSamClassic",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/dxx-redux/dxx-redux",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/team-eternity/eternity",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/freegish/freegish",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/RTCWQuest",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/turican0/remc2",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/hankmorgan/UnderworldGodot",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/TheSuperHackers/GeneralsGameCode",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/codenamecpp/GLKeeper",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/ja2-stracciatella/ja2-stracciatella",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/jotd666/mspacman500",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/nxengine/nxengine-evo",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/exult/exult",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/deathkiller/jazz2-native",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/nemo22/skynet-godot",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/vgrichina/battlecity",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/edge-classic/EDGE-classic",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jonof/jfsw",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Return-To-The-Roots/s25client",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/jorio/Bugdom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Ragnaroek/iron-wolf",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/EXOK/Celeste64",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/PQMarine/UnderworldRevisited",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/imjustadudegamer/VoyagerSP-Android",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/retroreplay82/Legendary-Wings-NES-to-PC",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/PixieCatSupreme/AnodyneSharp",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Meridian59/Meridian59",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/ABrandau/Shattered-Paradise-SDK",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/michelpereira/awesome-open-source-games",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/afwbkbc/glsmac",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/maxr-dot-org/maxr",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OutpostUniverse/OPHD",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/simutrans/simutrans",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/stefanhendriks/Dune-II---The-Maker",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Sammi-Husky/BrawlModules",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/SilverwireGames/ReChan",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/LBALab/twin-e",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/JACoders/OpenJK",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/AlisterT/openjazz",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/swfans/syndwarsfx",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/olcayseygan/CnCGeneralsZH-Reforged",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/nadult/FreeFT",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenSC2K/OpenSC2K",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/induktio/thinker",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Wemino/VorpalFix",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/andreapavoni/parabellum",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/davidadas/rebellion2",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/jonof/jfwhaven",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jorio/Bugdom2",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/iNdioNicarao/dxx-3ds",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/openmoh/openmohaa",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/space-wizards/space-station-14",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/InsanityBringer/PiccuEngine",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/m-x-d/Heretic2R",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Bishop-333/OmegA-engine",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Endprodukt/cannonball-dx",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Aleph-One-Marathon/alephone",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/nhaar/Waddle-Forever",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/dhewm/dhewm3",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/dgcor/DGEngine",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/collinsmith/riiablo",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/dxx-rebirth/dxx-rebirth",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/halkuncode/Raiders2600",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/crowded-street/3sx",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/kugelrund/Speed-Academy",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/OpenApoc/OpenApoc",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/BrokenRegistry/Rotp-Fusion",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/freeciv/freeciv",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/fragglet/sdl-sopwith",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/jorio/CroMagRally",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/0lvin/heretic2",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Warsow/qfusion",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/hogsy/chronon",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/AlexC1991/zt1-engine",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/YuriPlanet/vera20k",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/jotd666/bagman",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/bluddy/rails",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/AndrewAltimit/legend-of-legaia-re",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/OpenDUNE/OpenDUNE",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/kugelrund/Speed-Outcast",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/bvschaik/julius",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/xtreme8000/BetterSpades",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/RandomityGuy/MBHaxe",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/ZDoom/Raze",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jorio/MightyMike",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/zlatkok/swos-port",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/RohanBhattacharyya/oSBM",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/KranX/Vangers",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/atsb/daikatana-restoration-project",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/missingno7/pre2_port",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/fabiangreffrath/wolf4sdl",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jorio/BillyFrontier",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jonof/jfduke3d",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/alexbatalov/fallout2-ce",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Tribal-Trouble/tribaltrouble",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jonof/jftekwar",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/patricksurry/eastern-front-1941",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/imjustadudegamer/VoyagerHM-Android",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/fabiangreffrath/taradino",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/jorio/OttoMatic",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/TheAssemblyArmada/Vanilla-Conquer",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Warzone2100/warzone2100",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/ECWolfEngine/ECWolf",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/ReflectionHLE/ReflectionHLE",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/lunarmeadow/barrett",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yancharkin/SpelunkyClassicHD",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/odamex/odamex",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Phobos-developers/Phobos",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/DrDecki/psychonauts-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/konovalov-aleks/reSL",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/DavidGrice/knightskingdom",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Primitheus/rumbledecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/N0zoM1z0/th105",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/SDW-Community/Sheep-Dog-n-Wolf-Rewooled",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/PPrism/TerrariaOGC",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/alexbatalov/arcanum-ce",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/2003scape/rsc-c",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/bttrdrgn/homeland",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Marisa-Chan/UA_source",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Carter54git/dethrace-ported-to-web",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/NBlood/Redneck-Rampage-RE",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/smartblade/BldMystery",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/NancyAurum/dest",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/neuromancer/wc2-re",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/banteg/crimson",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/sc2kfix/sc2kfix",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/s-macke/starflight-reverse",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/isledecomp/racers",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/mr-finster/stunts-hd",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/ApfelTeeSaft/OT6-Reconstruction",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/scd5dev/GrannyDecompilationLegacy",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/danvratil/jhgpc98decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/UnofficialCrusaderPatch/UnofficialCrusaderPatch",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/uncreativeCultist/buckshot-decomp-public",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/some100/th07",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/N0zoM1z0/th08",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/lethal-guitar/BioMenaceDecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/disinvite/jman-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/freeserf/freeserf",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/GrognardsFromHell/TemplePlus",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Bubb13/EEex",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/jon-zu/shroom95-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/pakompom/SpaceRangersHD_FPC",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Yanis002/pm4",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/N0zoM1z0/th095",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/AARosson48/SummonerDecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/prykin/st-decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/petarov/alleycat.exe",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/alexbatalov/fallout2-re",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Edw590/F1DP",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/EOP-Labs/M2TWEOP-library",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/r4dius/outrun2-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/rbxrootx/MissionFleet",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/TheFlyingFoool/DuckGameRebuilt",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/burnedpopcorn/UnderTale-Yellow-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/rayanht/mwcc",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/HaydnTrigg/Homeworld2Classic",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/ammaarreshi/SkyRoads-Codex",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/whylurking/IsaacRecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/TeamBlossomDevs/DeltaruneDecomp_beta",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/sushi-shi/homm3-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/ruslan831/PlantsVsZombies-decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Shintensu/OkamiHD-Decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/pablocpas/OpenCMR2",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/SDW-Community/sdw-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/NKHook/BTD5-Decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/spacefarergames/EcstaticaRecompiled",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Team-UPD/DeltaruneDecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/2006-Scape/2006Scape",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/bluisblu/pvz",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/smolkrieger/nuclear-neighbor",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/spacefarergames/AloneInTheDarkReHaunted",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/snzhkhd/King-s-Field-PC",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/FatalDecomp/ROLLER",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/benprew/microprose-shandalar-source",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/Supermedo/prince-of-persia-2-windows",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/met-nikita/Silent-Storm-Reconstruction",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/setupwitch/Pizza-Tower-EXtracted",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/neuviemeporte/f15se2-re",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    }
+  ]
+}
