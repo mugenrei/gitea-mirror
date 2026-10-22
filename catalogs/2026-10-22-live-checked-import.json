@@ -74,6 +74,81 @@
       "url": "https://github.com/elmasas/lcs-recomp",
       "destinationOrg": "decomps",
       "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/coop-deluxe/sm64coopdx",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicdcer/MarioKart64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/BanjoRecomp/BanjoRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/Ghostship",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/PaperBoat",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/TwilitRealm/dusklight",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Odrannnn/MetroidPrimePort",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/bluewake",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/josiahg2502-glitch/NewSuperPaperBros",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/patchzyy/Wiicompiled",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/Apolinario-coder/SkyRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/peiikai/LASRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/ZeldaWWHDRecomp/ZeldaWWHDRecomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/pret/pokepinballrs",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MetroidPrimeHuntersRecomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
     }
   ]
 }
