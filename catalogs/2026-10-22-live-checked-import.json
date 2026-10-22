@@ -224,6 +224,81 @@
       "url": "https://github.com/RSDKModding/RSDKv3-Decompilation",
       "destinationOrg": "decomps",
       "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/wivi514/Dead_Rising_2_Case_Zero_Xenon_Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/birabittoh/NocturneRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/shipa-2/Xerenge",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/wivi514/Dead_Rising_2_Case_West_Xenon_Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Ekspym/Tekken6-native-online",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/eandis/SDOJ-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/novapowers0/DBZ-Budokai-3-HD-Collection",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/PaulCombal/mw2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/KaikoClanworth1/wwe-svr2011-pc",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/goliathret/EdgeOfTimeRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Unowa001/crackdown-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/xenophobentx/takedawn",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/SCDA-XBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/BLACK-XBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenCommunityEdition/OpenCE",
+      "destinationOrg": "decomps",
+      "category": "xbox-decompilation"
     }
   ]
 }
