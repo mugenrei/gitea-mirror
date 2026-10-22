@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/yowari/sonic-j2me-decompilation",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/cvghivebrain/s1disasm",
+      "destinationOrg": "mirrors",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/carlosrmz009/littleplanet",
+      "destinationOrg": "decomps",
+      "category": "segacd-static-recomp"
+    },
+    {
+      "url": "https://github.com/mstan/SonicTheHedgehogRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SonicTheHedgehog2Recomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/spindisasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/Sonic3AndKnucklesRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/ktes2",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/foreverWIP/s1-port",
+      "destinationOrg": "decomps",
+      "category": "genesis-native-port"
+    },
+    {
+      "url": "https://github.com/lamb2k/re4dc",
+      "destinationOrg": "decomps",
+      "category": "dreamcast-native-port"
+    },
+    {
+      "url": "https://github.com/lhsazevedo/akmw",
+      "destinationOrg": "decomps",
+      "category": "mastersystem-decompilation"
+    },
+    {
+      "url": "https://github.com/matiaszanolli/sega-vr-disasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/ShiningForceCentral/SF1DISASM",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/ShiningForceCentral/SFCDDISASM",
+      "destinationOrg": "decomps",
+      "category": "segacd-decompilation"
+    },
+    {
+      "url": "https://github.com/ShiningForceCentral/SF2DISASM",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/YuutaTsubasa/ChaotixRecompiled",
+      "destinationOrg": "decomps",
+      "category": "sega32x-decompilation"
+    },
+    {
+      "url": "https://github.com/RuiNelson/StreetsOfRageProject",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/ZoomiesZaggy/Space-Channel-5",
+      "destinationOrg": "decomps",
+      "category": "dreamcast-static-recomp"
+    },
+    {
+      "url": "https://github.com/sonicretro/kid-chameleon-disasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/scddisasm",
+      "destinationOrg": "decomps",
+      "category": "segacd-disassembly"
+    },
+    {
+      "url": "https://github.com/TheRavenfreak/Sonic-1-Game-Gear-Disassembly",
+      "destinationOrg": "decomps",
+      "category": "gamegear-disassembly"
+    },
+    {
+      "url": "https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-",
+      "destinationOrg": "decomps",
+      "category": "genesis-disassembly"
+    },
+    {
+      "url": "https://github.com/AlexField442/Sonic-2-Nick-Arcade-Disassembly",
+      "destinationOrg": "decomps",
+      "category": "genesis-disassembly"
+    },
+    {
+      "url": "https://github.com/lab313ru/quackshot_src",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/Aeonitis/Reverse-Engineer-Azel",
+      "destinationOrg": "decomps",
+      "category": "saturn-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/s2smsdisasm",
+      "destinationOrg": "decomps",
+      "category": "mastersystem-disassembly"
+    },
+    {
+      "url": "https://github.com/Nasina7/puyodisasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-disassembly"
+    },
+    {
+      "url": "https://github.com/bstreiff/tje-disasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-disassembly"
+    }
+  ]
+}
