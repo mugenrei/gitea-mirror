@@ -149,6 +149,81 @@
       "url": "https://github.com/mstan/MetroidPrimeHuntersRecomp",
       "destinationOrg": "decomps",
       "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/Pencea-Flavius/Minecraft-PE-PSP",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/dsda-org/dsda-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/yquake2",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/QuestZDoom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/zaero",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/LoreanXavier/pt-pc",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-native-runtime"
+    },
+    {
+      "url": "https://github.com/Eukaryot/sonic3air",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Styd051/DOOM64-EX-Plus-Enhanced",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/troyedwardsjr/z2rs",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/ArmageddonGames/ZeldaClassic",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Legend-of-Dragoon-Modding/Severed-Chains",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/codepdbh/nfsu2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/bep1s69/nfsmw-ios",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenNFS/OpenNFS",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/RSDKModding/RSDKv3-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
     }
   ]
 }
