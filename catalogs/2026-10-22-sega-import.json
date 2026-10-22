@@ -16,11 +16,6 @@
       "category": "genesis-decompilation"
     },
     {
-      "url": "https://github.com/carlosrmz009/littleplanet",
-      "destinationOrg": "decomps",
-      "category": "segacd-static-recomp"
-    },
-    {
       "url": "https://github.com/mstan/SonicTheHedgehogRecomp",
       "destinationOrg": "decomps",
       "category": "genesis-decompilation"
