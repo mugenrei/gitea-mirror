@@ -1,0 +1,6 @@
+# Enforce Unix line endings for shell scripts copied into Linux images.
+# Windows Git with core.autocrlf=true otherwise changes the shebang to
+# '#!/bin/sh\r', which fails at container startup with ENOENT.
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
