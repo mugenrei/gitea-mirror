@@ -21,11 +21,6 @@
       "category": "psp-static-recomp"
     },
     {
-      "url": "https://github.com/fabioap-cpu/Tekken3Recomp",
-      "destinationOrg": "decomps",
-      "category": "ps1-static-recomp"
-    },
-    {
       "url": "https://github.com/bc160201983/medievil_2019_pc_port",
       "destinationOrg": "decomps",
       "category": "ps4-native-runtime"
