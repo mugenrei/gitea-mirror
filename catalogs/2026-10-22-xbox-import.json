@@ -1,0 +1,649 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/wivi514/Dead_Rising_2_Case_Zero_Xenon_Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/birabittoh/NocturneRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/xenophobentx/takedawn",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/shipa-2/Xerenge",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/wivi514/Dead_Rising_2_Case_West_Xenon_Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Ekspym/Tekken6-native-online",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/SCDA-XBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/eandis/SDOJ-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/novapowers0/DBZ-Budokai-3-HD-Collection",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/PaulCombal/mw2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/KaikoClanworth1/wwe-svr2011-pc",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/goliathret/EdgeOfTimeRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Unowa001/crackdown-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/BLACK-XBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/mchughalex/skate3recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenCommunityEdition/OpenCE",
+      "destinationOrg": "decomps",
+      "category": "xbox-decompilation"
+    },
+    {
+      "url": "https://github.com/Dyotson/ForzaHorizon1-ReImagined",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Alexbeav/fm4-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/YuutaTsubasa/Free-Riders-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/gamboozino/ngbrecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/SpeedBreakerProject/speedbreaker",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/arcanite24/pinyon-shift",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/KoreanSeats1/Theft4",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/masterspike52/reNut",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/shihabal3amri/tekken-tag-tournament-2-pc",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/himdo/Fable-2-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Gabrick75/fh2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/burnout3",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/Fable2Recomp/Fable2Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/crazyriddler/FinestHourRemastered",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/0herculabs/hl360-Forza2",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/0herculabs/hl360-forza4",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/0herculabs/hl360-forza3",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/NoRain211/doaxvb-re",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/florinp93/hells-gate-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/samuelit0davila/fifa-street-pc-port",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/invinceble55-wq/Estacado-The-Darkness-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/jorjbarbosa/naruto-rise-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/TekRantGaming/earthworm-jim-hd-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/freefrank/LostOdysseyRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/NeverCookFirst/DimensionsRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/christianortel/skate2-recompile-pc",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/iExplosiveRage/DBZ-Burst-Limit-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/psxrestore/Condemned2Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/TekRantGaming/king-kong-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/zenit2893-cmyk/project-1944",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/birabittoh/EternalSonataReprise",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/iMrBurn/wwe12-pc",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Sirhalo23/RidgeRacer6-Recompilation",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/mzzvxm/LARecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/portingpete/The-Darkness-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/holdmysocks/mcla-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/ronniecloud/re-wor",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/FrankHUN88453/CoD3Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/hl2-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/OZORDI/LibertyRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/TheSaltTrader/Ninja-s-Dawn---A-Ninja-Gaiden-2-Recompilation-Project",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/rapidsamphire/AC6Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/MatiasRiveraC/SSX-Tricky-PC",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/PromethenDev/wwe2k14-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Masterllgod/naruto-storm-generations-port-nativo",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/jv36/fifastreet2-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/XboxXBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/luisxl15/GTA-IV-RECOMP-XBOX-360",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/mxmstr/Burnout3Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-decompilation"
+    },
+    {
+      "url": "https://github.com/banjo360/bk360",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/twist84/halo3_cache_release_recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/OAleex/MojoRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/OZORDI/SanRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/codepdbh/NFS-CARBON-360-ANDROID-RECOMP",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/Player124413/Sonic-Generations-recomp-android-and-pc-edition",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Maxilure/MindOver-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/Dyotson/RecompiledHaloReach",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/opensagadev/saga",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/BurnoutDecomp/b5-decomp",
+      "destinationOrg": "mirrors",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/deivid22srk/pinyon-shift-android",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/kholdfuzion/beanRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/PranchaD/re-Sonic06Demo",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/fabioap-cpu/Forza-Horizon-2-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/LittleBitUA/DownpourRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/DevZer0D4Y/MCX360-EDITION",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/madelrandel-blip/NFSMW-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/CaiusCodes/GoldenEye-007-XBLA-PC-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/SansNope/UnleashedRecomp-Android",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/timftw21/burnout2-recompilation",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/Sampreeth004/nfs-carbon-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/SunJaycy/GoldenEye-Recomp-rexglue",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/hamishakl/LibertyRecomp",
+      "destinationOrg": "mirrors",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/GTTeancum/OpenH3M",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/StevensND/nfsmw-nx",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/kiesxoxo/burnout-crash-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/GenryTheFox0/Project-Iron-6",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Heromachine/Burnout-Recompilation",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/nebadasSwifty/masseffect-nx",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/SunJaycy/GoldenEye-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/monstercameron/LibertyFlux",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/Fable2Recomp/beanRecomp",
+      "destinationOrg": "mirrors",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/iron-jay/banjo_tooie_xbla_recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/NerunSmarts/ForzaRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/Boron853/Souls-of-the-Reaper",
+      "destinationOrg": "decomps",
+      "category": "xbox360-native-port"
+    },
+    {
+      "url": "https://github.com/antoxa2584x/nfsu2-sw",
+      "destinationOrg": "decomps",
+      "category": "xbox-native-port"
+    },
+    {
+      "url": "https://github.com/jedijosh920/SWROTS-PC",
+      "destinationOrg": "decomps",
+      "category": "xbox-native-port"
+    },
+    {
+      "url": "https://github.com/JackTulli/halo-64",
+      "destinationOrg": "decomps",
+      "category": "xbox-native-port"
+    },
+    {
+      "url": "https://github.com/Wndwsqrrl/3on3NHL-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Subarasheese/daytona-xbla-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/SomeoneIsWorking/gears1",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/apexJCL/blinx2-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/coole42-pixel/BullyRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/masterspike52/reDAHM",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/SirSymo/SM2-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/phobos665/split2-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/GTTeancum/OpenXML1xbox",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/doc-haz/infinite-undiscovery-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/NoRain211/doa3-re",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/luisxl15/Guitar-Hero-3-Recomp-",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/davidptrssvea/Table-Tennis-Rockstar-PC",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/R-drg/the-simpsons-game-nx",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/nefariousjosiah/WWE-SVR2008-RECOMP",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Genesis5500/ArmyOfTwo-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation"
+    },
+    {
+      "url": "https://github.com/GiZcesi/OpenTricky",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/MattSG/mm3-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/lakshya16157/midtown-madness-3-PC-Native",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/Gumpolas/TooTawersRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/KraftMacAndChee/Mercenaries-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox-decompilation"
+    },
+    {
+      "url": "https://github.com/VinceIP/fci-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/Revan67/ThirdAge-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/vyanhursky/DefJamFFNY-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/kittibyte/UndertaleDecomp",
+      "destinationOrg": "decomps",
+      "category": "xboxone-decompilation"
+    }
+  ]
+}

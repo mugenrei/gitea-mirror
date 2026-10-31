@@ -1,0 +1,374 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/GetLostIn/CTR-NitroFueled-PC",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/FelipePrado0/SpartanPort",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/bc160201983/medievil_2019_pc_port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/saulob/dragons-crown-pro-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/deadinside28/bloodborne_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/OverkillLabs3/SoS-PS5",
+      "destinationOrg": "decomps",
+      "category": "ps5-native-port"
+    },
+    {
+      "url": "https://github.com/andrebrumdev/gow2-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/sp00nznet/simpsonsarcade-ps3",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/danisandoval/fukami",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/KIexster/god-of-war-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/z3xox/Tenkaichi3Decomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/SlickAmogus/silent-hill-decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/CTR-tools/ctr-native",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation"
+    },
+    {
+      "url": "https://github.com/elmasas/lcs-recomp",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/coop-deluxe/sm64coopdx",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicdcer/MarioKart64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/BanjoRecomp/BanjoRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/Ghostship",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/HarbourMasters/PaperBoat",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/TwilitRealm/dusklight",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Odrannnn/MetroidPrimePort",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/bluewake",
+      "destinationOrg": "decomps",
+      "category": "gamecube-static-recomp"
+    },
+    {
+      "url": "https://github.com/josiahg2502-glitch/NewSuperPaperBros",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/patchzyy/Wiicompiled",
+      "destinationOrg": "decomps",
+      "category": "wii-static-recomp"
+    },
+    {
+      "url": "https://github.com/Apolinario-coder/SkyRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/peiikai/LASRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/ZeldaWWHDRecomp/ZeldaWWHDRecomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/pret/pokepinballrs",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/MetroidPrimeHuntersRecomp",
+      "destinationOrg": "decomps",
+      "category": "nds-static-recomp"
+    },
+    {
+      "url": "https://github.com/Pencea-Flavius/Minecraft-PE-PSP",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/dsda-org/dsda-doom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/yquake2",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/Team-Beef-Studios/QuestZDoom",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/yquake2/zaero",
+      "destinationOrg": "decomps",
+      "category": "pc-ports-source-port"
+    },
+    {
+      "url": "https://github.com/LoreanXavier/pt-pc",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-native-runtime"
+    },
+    {
+      "url": "https://github.com/Eukaryot/sonic3air",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Styd051/DOOM64-EX-Plus-Enhanced",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/troyedwardsjr/z2rs",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/ArmageddonGames/ZeldaClassic",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Legend-of-Dragoon-Modding/Severed-Chains",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/codepdbh/nfsu2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/bep1s69/nfsmw-ios",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenNFS/OpenNFS",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/RSDKModding/RSDKv3-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation"
+    },
+    {
+      "url": "https://github.com/wivi514/Dead_Rising_2_Case_Zero_Xenon_Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/birabittoh/NocturneRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/shipa-2/Xerenge",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/wivi514/Dead_Rising_2_Case_West_Xenon_Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Ekspym/Tekken6-native-online",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/eandis/SDOJ-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/novapowers0/DBZ-Budokai-3-HD-Collection",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/PaulCombal/mw2-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/KaikoClanworth1/wwe-svr2011-pc",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/goliathret/EdgeOfTimeRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/Unowa001/crackdown-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/xenophobentx/takedawn",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/SCDA-XBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/TGP482/BLACK-XBERecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/OpenCommunityEdition/OpenCE",
+      "destinationOrg": "decomps",
+      "category": "xbox-decompilation"
+    },
+    {
+      "url": "https://github.com/yowari/sonic-j2me-decompilation",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/cvghivebrain/s1disasm",
+      "destinationOrg": "mirrors",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SonicTheHedgehogRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/SonicTheHedgehog2Recomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/spindisasm",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/mstan/Sonic3AndKnucklesRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/sonicretro/ktes2",
+      "destinationOrg": "decomps",
+      "category": "genesis-decompilation"
+    },
+    {
+      "url": "https://github.com/YesterMester/TheSimpsonsGameRecomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-static-recomp"
+    },
+    {
+      "url": "https://github.com/alphanu1/daytona-arcade-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    },
+    {
+      "url": "https://github.com/Masterllgod/naruto-storm-3-full-burst-port-nativo",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/tmcleroy/cps2recomp",
+      "destinationOrg": "decomps",
+      "category": "other-static-recomp"
+    },
+    {
+      "url": "https://github.com/GuillianSeed/MetalGear",
+      "destinationOrg": "decomps",
+      "category": "msx-decompilation"
+    },
+    {
+      "url": "https://github.com/itsmattkc/RunnersDecomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation"
+    },
+    {
+      "url": "https://github.com/mahmoud-mess/tekken6-recomp",
+      "destinationOrg": "decomps",
+      "category": "arcade-static-recomp"
+    }
+  ]
+}

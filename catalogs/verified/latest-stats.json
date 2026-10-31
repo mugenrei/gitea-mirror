@@ -1,0 +1,23 @@
+{
+  "checkedAtUtc": "2026-10-31T21:10:14.543833+00:00",
+  "sourceEntries": 2090,
+  "verifiedReadyToMirror": 1037,
+  "verifiedTrackOnly": 973,
+  "unavailableOrInaccessible": 52,
+  "requiresReview": 28,
+  "archivedButAvailable": 30,
+  "renamedOrTransferred": 47,
+  "platformMirrorCounts": {
+    "nintendo": 297,
+    "other": 104,
+    "pc": 312,
+    "playstation": 171,
+    "sega": 27,
+    "xbox": 126
+  },
+  "notes": [
+    "Unavailable includes private/inaccessible, not necessarily deleted.",
+    "GraphQL verifies repository identity and public availability, not code correctness.",
+    "The original discovery catalog was not deleted."
+  ]
+}
