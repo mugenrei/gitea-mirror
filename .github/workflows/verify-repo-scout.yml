@@ -1,0 +1,55 @@
+name: Verify GitHub repository scout
+
+on:
+  push:
+    branches:
+      - catalog/scout-2026-10-22
+    paths:
+      - .github/workflows/verify-repo-scout.yml
+      - scripts/revalidate-repo-catalog.py
+      - catalogs/2026-10-22-all-new-2090.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-repo-scout-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Check out catalog branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate audit script syntax
+        run: python -m py_compile scripts/revalidate-repo-catalog.py
+      - name: Recheck all 2,090 repositories using authenticated GraphQL batches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/revalidate-repo-catalog.py
+      - name: Upload fully audited catalogs (even if push is blocked)
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-scout-verified-${{ github.run_number }}
+          path: catalogs/verified/
+          retention-days: 90
+      - name: Commit verified manifests to catalog branch
+        run: |
+          if [ -z "$(git status --porcelain -- catalogs/verified)" ]; then
+            echo "Verified catalogs are unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalogs/verified/
+          git commit -m "catalog: refresh checked repository availability [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
