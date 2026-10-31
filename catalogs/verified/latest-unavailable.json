@@ -1,0 +1,522 @@
+{
+  "checkedAtUtc": "2026-10-31T21:10:14.543833+00:00",
+  "repositories": [
+    {
+      "originalUrl": "https://github.com/Unowa001/crackdown-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'Unowa001/crackdown-recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/BelmanteGu/SuperMarioWonderRecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'BelmanteGu/SuperMarioWonderRecomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/TheSaltTrader/Ninja-s-Dawn---A-Ninja-Gaiden-2-Recompilation-Project",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'TheSaltTrader/Ninja-s-Dawn---A-Ninja-Gaiden-2-Recompilation-Project'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/mlgprorektm8/RyGT",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'mlgprorektm8/RyGT'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/kem0x/RepsiMan",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'kem0x/RepsiMan'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/AxioDL/metaforce",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'AxioDL/metaforce'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/ThePlayerRolo/KRTDLDecomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'ThePlayerRolo/KRTDLDecomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/shibbo/3DWDecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'shibbo/3DWDecomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/dreamsailing59-ops/Snapshot",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'dreamsailing59-ops/Snapshot'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/PrimeDecomp/corruption-proto",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'PrimeDecomp/corruption-proto'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/T3CHNOLOG1C/BigRed",
+      "destinationOrg": "decomps",
+      "category": "3ds-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'T3CHNOLOG1C/BigRed'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/3DWCommunity/3dcomp",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name '3DWCommunity/3dcomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/lucyawrey/Paper_Mario_64_Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'lucyawrey/Paper_Mario_64_Recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/DaCodeChick/DroidWorks-decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'DaCodeChick/DroidWorks-decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/TekRantGaming/sms-pc-port",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-native-port",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'TekRantGaming/sms-pc-port'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/GarrettGunnell/Steamless",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'GarrettGunnell/Steamless'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/danvratil/jhgpc98decomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'danvratil/jhgpc98decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/fr3dsp/TheImpossibleGame-Decomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'fr3dsp/TheImpossibleGame-Decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/spongeis5/ToS-Decomp",
+      "destinationOrg": "decomps",
+      "category": "multiplatform-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'spongeis5/ToS-Decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/Moddimation/KinokoDecomp-S",
+      "destinationOrg": "decomps",
+      "category": "wiiu-decompilation",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'Moddimation/KinokoDecomp-S'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/sonsegajp/HWDER",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp",
+      "mirror": true,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'sonsegajp/HWDER'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/OpenPort-Labs/Galaxy-Android",
+      "destinationOrg": "decomps",
+      "category": "wii-native-port",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'OpenPort-Labs/Galaxy-Android'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/rghdecomp/rgh",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'rghdecomp/rgh'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/Fluvian/gga",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'Fluvian/gga'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/sasja-san/atc",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'sasja-san/atc'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/nikolaygorb/TheDarknessRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'nikolaygorb/TheDarknessRecomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/fabioap-cpu/SoulBlade_Recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'fabioap-cpu/SoulBlade_Recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/cabi24/SFRush2049-decomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'cabi24/SFRush2049-decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/gcsmith/Pilotwings64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'gcsmith/Pilotwings64Recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/MissingThePixel/MTR-PGR4",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'MissingThePixel/MTR-PGR4'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/Nugetinc/MixelsRushDecompilation",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'Nugetinc/MixelsRushDecompilation'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/ieee802dot11ac/rb3ds",
+      "destinationOrg": "decomps",
+      "category": "nds-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'ieee802dot11ac/rb3ds'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/abelbriggs1/tm2pc-reveng",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'abelbriggs1/tm2pc-reveng'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/ZounaModding/RatDecomp",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'ZounaModding/RatDecomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/juandav/dw3_decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'juandav/dw3_decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/juandav/dcb_decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'juandav/dcb_decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/socom-cc/reCOM",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'socom-cc/reCOM'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/MVEALNG/NXE-Dashboard-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'MVEALNG/NXE-Dashboard-Recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/GTTeancum/OpenGTPS1",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'GTTeancum/OpenGTPS1'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/SnesFX/Temple-De-Run",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'SnesFX/Temple-De-Run'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/gcsmith/Superman64Recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'gcsmith/Superman64Recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/toowasmir/WebOfShadowsRecomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'toowasmir/WebOfShadowsRecomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/svinsmoke212/revenge",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'svinsmoke212/revenge'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/CalebPancake/Taiko-No-Tatsujin-Wii-Ketteiban",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation",
+      "mirror": false,
+      "reason": "empty"
+    },
+    {
+      "originalUrl": "https://github.com/dacodechick/legaia-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'dacodechick/legaia-decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/shinny456/ygodm8",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'shinny456/ygodm8'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/PatoFlamejanteTV/OpenSubway",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'PatoFlamejanteTV/OpenSubway'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/fluvian/mnsg",
+      "destinationOrg": "mirrors",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'fluvian/mnsg'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/ACreTeam/cf-decomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'ACreTeam/cf-decomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/laqieer/fireemblem8j",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'laqieer/fireemblem8j'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/paulogaab21/ufc3recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-decompilation",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'paulogaab21/ufc3recomp'."
+      ]
+    },
+    {
+      "originalUrl": "https://github.com/flashfire199/Armored-core-ReAnswered",
+      "destinationOrg": "decomps",
+      "category": "other-native-port",
+      "mirror": false,
+      "reason": "not_found_or_inaccessible",
+      "apiErrors": [
+        "Could not resolve to a Repository with the name 'flashfire199/Armored-core-ReAnswered'."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,313 @@
+{
+  "checkedAtUtc": "2026-10-31T21:10:14.543833+00:00",
+  "repositories": [
+    {
+      "originalUrl": "https://github.com/biggestsonicfan/stfdisasm",
+      "destinationOrg": "mirrors",
+      "category": "arcade-decompilation",
+      "mirror": true,
+      "url": "https://github.com/biggestsonicfan/stfdisasm",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 15797,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/canersaka/Yakuza-Dead-Souls-Recompiled",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp",
+      "mirror": true,
+      "url": "https://github.com/canersaka/Yakuza-Dead-Souls-Recompiled",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 41657,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/blazkowolf/cv64",
+      "destinationOrg": "mirrors",
+      "category": "n64-decompilation",
+      "mirror": true,
+      "url": "https://github.com/k64ret/cv64",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 1117,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/KidWizardOfTheWeb/SRZGDecomp",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation",
+      "mirror": true,
+      "url": "https://github.com/KidWizardOfTheWeb/SRZGDecomp",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 30935,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/lombyte-project/Lombyte",
+      "destinationOrg": "mirrors",
+      "category": "ps2-decompilation",
+      "mirror": true,
+      "url": "https://github.com/lombyte-project/Lombyte",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 39780,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/menaman123/NativeEE",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp",
+      "mirror": true,
+      "url": "https://github.com/menaman123/NativeEE",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 6794,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/OpenXcom/OpenXcom",
+      "destinationOrg": "mirrors",
+      "category": "pc-engines-reimplementation",
+      "mirror": true,
+      "url": "https://github.com/OpenXcom/OpenXcom",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 35313,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/pbr-ret/pbr-decomp",
+      "destinationOrg": "decomps",
+      "category": "wii-decompilation",
+      "mirror": true,
+      "url": "https://github.com/pbr-ret/pbr-decomp",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 4488,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Team-UPD/DeltaruneDecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation",
+      "mirror": true,
+      "url": "https://github.com/TeamBlossomDevs/DeltaruneDecomp_beta",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 68700,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/adamcolquhoun/Creatures-2-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "pc-decompilation",
+      "mirror": false,
+      "url": "https://github.com/adamcolquhoun/Creatures-2-Decompilation",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 3,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/prakxo/doraemon1",
+      "destinationOrg": "mirrors",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "url": "https://github.com/adipocira/doraemon1",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 1249,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Bingies24/CtRCrossPlatform",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation",
+      "mirror": false,
+      "url": "https://github.com/Bingies24/cuttherope-dx",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 34292,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Bomberhackers/bm64tsa",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "url": "https://github.com/Bomberhackers/bm64tsa",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 16634,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/djsaunde/1080-decomp",
+      "destinationOrg": "mirrors",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "url": "https://github.com/djsaunde/1080-decomp",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 117253,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/GensokyoClub/th06",
+      "destinationOrg": "mirrors",
+      "category": "pc-decompilation",
+      "mirror": false,
+      "url": "https://github.com/GensokyoClub/th06",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 10282,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Jhuyghue/donburi-decomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "url": "https://github.com/Jhuyghue/donburi-recomp",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 17453,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Legend-of-Dragoon-Modding/Legend-of-Dragoon-Java",
+      "destinationOrg": "decomps",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "url": "https://github.com/Legend-of-Dragoon-Modding/Severed-Chains",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 145065,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/MaryNCRT/Ultimate-Mortal-Kombat-3-iOS-Recomp",
+      "destinationOrg": "decomps",
+      "category": "mobile-decompilation",
+      "mirror": false,
+      "url": "https://github.com/MaryNCRT/Ultimate-Mortal-Kombat-3-iOS-Decompiled",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 233882,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/birabittoh/KameoRePowered",
+      "destinationOrg": "mirrors",
+      "category": "xbox360-decompilation",
+      "mirror": false,
+      "url": "https://github.com/MaxDeadBear/KameoRePowered",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 17934,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/n64decomp/pw64",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation",
+      "mirror": false,
+      "url": "https://github.com/n64decomp/pw64",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 1985,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/NancySadkov/dest",
+      "destinationOrg": "mirrors",
+      "category": "pc-decompilation",
+      "mirror": false,
+      "url": "https://github.com/NancySadkov/dest",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 61198,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Raidenthequick/megaman3-disassembly",
+      "destinationOrg": "mirrors",
+      "category": "nes-disassembly",
+      "mirror": false,
+      "url": "https://github.com/refreshing-lemonade/megaman3-disassembly",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 1599,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/Raidenthequick/megaman4-disassembly",
+      "destinationOrg": "mirrors",
+      "category": "nes-disassembly",
+      "mirror": false,
+      "url": "https://github.com/refreshing-lemonade/megaman4-disassembly",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 1420,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/refreshing-lemonade/megaman5-disassembly",
+      "destinationOrg": "mirrors",
+      "category": "nes-disassembly",
+      "mirror": false,
+      "url": "https://github.com/refreshing-lemonade/megaman5-disassembly",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 2189,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/SheepStealer2001/sdw-decomp",
+      "destinationOrg": "mirrors",
+      "category": "ps1-decompilation",
+      "mirror": false,
+      "url": "https://github.com/SDW-Community/sdw-decomp",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 3609,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/seilc/incredibles",
+      "destinationOrg": "mirrors",
+      "category": "gamecube-decompilation",
+      "mirror": false,
+      "url": "https://github.com/seilc/incredibles",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 29717,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/squiddonaut/pokeblack",
+      "destinationOrg": "mirrors",
+      "category": "nds-decompilation",
+      "mirror": false,
+      "url": "https://github.com/squiddonaut/pokeblack",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 141593,
+      "renamed": false,
+      "reason": "canonical_url_duplicate"
+    },
+    {
+      "originalUrl": "https://github.com/adubbz/dcdecomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation",
+      "mirror": false,
+      "url": "https://github.com/TheMoonPeople/Chronicle",
+      "archived": false,
+      "githubReportedDiskUsageKiB": 55774,
+      "renamed": true,
+      "reason": "canonical_url_duplicate"
+    }
+  ]
+}
