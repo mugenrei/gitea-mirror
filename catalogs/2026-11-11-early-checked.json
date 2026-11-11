@@ -170,6 +170,59 @@
       "url": "https://github.com/beanieaxolotl/shinen-gax-decomp",
       "destinationOrg": "decomps",
       "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/aldotoa/max-payne-recomp",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Decryptu/pokerecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Fabiano-Gelain/YsRecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Interrupt/ultima-underworld",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/AssetRipper/AssetRipper",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/atenfyr/UAssetGUI",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/N64Recomp/N64ModernRuntime",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/mpolizel/SMW2Recomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/MotaviaWorks/PSIVRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-static-recomp"
+    },
+    {
+      "url": "https://github.com/DreaXer/TheGreatRecomp",
+      "destinationOrg": "decomps",
+      "category": "dreamcast-static-recomp"
     }
   ]
 }
