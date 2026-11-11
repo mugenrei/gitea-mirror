@@ -1,0 +1,54 @@
+name: Verify November 2026 game source scout
+
+on:
+  push:
+    branches:
+      - catalog/scout-2026-11-11
+    paths:
+      - .github/workflows/verify-nov-2026-scout.yml
+      - scripts/verify-nov-2026-scout.py
+      - catalogs/2026-11-11-candidates.json
+      - catalogs/2026-11-11-existing-baseline.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-nov-source-scout-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check verifier syntax
+        run: python -m py_compile scripts/verify-nov-2026-scout.py scripts/revalidate-repo-catalog.py
+      - name: Live verification and canonical dedup against all earlier catalogs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/verify-nov-2026-scout.py
+      - name: Upload verified manifests as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nov-2026-game-source-scout-${{ github.run_number }}
+          path: catalogs/2026-11-11-verified/
+          retention-days: 90
+      - name: Commit verified catalogs to scout branch
+        run: |
+          if [ -z "$(git status --porcelain -- catalogs/2026-11-11-verified)" ]; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add catalogs/2026-11-11-verified
+          git commit -m 'catalog: publish November 2026 checked new repositories [skip ci]'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
