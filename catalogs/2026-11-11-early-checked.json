@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/MysteriousAeon/rayman3-hd-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/elripalda/gta4-ps5",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/AbdelmoumenDeghbouche/knack_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/AbdelmoumenDeghbouche/wipeout_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/jhaizhou-ops/d2r-mobile",
+      "destinationOrg": "decomps",
+      "category": "switch-native-runtime"
+    },
+    {
+      "url": "https://github.com/morerokk/MHGURecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/jjmhalew/RampageRE",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/literalynn/BurnoutDominatorReversed",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/SlaveOfIDO/blastcorps-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/paperpad",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/4sval/FModel",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    }
+  ]
+}
