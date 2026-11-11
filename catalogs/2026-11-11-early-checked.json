@@ -1,0 +1,274 @@
+{
+  "version": 1,
+  "defaults": {
+    "destinationOrg": "decomps",
+    "mirror": true
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/MysteriousAeon/rayman3-hd-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/elripalda/gta4-ps5",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/AbdelmoumenDeghbouche/knack_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/AbdelmoumenDeghbouche/wipeout_pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/jhaizhou-ops/d2r-mobile",
+      "destinationOrg": "decomps",
+      "category": "switch-native-runtime"
+    },
+    {
+      "url": "https://github.com/morerokk/MHGURecomp",
+      "destinationOrg": "decomps",
+      "category": "switch-static-recomp"
+    },
+    {
+      "url": "https://github.com/jjmhalew/RampageRE",
+      "destinationOrg": "decomps",
+      "category": "ps2-decompilation"
+    },
+    {
+      "url": "https://github.com/literalynn/BurnoutDominatorReversed",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/SlaveOfIDO/blastcorps-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/chrissotraidis/paperpad",
+      "destinationOrg": "decomps",
+      "category": "n64-decompilation"
+    },
+    {
+      "url": "https://github.com/4sval/FModel",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/dannyowelch/deception2-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/moesuito/gt4-staticrecomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/C-GBL/P3FES-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/Re-TeRo17/ratchet-tod-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/undecuple/project-helghast",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/mateussmeneses/theorder1886-port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/razzconnect/basara4-native-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/saulob/13-sentinels-aegis-rim-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/AlessioGiacobbe/pataport",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/angelof-exe/ygo-tf-5-decomp",
+      "destinationOrg": "decomps",
+      "category": "psp-decompilation"
+    },
+    {
+      "url": "https://github.com/gamboozino/ng2recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/hibikifukui22/Dead-or-Alive-Xtreme-2-Recompilation",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/KamiTK2/openNG2",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/santiquiroz/gears-of-war-2-pc-port",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/hk21x/007eon-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/Teraflopping/xrevive",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/seedds/nxnative",
+      "destinationOrg": "decomps",
+      "category": "switch-native-runtime"
+    },
+    {
+      "url": "https://github.com/c22dev/mush8",
+      "destinationOrg": "decomps",
+      "category": "switch-native-runtime"
+    },
+    {
+      "url": "https://github.com/chasem-dev/colosseum-launcher",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Odrannnn/MetroidPrime2Port",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/josiahg2502-glitch/Smash4PC",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/beanieaxolotl/shinen-gax-decomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
+    },
+    {
+      "url": "https://github.com/aldotoa/max-payne-recomp",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Decryptu/pokerecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    },
+    {
+      "url": "https://github.com/Fabiano-Gelain/YsRecomp",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/Interrupt/ultima-underworld",
+      "destinationOrg": "decomps",
+      "category": "pc-static-recomp"
+    },
+    {
+      "url": "https://github.com/AssetRipper/AssetRipper",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/atenfyr/UAssetGUI",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/N64Recomp/N64ModernRuntime",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/mpolizel/SMW2Recomp",
+      "destinationOrg": "decomps",
+      "category": "snes-static-recomp"
+    },
+    {
+      "url": "https://github.com/MotaviaWorks/PSIVRecomp",
+      "destinationOrg": "decomps",
+      "category": "genesis-static-recomp"
+    },
+    {
+      "url": "https://github.com/DreaXer/TheGreatRecomp",
+      "destinationOrg": "decomps",
+      "category": "dreamcast-static-recomp"
+    },
+    {
+      "url": "https://github.com/danielalves96/gow-pc-port",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/GTTeancum/Timesplitters",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/LunarLaurus/adams-ant-farm-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/wootbeer/snprecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/8bitninja64/HangtimeRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/saulob/el-chavo-kart-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/shaneomac1337/Top-Spin-4-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/aboood40091/sead",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/0x1F9F1/Open1560",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
+    }
+  ]
+}
