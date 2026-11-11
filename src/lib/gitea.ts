@@ -7,9 +7,10 @@ import {
 import { membershipRoleEnum } from "@/types/organizations";
 import { Octokit } from "@octokit/rest";
 import type { Config } from "@/types/config";
-import type { Organization, Repository } from "./db/schema";
+import type { IssueStateFilter, Organization, ReleaseType, Repository } from "./db/schema";
 import { httpPost, httpGet, httpDelete, httpPut, httpPatch } from "./http-client";
 import { createMirrorJob } from "./helpers";
+import { applyIssueMediaOption, stripIssueMedia } from "./utils/issue-media";
 import { db, organizations, repositories } from "./db";
 import { eq, and, ne } from "drizzle-orm";
 import { decryptConfigTokens } from "./utils/config-encryption";
@@ -31,9 +32,28 @@ import {
   listSources,
   sourceAccessToken,
 } from "./sources";
-import { isRateLimitError } from "./rate-limit-gate";
+import { triggerAllReleasesRemovedNotification } from "./notification-service";
+import {
+  RATE_LIMIT_FAST_FAIL_THRESHOLD_SECONDS,
+  RateLimitPausedError,
+  isRateLimitError,
+  markRateLimited,
+  rateLimitGateKey,
+  rateLimitResetFromResponse,
+  waitForRateLimitGate,
+} from "./rate-limit-gate";
 import { assertMirrorCredentialUpdateSupported } from "./gitea-mirror-credentials";
+import { guardedFetch, OutboundUrlError } from "./utils/outbound-url";
+import {
+  DownloadLimitError,
+  downloadWithLimits,
+  type BoundedDownload,
+  type DownloadLimits,
+} from "./utils/bounded-download";
 import { persistMetadataPassProgress } from "./metadata-progress-store";
+import { summarizeReleaseAssets } from "./repository-storage";
+import { recordReleaseAssetStorage } from "./repository-storage-store";
+import { listDestinationReleases } from "./destination-listing";
 import {
   advanceMetadataSyncCursor,
   buildPassProgress,
@@ -45,9 +65,16 @@ import {
   type MetadataSyncCursor,
 } from "./metadata-state";
 import {
+  compileReleaseTagPattern,
+  compileReleaseTagPatterns,
   normalizeReleaseAssetLimit,
   normalizeReleaseLimit,
+  normalizeReleaseTagPatterns,
+  normalizeReleaseType,
   releaseGetsAssets,
+  releaseMatchesTagFilters,
+  releaseMatchesType,
+  releaseScanLimit,
   resolveMirrorOptionsForRepository,
   resolveOrganizationSkipForks,
   type ResolvedMirrorOptions,
@@ -56,6 +83,8 @@ import { repositoryDestinationColumns } from "./repo-utils";
 import { resolveDestinationIdentity } from "./destination-connection";
 import { withKeyedLock } from "./utils/keyed-mutex";
 import { claimRepositoryForInFlightWork } from "./utils/repo-status-claim";
+import { waitForGiteaImport } from "./gitea-import-wait";
+import type { GiteaRepoInfo } from "./gitea-enhanced";
 
 /**
  * Run the release mirror for one repository through whichever source it came
@@ -79,6 +108,9 @@ export async function mirrorRepositoryReleases({
   giteaRepoName,
   releaseLimit,
   releaseAssetLimit,
+  releaseType,
+  releaseIncludeTags,
+  releaseExcludeTags,
 }: {
   config: Partial<Config>;
   repository: Repository;
@@ -91,6 +123,9 @@ export async function mirrorRepositoryReleases({
   giteaRepoName: string;
   releaseLimit?: number;
   releaseAssetLimit?: number | null;
+  releaseType?: ReleaseType;
+  releaseIncludeTags?: string[];
+  releaseExcludeTags?: string[];
 }): Promise<boolean> {
   if (sourceConnection.provider === "github") {
     if (!octokit) {
@@ -108,6 +143,9 @@ export async function mirrorRepositoryReleases({
       giteaRepoName,
       releaseLimit,
       releaseAssetLimit,
+      releaseType,
+      releaseIncludeTags,
+      releaseExcludeTags,
     });
     return true;
   }
@@ -121,6 +159,9 @@ export async function mirrorRepositoryReleases({
       giteaRepoName,
       releaseLimit,
       releaseAssetLimit,
+      releaseType,
+      releaseIncludeTags,
+      releaseExcludeTags,
     });
     return true;
   }
@@ -195,38 +236,36 @@ export const getGiteaRepoOwnerAsync = async ({
     throw new Error("User ID is required for organization overrides.");
   }
 
-  // Check if repository is starred
-  if (repository.isStarred) {
-    const starredReposMode = config.githubConfig.starredReposMode || "dedicated-org";
-    if (starredReposMode === "preserve-owner") {
-      return repository.organization || repository.owner;
-    }
-    return config.githubConfig.starredReposOrg || "starred";
-  }
-
-  // Check for repository-specific override (second highest priority)
-  if (repository.destinationOrg) {
-    console.log(`Using repository override: ${repository.fullName} -> ${repository.destinationOrg}`);
-    return repository.destinationOrg;
-  }
-
-  // Check for organization-specific override
-  if (repository.organization) {
+  // The organization override is the only tier that needs a database read,
+  // and only when the starred mode or a repository override has not already
+  // decided. Everything else is shared with `resolveDestinationOwner` below,
+  // which the repositories list uses to filter by the real destination
+  // without one query per row.
+  let organizationDestination: string | undefined;
+  if (!repository.isStarred && !repository.destinationOrg && repository.organization) {
     const orgConfig = await getOrganizationConfig({
       orgName: repository.organization,
       userId: config.userId,
     });
-
-    if (orgConfig?.destinationOrg) {
-      console.log(`Using organization override: ${repository.organization} -> ${orgConfig.destinationOrg}`);
-      return orgConfig.destinationOrg;
-    }
+    organizationDestination = orgConfig?.destinationOrg ?? undefined;
   }
 
-  // For personal repos (not organization repos), fall back to the default strategy
+  const owner = resolveDestinationOwner({
+    config,
+    repository,
+    organizationDestination,
+    sourceUsername,
+  });
 
-  // Fall back to existing strategy logic
-  return getGiteaRepoOwner({ config, repository, sourceUsername });
+  // Logged here rather than in the resolver, which the repositories list
+  // runs for every row on every load.
+  if (!repository.isStarred && repository.destinationOrg) {
+    console.log(`Using repository override: ${repository.fullName} -> ${repository.destinationOrg}`);
+  } else if (organizationDestination) {
+    console.log(`Using organization override: ${repository.organization} -> ${organizationDestination}`);
+  }
+
+  return owner;
 };
 
 export const getGiteaRepoOwner = ({
@@ -322,6 +361,53 @@ export const getGiteaRepoOwner = ({
       // Default fallback
       return config.giteaConfig.defaultOwner;
   }
+};
+
+/**
+ * Resolve the destination owner with the same precedence the mirror uses:
+ * starred mode > repository override > organization override > strategy.
+ *
+ * The organization override is passed in rather than fetched so callers that
+ * already hold the organization rows (the repositories list) can resolve many
+ * repositories without a database round-trip per row.
+ */
+export const resolveDestinationOwner = ({
+  config,
+  repository,
+  organizationDestination,
+  sourceUsername,
+}: {
+  config: Partial<Config>;
+  repository: Repository;
+  organizationDestination?: string | null;
+  /** Account name of the repository's own source, when already resolved. */
+  sourceUsername?: string;
+}): string => {
+  if (!config.githubConfig || !config.giteaConfig) {
+    throw new Error("GitHub or Gitea config is required.");
+  }
+
+  if (!config.giteaConfig.defaultOwner) {
+    throw new Error("Gitea username is required.");
+  }
+
+  if (repository.isStarred) {
+    const starredReposMode = config.githubConfig.starredReposMode || "dedicated-org";
+    if (starredReposMode === "preserve-owner") {
+      return repository.organization || repository.owner;
+    }
+    return config.githubConfig.starredReposOrg || "starred";
+  }
+
+  if (repository.destinationOrg) {
+    return repository.destinationOrg;
+  }
+
+  if (repository.organization && organizationDestination) {
+    return organizationDestination;
+  }
+
+  return getGiteaRepoOwner({ config, repository, sourceUsername });
 };
 
 export const isRepoPresentInGitea = async ({
@@ -734,6 +820,58 @@ export const syncRepositoryMetadataToGitea = async ({
   }
 };
 
+/**
+ * A mirror of this source is already on the destination, so there is nothing to
+ * migrate: bring it up to date the way a sync does. This is where a retry lands
+ * after a proxy timed out on the migrate call while Gitea carried on (#496).
+ * Only recording that the mirror exists left the row green with no releases,
+ * issues or anything else a first mirror brings, and with scheduling off nothing
+ * ever came back for them.
+ */
+async function syncExistingMirror({
+  config,
+  repository,
+  owner,
+  repoName,
+  repoInfo,
+}: {
+  config: Partial<Config>;
+  repository: Repository;
+  owner: string;
+  repoName: string;
+  repoInfo: GiteaRepoInfo;
+}): Promise<void> {
+  const { getGiteaRepoInfo, syncGiteaRepoEnhanced } = await import("./gitea-enhanced");
+  const location = {
+    mirroredLocation: `${owner}/${repoName}`,
+    ...repositoryDestinationColumns(resolveDestinationIdentity(config)),
+  };
+
+  const claimed = await claimRepositoryForInFlightWork({
+    repositoryId: repository.id!,
+    set: { status: repoStatusEnum.parse("mirroring"), updatedAt: new Date(), ...location },
+  });
+
+  if (!claimed) {
+    console.log(
+      `[Idempotency] ${repository.fullName} is being mirrored or synced by another process. Skipping.`
+    );
+    return;
+  }
+
+  await waitForGiteaImport({
+    location: location.mirroredLocation,
+    initial: repoInfo,
+    readRepo: () => getGiteaRepoInfo({ config, owner, repoName }),
+  });
+
+  await syncGiteaRepoEnhanced({
+    config,
+    repository: { ...repository, ...location },
+    alreadyClaimed: true,
+  });
+}
+
 export const mirrorGithubRepoToGitea = async ({
   octokit,
   repository,
@@ -921,44 +1059,18 @@ export const mirrorGithubRepoToGitea = async ({
           // expectedLocation is recomputed below before the "mirroring" write.
         } else {
           console.log(
-            `Repository ${targetRepoName} already exists in Gitea under ${repoOwner}. Updating database status.`
+            `Repository ${targetRepoName} already exists in Gitea under ${repoOwner}. Bringing it up to date.`
           );
 
-          await syncRepositoryMetadataToGitea({
+          // The repository is there: a failure from here on keeps its location.
+          migrateSucceeded = true;
+          await syncExistingMirror({
             config,
-            octokit,
             repository,
-            giteaOwner: repoOwner,
-            giteaRepoName: targetRepoName,
-            giteaToken: decryptedConfig.giteaConfig.token,
+            owner: repoOwner,
+            repoName: targetRepoName,
+            repoInfo: existingRepoInfo,
           });
-
-          // Update database to reflect that the repository is already mirrored
-          await db
-            .update(repositories)
-            .set({
-              status: repoStatusEnum.parse("mirrored"),
-              updatedAt: new Date(),
-              lastMirrored: new Date(),
-              errorMessage: null,
-              mirroredLocation: `${repoOwner}/${targetRepoName}`,
-              ...repositoryDestinationColumns(resolveDestinationIdentity(config)),
-            })
-            .where(eq(repositories.id, repository.id!));
-
-          // Append log for "mirrored" status
-          await createMirrorJob({
-            userId: config.userId,
-            repositoryId: repository.id,
-            repositoryName: repository.name,
-            message: `Repository ${repository.name} already exists in Gitea`,
-            details: `Repository ${repository.name} was found to already exist in Gitea under ${repoOwner} and database status was updated.`,
-            status: "mirrored",
-          });
-
-          console.log(
-            `Repository ${repository.name} database status updated to mirrored`
-          );
           return;
         }
       } else {
@@ -1168,6 +1280,9 @@ export const mirrorGithubRepoToGitea = async ({
           giteaRepoName: targetRepoName,
           releaseLimit: mirrorOptions.releaseLimit,
           releaseAssetLimit: mirrorOptions.releaseAssetLimit,
+          releaseType: mirrorOptions.releaseType,
+          releaseIncludeTags: mirrorOptions.releaseIncludeTags,
+          releaseExcludeTags: mirrorOptions.releaseExcludeTags,
         });
         if (mirrored) {
           metadataState.components.releases = true;
@@ -1246,6 +1361,9 @@ export const mirrorGithubRepoToGitea = async ({
           repository,
           giteaOwner: repoOwner,
           giteaRepoName: targetRepoName,
+          issueState: mirrorOptions.mirrorIssueState,
+          includeComments: mirrorOptions.mirrorIssueComments,
+          includeMedia: mirrorOptions.mirrorIssueMedia,
           syncCursor: metadataState.syncCursors.issues,
           passProgress: metadataState.passProgress.issues,
           onPassProgress: async (progress) => {
@@ -1817,44 +1935,18 @@ export async function mirrorGitHubRepoToGiteaOrg({
           });
         } else {
           console.log(
-            `Repository ${targetRepoName} already exists in Gitea organization ${targetOwner}. Updating database status.`
+            `Repository ${targetRepoName} already exists in Gitea organization ${targetOwner}. Bringing it up to date.`
           );
 
-          await syncRepositoryMetadataToGitea({
+          // The repository is there: a failure from here on keeps its location.
+          migrateSucceeded = true;
+          await syncExistingMirror({
             config,
-            octokit,
             repository,
-            giteaOwner: targetOwner,
-            giteaRepoName: targetRepoName,
-            giteaToken: decryptedConfig.giteaConfig.token,
+            owner: targetOwner,
+            repoName: targetRepoName,
+            repoInfo: existingRepoInfo,
           });
-
-          // Update database to reflect that the repository is already mirrored
-          await db
-            .update(repositories)
-            .set({
-              status: repoStatusEnum.parse("mirrored"),
-              updatedAt: new Date(),
-              lastMirrored: new Date(),
-              errorMessage: null,
-              mirroredLocation: `${targetOwner}/${targetRepoName}`,
-              ...repositoryDestinationColumns(resolveDestinationIdentity(config)),
-            })
-            .where(eq(repositories.id, repository.id!));
-
-          // Create a mirror job log entry
-          await createMirrorJob({
-            userId: config.userId,
-            repositoryId: repository.id,
-            repositoryName: repository.name,
-            message: `Repository ${targetRepoName} already exists in Gitea organization ${targetOwner}`,
-            details: `Repository ${targetRepoName} was found to already exist in Gitea organization ${targetOwner} and database status was updated.`,
-            status: "mirrored",
-          });
-
-          console.log(
-            `Repository ${targetRepoName} database status updated to mirrored in organization ${targetOwner}`
-          );
           return;
         }
       } else {
@@ -1990,6 +2082,9 @@ export async function mirrorGitHubRepoToGiteaOrg({
           giteaRepoName: targetRepoName,
           releaseLimit: mirrorOptions.releaseLimit,
           releaseAssetLimit: mirrorOptions.releaseAssetLimit,
+          releaseType: mirrorOptions.releaseType,
+          releaseIncludeTags: mirrorOptions.releaseIncludeTags,
+          releaseExcludeTags: mirrorOptions.releaseExcludeTags,
         });
         if (mirrored) {
           metadataState.components.releases = true;
@@ -2066,6 +2161,9 @@ export async function mirrorGitHubRepoToGiteaOrg({
           repository,
           giteaOwner: orgName,
           giteaRepoName: targetRepoName,
+          issueState: mirrorOptions.mirrorIssueState,
+          includeComments: mirrorOptions.mirrorIssueComments,
+          includeMedia: mirrorOptions.mirrorIssueMedia,
           syncCursor: metadataState.syncCursors.issues,
           passProgress: metadataState.passProgress.issues,
           onPassProgress: async (progress) => {
@@ -2780,12 +2878,26 @@ export const mirrorGitRepoIssuesToGitea = async ({
   passProgress,
   onPassProgress,
   milestoneIds,
+  issueState = "all",
+  includeComments = true,
+  includeMedia = true,
 }: {
   config: Partial<Config>;
   octokit: Octokit;
   repository: Repository;
   giteaOwner: string;
   giteaRepoName?: string;
+  /**
+   * Which source issues get created. "all" keeps the historical behavior.
+   * The listing still asks for every state, so an issue that is already
+   * mirrored keeps following GitHub when it leaves the filter: closing it
+   * there closes the copy. Nothing is deleted.
+   */
+  issueState?: IssueStateFilter;
+  /** Copy issue comments. Off skips the per-issue comment listing entirely. */
+  includeComments?: boolean;
+  /** Keep images/videos/attachment links in issue bodies and comments. */
+  includeMedia?: boolean;
   /**
    * Gitea milestone ids by title from the milestones pass that ran just
    * before (#460). Without it the issues' milestones are left untouched.
@@ -2859,9 +2971,19 @@ export const mirrorGitRepoIssuesToGitea = async ({
   }
   // GitHub numbers this pass has finished, kept if it does not complete.
   const completedNumbers = new Set<number>();
+  // Issues an earlier state filter left out have not changed since, so an
+  // incremental listing would never return them. A pass under a different
+  // filter lists everything once.
+  if (plan.mode === "incremental" && (syncCursor?.issueState ?? "all") !== issueState) {
+    console.log(
+      `[Issues] The issue state filter for ${repository.fullName} changed; running a full pass`
+    );
+    plan = { mode: "full", reason: "the issue state filter changed" };
+  }
   const finishPass = async () => {
     if (resume) await onPassProgress?.(undefined);
-    return advanceMetadataSyncCursor(syncCursor, plan.mode, passStartedAt);
+    const cursor = advanceMetadataSyncCursor(syncCursor, plan.mode, passStartedAt);
+    return issueState === "all" ? cursor : { ...cursor, issueState };
   };
   const keepPassProgress = async () => {
     await onPassProgress?.(buildPassProgress(plan, passStartedAt, completedNumbers, resume));
@@ -3039,6 +3161,7 @@ export const mirrorGitRepoIssuesToGitea = async ({
   }
 
   let unchangedIssueCount = 0;
+  let filteredOutIssueCount = 0;
 
   // Process issues in parallel with concurrency control
   let mirroredIssues: unknown[];
@@ -3056,6 +3179,17 @@ export const mirrorGitRepoIssuesToGitea = async ({
       });
       if (itemClass === "skip") {
         completedNumbers.add(issue.number);
+        return issue;
+      }
+
+      // The state filter only decides what gets created. Not counted as done,
+      // so a resumed pass under another filter looks at the issue again.
+      if (
+        issueState !== "all" &&
+        issue.state !== issueState &&
+        !giteaIssueByGitHubNumber.has(issue.number)
+      ) {
+        filteredOutIssueCount++;
         return issue;
       }
 
@@ -3104,7 +3238,7 @@ export const mirrorGitRepoIssuesToGitea = async ({
       }.`;
       const issueMarker = `[GH-ISSUE #${issue.number}]`;
       const mirroredTitle = `${issueMarker} ${issue.title}`;
-      const issueBody = `${issueOriginHeader}\nOriginal GitHub issue: ${issue.html_url}${originalAssignees}\n\n${issue.body ?? ""}`;
+      const issueBody = `${issueOriginHeader}\nOriginal GitHub issue: ${issue.html_url}${originalAssignees}\n\n${applyIssueMediaOption(issue.body, includeMedia)}`;
 
       const wantedMilestoneId = resolveGiteaMilestoneId(milestoneIds, issue.milestone);
       const issuePayload: any = {
@@ -3302,106 +3436,119 @@ export const mirrorGitRepoIssuesToGitea = async ({
         });
       }
 
-      // Clone comments
-      const comments = await octokit.paginate(
-        octokit.rest.issues.listComments,
-        {
-          owner,
-          repo,
-          issue_number: issue.number,
-          per_page: 100,
-        },
-        (res) => res.data
-      );
-
-      // Ensure comments are applied in chronological order to preserve discussion flow
-      const sortedComments = comments
-        .slice()
-        .sort(
-          (a, b) =>
-            new Date(a.created_at || 0).getTime() -
-            new Date(b.created_at || 0).getTime()
+      if (includeComments) {
+        // Clone comments
+        const comments = await octokit.paginate(
+          octokit.rest.issues.listComments,
+          {
+            owner,
+            repo,
+            issue_number: issue.number,
+            per_page: 100,
+          },
+          (res) => res.data
         );
 
-      // Process comments sequentially to preserve historical ordering
-      if (sortedComments.length > 0) {
-        const existingComments: any[] = [];
-        let commentsPage = 1;
-        const commentsPerPage = 100;
-        while (true) {
-          const existingCommentsRes = await httpGet(
-            `${config.giteaConfig!.url}/api/v1/repos/${giteaOwner}/${repoName}/issues/${targetIssueNumber}/comments?page=${commentsPage}&limit=${commentsPerPage}`,
-            {
-              Authorization: `token ${decryptedConfig.giteaConfig!.token}`,
-            }
+        // Ensure comments are applied in chronological order to preserve discussion flow
+        const sortedComments = comments
+          .slice()
+          .sort(
+            (a, b) =>
+              new Date(a.created_at || 0).getTime() -
+              new Date(b.created_at || 0).getTime()
           );
-          const pageComments = Array.isArray(existingCommentsRes.data)
-            ? existingCommentsRes.data
-            : [];
-          if (!pageComments.length) break;
-          existingComments.push(...pageComments);
-          // Use the Link header to decide whether more pages exist.
-          // See note on the existing-issues pagination above; the
-          // same Gitea behaviors (MAX_RESPONSE_ITEMS cap and
-          // repeated-data on out-of-bound pages) apply here.
-          const commentsLinkHeader =
-            existingCommentsRes.headers.get("link") || "";
-          if (!/\brel="next"/.test(commentsLinkHeader)) break;
-          commentsPage += 1;
-        }
-        const mirroredCommentIds = new Set<number>();
-        const existingCommentBodies = new Set<string>();
-        for (const existingComment of existingComments) {
-          const body = String(existingComment.body || "");
-          if (body) existingCommentBodies.add(body);
-          const marker = String(existingComment.body || "").match(
-            /<!--\s*gh-comment-id:(\d+)\s*-->/i
-          );
-          if (marker?.[1]) {
-            const parsed = Number.parseInt(marker[1], 10);
-            if (Number.isFinite(parsed)) mirroredCommentIds.add(parsed);
-          }
-        }
 
-        await processWithRetry(
-          sortedComments,
-          async (comment) => {
-            if (mirroredCommentIds.has(comment.id)) {
-              return comment;
-            }
-            const commenter = comment.user?.login ?? "unknown";
-            const commentDate = formatDateShort(comment.created_at);
-            const commentHeader = `@${commenter} commented on GitHub${
-              commentDate ? ` (${commentDate})` : ""
-            }:`;
-            const legacyBody = `${commentHeader}\n\n${comment.body ?? ""}`;
-            const markedBody = `<!-- gh-comment-id:${comment.id} -->\n${legacyBody}`;
-            if (existingCommentBodies.has(legacyBody) || existingCommentBodies.has(markedBody)) {
-              return comment;
-            }
-
-            await httpPost(
-              `${config.giteaConfig!.url}/api/v1/repos/${giteaOwner}/${repoName}/issues/${targetIssueNumber}/comments`,
-              {
-                body: markedBody,
-              },
+        // Process comments sequentially to preserve historical ordering
+        if (sortedComments.length > 0) {
+          const existingComments: any[] = [];
+          let commentsPage = 1;
+          const commentsPerPage = 100;
+          while (true) {
+            const existingCommentsRes = await httpGet(
+              `${config.giteaConfig!.url}/api/v1/repos/${giteaOwner}/${repoName}/issues/${targetIssueNumber}/comments?page=${commentsPage}&limit=${commentsPerPage}`,
               {
                 Authorization: `token ${decryptedConfig.giteaConfig!.token}`,
               }
             );
-            return comment;
-          },
-          {
-            concurrencyLimit: 1,
-            maxRetries: 2,
-            retryDelay: 1000,
-            onRetry: (_comment, error, attempt) => {
-              console.log(
-                `Retrying comment (attempt ${attempt}): ${error.message}`
-              );
-            },
+            const pageComments = Array.isArray(existingCommentsRes.data)
+              ? existingCommentsRes.data
+              : [];
+            if (!pageComments.length) break;
+            existingComments.push(...pageComments);
+            // Use the Link header to decide whether more pages exist.
+            // See note on the existing-issues pagination above; the
+            // same Gitea behaviors (MAX_RESPONSE_ITEMS cap and
+            // repeated-data on out-of-bound pages) apply here.
+            const commentsLinkHeader =
+              existingCommentsRes.headers.get("link") || "";
+            if (!/\brel="next"/.test(commentsLinkHeader)) break;
+            commentsPage += 1;
           }
-        );
+          const mirroredCommentIds = new Set<number>();
+          const existingCommentBodies = new Set<string>();
+          for (const existingComment of existingComments) {
+            const body = String(existingComment.body || "");
+            if (body) {
+              existingCommentBodies.add(body);
+              // When media is off, compare against the stripped form too so a
+              // comment mirrored before the option existed is not re-created
+              // as a duplicate with the same text and no media.
+              if (!includeMedia) {
+                existingCommentBodies.add(stripIssueMedia(body));
+              }
+            }
+            const marker = String(existingComment.body || "").match(
+              /<!--\s*gh-comment-id:(\d+)\s*-->/i
+            );
+            if (marker?.[1]) {
+              const parsed = Number.parseInt(marker[1], 10);
+              if (Number.isFinite(parsed)) mirroredCommentIds.add(parsed);
+            }
+          }
+
+          await processWithRetry(
+            sortedComments,
+            async (comment) => {
+              if (mirroredCommentIds.has(comment.id)) {
+                return comment;
+              }
+              const commenter = comment.user?.login ?? "unknown";
+              const commentDate = formatDateShort(comment.created_at);
+              const commentHeader = `@${commenter} commented on GitHub${
+                commentDate ? ` (${commentDate})` : ""
+              }:`;
+              const legacyBody = `${commentHeader}\n\n${applyIssueMediaOption(comment.body, includeMedia)}`;
+              const markedBody = `<!-- gh-comment-id:${comment.id} -->\n${legacyBody}`;
+              if (
+                existingCommentBodies.has(legacyBody) ||
+                existingCommentBodies.has(markedBody)
+              ) {
+                return comment;
+              }
+
+              await httpPost(
+                `${config.giteaConfig!.url}/api/v1/repos/${giteaOwner}/${repoName}/issues/${targetIssueNumber}/comments`,
+                {
+                  body: markedBody,
+                },
+                {
+                  Authorization: `token ${decryptedConfig.giteaConfig!.token}`,
+                }
+              );
+              return comment;
+            },
+            {
+              concurrencyLimit: 1,
+              maxRetries: 2,
+              retryDelay: 1000,
+              onRetry: (_comment, error, attempt) => {
+                console.log(
+                  `Retrying comment (attempt ${attempt}): ${error.message}`
+                );
+              },
+            }
+          );
+        }
       }
 
       completedNumbers.add(issue.number);
@@ -3442,6 +3589,9 @@ export const mirrorGitRepoIssuesToGitea = async ({
     `Completed mirroring ${filteredIssues.length} issues for ${repository.fullName}` +
       (unchangedIssueCount > 0
         ? ` (${unchangedIssueCount} unchanged since the last pass, no GitHub calls)`
+        : "") +
+      (filteredOutIssueCount > 0
+        ? ` (${filteredOutIssueCount} not ${issueState}, skipped)`
         : "")
   );
 
@@ -3489,6 +3639,127 @@ export function classifyReleasesForReconciliation(
 
   return { toCreate, toSkip };
 }
+
+/**
+ * Download one release asset from its source host.
+ *
+ * GitHub: `browser_download_url` (github.com/<owner>/<repo>/releases/download/...)
+ * is meant for browsers. For a private repository it only accepts a logged-in
+ * session and answers 404 to any API token, classic or fine-grained, so those
+ * assets carry `api_url`: the REST asset URL, which with
+ * `Accept: application/octet-stream` answers 302 to a pre-signed object-storage
+ * URL (or, rarely, 200 with the content). The redirect is followed by hand so the
+ * token is never sent to the storage host, whatever the runtime's redirect header
+ * policy is.
+ *
+ * A REST download spends the same budget as any other GitHub API call but does not
+ * go through Octokit, so it answers to the rate limit gate here: nothing is sent
+ * while the gate is closed, and a refusal closes it for the assets after this one
+ * (#437).
+ *
+ * Everything else uses browser_download_url: public GitHub assets, which cost no
+ * API budget that way, and Gitea / Forgejo, whose URL accepts that instance's token.
+ *
+ * An external asset is different: the repository's owner wrote that URL, and that
+ * owner may be anybody whose repository is being mirrored. It gets no token, and
+ * it must be on the public internet at every hop, or a release could read the
+ * operator's token or their internal services into a release attachment. That
+ * owner also decides how much the link sends and how slowly, so it is held to a
+ * size and a total time as well.
+ *
+ * Every download gives up when nothing arrives for a while, so a hung connection
+ * cannot hold a sync forever, and every way out of it closes the connection
+ * (see downloadWithLimits).
+ */
+async function downloadSourceAsset(
+  doFetch: typeof fetch,
+  asset: { browser_download_url: string; api_url?: string; external?: boolean },
+  downloadAuthorization: string | null,
+  rateLimitKey: string,
+  limits: ReleaseAssetDownloadLimits
+): Promise<BoundedDownload> {
+  if (asset.external) {
+    return downloadWithLimits(
+      (signal) =>
+        guardedFetch(
+          asset.browser_download_url,
+          { headers: { Accept: "application/octet-stream" }, signal },
+          { publicOnly: true, fetchImpl: doFetch }
+        ),
+      limits.external
+    );
+  }
+  if (asset.api_url && downloadAuthorization) {
+    const apiUrl = asset.api_url;
+    // Outside the limits: waiting for the gate is not a stalled download.
+    await waitForRateLimitGate(
+      { key: rateLimitKey, maxWaitMs: RATE_LIMIT_FAST_FAIL_THRESHOLD_SECONDS * 1000 },
+      `GET ${apiUrl}`
+    );
+    return downloadWithLimits(async (signal) => {
+      const firstRequest = new AbortController();
+      const first = await guardedFetch(
+        apiUrl,
+        {
+          headers: { Accept: "application/octet-stream", Authorization: downloadAuthorization },
+          signal: AbortSignal.any([signal, firstRequest.signal]),
+        },
+        { maxRedirects: 0, fetchImpl: doFetch }
+      );
+      const resetAt = rateLimitResetFromResponse(first);
+      if (resetAt) {
+        markRateLimited(rateLimitKey, resetAt);
+      }
+      if (first.status < 300 || first.status >= 400) {
+        return first;
+      }
+      const location = first.headers.get("location");
+      if (!location) {
+        return first;
+      }
+      // Only its Location is needed; abort it so its connection closes.
+      firstRequest.abort();
+      return guardedFetch(
+        new URL(location, apiUrl).toString(),
+        { headers: { Accept: "application/octet-stream" }, signal },
+        { fetchImpl: doFetch }
+      );
+    }, limits.source);
+  }
+  return downloadWithLimits(
+    (signal) =>
+      guardedFetch(
+        asset.browser_download_url,
+        {
+          headers: {
+            Accept: "application/octet-stream",
+            ...(downloadAuthorization ? { Authorization: downloadAuthorization } : {}),
+          },
+          signal,
+        },
+        { fetchImpl: doFetch }
+      ),
+    limits.source
+  );
+}
+
+export interface ReleaseAssetDownloadLimits {
+  /** Assets on the source instance itself. */
+  source: DownloadLimits;
+  /** Assets a repository's owner linked by URL. */
+  external: DownloadLimits;
+}
+
+/**
+ * Two minutes without a byte is a dead connection, also for a large file. An
+ * external link is capped at 512 MB and 15 minutes, which still allows a full
+ * size file at about 0.6 MB/s: past that, the copy stays where the owner linked
+ * it and the mirror skips it with a warning.
+ */
+export const RELEASE_ASSET_DOWNLOAD_LIMITS: ReleaseAssetDownloadLimits = {
+  source: { stallTimeoutMs: 2 * 60_000 },
+  external: { stallTimeoutMs: 2 * 60_000, maxBytes: 512 * 1024 * 1024, totalTimeoutMs: 15 * 60_000 },
+};
 
 /**
  * Decide what to upload, keep and delete for one release's assets.
@@ -3610,13 +3881,20 @@ export async function reconcileReleaseAssets({
   downloadAuthorization,
   tagName,
   fetchImpl,
+  downloadLimits = RELEASE_ASSET_DOWNLOAD_LIMITS,
 }: {
   config: Partial<Config>;
   decryptedConfig: Config;
   repoOwner: string;
   repoName: string;
   giteaReleaseId: number;
-  sourceAssets: Array<{ name: string; size: number; browser_download_url: string }>;
+  sourceAssets: Array<{
+    name: string;
+    size: number;
+    browser_download_url: string;
+    api_url?: string;
+    external?: boolean;
+  }>;
   /**
    * Authorization header value for the download requests, or null for none.
    * The caller supplies it because the assets live on the repository's own
@@ -3629,6 +3907,8 @@ export async function reconcileReleaseAssets({
   tagName: string;
   /** Injected in tests; production uses the global fetch. */
   fetchImpl?: typeof fetch;
+  /** Injected in tests; production uses RELEASE_ASSET_DOWNLOAD_LIMITS. */
+  downloadLimits?: ReleaseAssetDownloadLimits;
 }): Promise<{ uploaded: number; failed: number; skipped: number }> {
   let uploaded = 0;
   let failed = 0;
@@ -3720,31 +4000,29 @@ export async function reconcileReleaseAssets({
     }
 
     try {
-      // Download from the source host. fetch strips the Authorization header
-      // on a cross-host redirect (GitHub redirects to its object storage), so
-      // this works for both public and private release assets.
+      // Download from the source host (see downloadSourceAsset: private GitHub
+      // repositories go through the REST asset URL).
       console.log(
         `[Releases] Downloading asset: ${asset.name} (${asset.size} bytes) for ${tagName}`
       );
-      const assetResponse = await doFetch(asset.browser_download_url, {
-        headers: {
-          Accept: "application/octet-stream",
-          ...(downloadAuthorization ? { Authorization: downloadAuthorization } : {}),
-        },
-      });
+      const download = await downloadSourceAsset(
+        doFetch,
+        asset,
+        downloadAuthorization,
+        rateLimitGateKey(config.userId),
+        downloadLimits
+      );
 
-      if (!assetResponse.ok) {
+      if (!download.ok) {
         console.error(
-          `[Releases] Failed to download asset ${asset.name}: ${assetResponse.status} ${assetResponse.statusText}`
+          `[Releases] Failed to download asset ${asset.name}: ${download.status} ${download.statusText}`
         );
         failed++;
         continue;
       }
 
-      const assetData = await assetResponse.arrayBuffer();
-
       const formData = new FormData();
-      formData.append("attachment", new Blob([assetData]), asset.name);
+      formData.append("attachment", download.data, asset.name);
 
       const uploadResponse = await doFetch(
         `${assetsUrl}?name=${encodeURIComponent(asset.name)}`,
@@ -3766,6 +4044,22 @@ export async function reconcileReleaseAssets({
         failed++;
       }
     } catch (assetError) {
+      // The gate is closed for longer than a request may wait: every asset left
+      // would be refused too, so stop here and let the sync report the pause.
+      if (assetError instanceof RateLimitPausedError) throw assetError;
+      // Refused by the outbound guard, or a link that went past its limits. The
+      // repository's owner decides both, and should not be able to mark somebody
+      // else's mirror as failing. The next sync tries again either way.
+      if (
+        assetError instanceof OutboundUrlError ||
+        (asset.external && assetError instanceof DownloadLimitError)
+      ) {
+        console.warn(
+          `[Releases] Skipping asset ${asset.name} of ${tagName}: ${assetError.message}`
+        );
+        skipped++;
+        continue;
+      }
       console.error(
         `[Releases] Error processing asset ${asset.name}: ${
           assetError instanceof Error ? assetError.message : String(assetError)
@@ -3776,6 +4070,90 @@ export async function reconcileReleaseAssets({
   }
 
   return { uploaded, failed, skipped };
+}
+
+/**
+ * Delete every attachment one release currently has on the destination.
+ *
+ * Used by the opt-in pruning in the retention pass, which removes what the
+ * asset limit left behind: the uploads a release got before the limit was set
+ * or lowered. Like `reconcileReleaseAssets` this reads before it writes, and a
+ * listing that cannot be read deletes nothing, so a transient API error never
+ * wipes a release that still had its assets.
+ *
+ * Returns what was removed so the caller can log it and keep the storage
+ * totals honest. A release whose deletes all succeeded reports `failed: 0`.
+ */
+export async function pruneReleaseAttachments({
+  baseUrl,
+  token,
+  repoOwner,
+  repoName,
+  giteaReleaseId,
+  tagName,
+  fetchImpl,
+}: {
+  baseUrl: string;
+  token: string;
+  repoOwner: string;
+  repoName: string;
+  giteaReleaseId: number;
+  tagName: string;
+  /** Injected in tests; production uses the global fetch. */
+  fetchImpl?: typeof fetch;
+}): Promise<{ removed: number; failed: number }> {
+  const doFetch: typeof fetch = fetchImpl ?? fetch;
+  const giteaAuth = { Authorization: `token ${token}` };
+  const assetsUrl = `${baseUrl}/api/v1/repos/${repoOwner}/${repoName}/releases/${giteaReleaseId}/assets`;
+
+  let existingAssets: Array<{ id: number; name: string }>;
+  try {
+    const listResponse = await doFetch(assetsUrl, { headers: giteaAuth });
+    if (!listResponse.ok) {
+      throw new Error(`HTTP ${listResponse.status} ${listResponse.statusText}`);
+    }
+    const body = await listResponse.json();
+    if (!Array.isArray(body)) {
+      throw new Error("the assets endpoint did not return a list");
+    }
+    existingAssets = body;
+  } catch (listError) {
+    console.error(
+      `[Releases] Could not list the attachments of ${tagName} to prune them: ${
+        listError instanceof Error ? listError.message : String(listError)
+      }. Deleted nothing; the next sync retries.`
+    );
+    return { removed: 0, failed: 0 };
+  }
+
+  let removed = 0;
+  let failed = 0;
+
+  for (const asset of existingAssets) {
+    try {
+      const deleteResponse = await doFetch(`${assetsUrl}/${asset.id}`, {
+        method: "DELETE",
+        headers: giteaAuth,
+      });
+      // 404 means it is already gone, which is the state we wanted.
+      if (!deleteResponse.ok && deleteResponse.status !== 404) {
+        throw new Error(`HTTP ${deleteResponse.status} ${deleteResponse.statusText}`);
+      }
+      removed++;
+      console.log(
+        `[Releases] Pruned attachment ${asset.name} (id ${asset.id}) from ${tagName} (past the release asset limit)`
+      );
+    } catch (deleteError) {
+      failed++;
+      console.error(
+        `[Releases] Failed to prune attachment ${asset.name} (id ${asset.id}) from ${tagName}: ${
+          deleteError instanceof Error ? deleteError.message : String(deleteError)
+        }`
+      );
+    }
+  }
+
+  return { removed, failed };
 }
 
 /**
@@ -3822,12 +4200,34 @@ type MirrorReleasesParams = {
    * none, `undefined` means resolve it here like the release limit.
    */
   releaseAssetLimit?: number | null;
+  /**
+   * Already-resolved release type: `all` mirrors every release, `stable` only
+   * the ones the source does not flag as a pre-release. `undefined` means
+   * resolve it here like the other two.
+   */
+  releaseType?: ReleaseType;
+  /**
+   * Already-resolved tag patterns narrowing the release type filter further:
+   * `releaseIncludeTags` keeps only tags matching one of them,
+   * `releaseExcludeTags` drops the ones that do. An empty list means no filter.
+   * `undefined` means resolve them here like the other three.
+   */
+  releaseIncludeTags?: string[];
+  releaseExcludeTags?: string[];
 };
 
 /** The same parameters with the source adapter in place of the GitHub client. */
 type MirrorSourceReleasesParams = Omit<MirrorReleasesParams, "octokit"> & {
   source: ReleaseSourceAdapter;
 };
+
+/**
+ * The stored tag patterns that can actually be compiled. Used only for the log
+ * line, so a broken pattern is never named as if it were in effect.
+ */
+function usableTagPatterns(patterns: readonly string[]): string[] {
+  return patterns.filter((pattern) => compileReleaseTagPattern(pattern) !== null);
+}
 
 /**
  * Lock key for one destination repository's releases: the destination base URL
@@ -3949,6 +4349,9 @@ export async function mirrorGitHubReleasesToGitea(params: MirrorReleasesParams) 
             name: asset.name,
             size: asset.size,
             browser_download_url: asset.browser_download_url,
+            // Private only: this URL costs a REST request per download, and a
+            // public repository's browser URL works and costs none.
+            ...(rest.repository.isPrivate ? { api_url: asset.url } : {}),
           })),
         }));
       },
@@ -3988,6 +4391,9 @@ async function mirrorSourceReleasesToGiteaLocked({
   giteaRepoName,
   releaseLimit: releaseLimitOverride,
   releaseAssetLimit: releaseAssetLimitOverride,
+  releaseType: releaseTypeOverride,
+  releaseIncludeTags: releaseIncludeTagsOverride,
+  releaseExcludeTags: releaseExcludeTagsOverride,
 }: MirrorSourceReleasesParams) {
   if (
     !config.giteaConfig?.defaultOwner ||
@@ -4039,21 +4445,79 @@ async function mirrorSourceReleasesToGiteaLocked({
 
   // Which of those releases also get their assets (#311). Older releases
   // past this point are still created with notes and tag, just without the
-  // uploads. Assets already in Gitea are never removed by this limit; it only
-  // decides what a sync uploads.
+  // uploads. The limit alone only decides what a sync uploads - attachments
+  // that already reached Gitea stay put, unless the opt-in pruning below is
+  // enabled and takes them away again.
   const releaseAssetLimit =
     releaseAssetLimitOverride !== undefined
       ? (normalizeReleaseAssetLimit(releaseAssetLimitOverride) ?? null)
       : (await resolveOptions()).releaseAssetLimit;
 
+  // Opt-in retroactive pruning (see `pruneOldReleaseAssets` on the config).
+  // Global only; it prunes by the ranks this repository's own asset limit
+  // produces, so a per-repo asset limit of 3 prunes that repo's 4th release.
+  const pruneOldReleaseAssets = (await resolveOptions()).pruneOldReleaseAssets;
+
+  // Which releases are candidates at all: every one, or only the ones the source
+  // does not flag as a pre-release.
+  const releaseType =
+    normalizeReleaseType(releaseTypeOverride) ??
+    (await resolveOptions()).releaseType;
+
+  // Tag patterns narrow that further, for the projects that never set the
+  // pre-release flag but tag `v1.2.3-rc.1`. Include keeps only matching tags,
+  // exclude drops matching ones, and exclude wins when both name a tag.
+  const releaseIncludeTags =
+    normalizeReleaseTagPatterns(releaseIncludeTagsOverride) ??
+    (await resolveOptions()).releaseIncludeTags;
+  const releaseExcludeTags =
+    normalizeReleaseTagPatterns(releaseExcludeTagsOverride) ??
+    (await resolveOptions()).releaseExcludeTags;
+
+  const includeTagPatterns = compileReleaseTagPatterns(releaseIncludeTags);
+  const excludeTagPatterns = compileReleaseTagPatterns(releaseExcludeTags);
+  const hasTypeFilter = releaseType !== "all";
+  const hasTagFilter =
+    includeTagPatterns.length > 0 || excludeTagPatterns.length > 0;
+  const hasReleaseFilter = hasTypeFilter || hasTagFilter;
+
   // The source lists its own newest releases; everything below this point is
-  // the same reconciliation whichever host they came from.
-  const limitedReleases = (
-    await source.listReleases(sourceOwner, sourceRepo, releaseLimit)
-  ).slice(0, releaseLimit);
+  // the same reconciliation whichever host they came from. With a filter
+  // active the mirror looks further back first, so "the newest 10" means the
+  // newest 10 matching releases rather than whatever survives of the newest 10.
+  const scanLimit = releaseScanLimit(releaseLimit, releaseType, hasTagFilter);
+  const fetchedReleases = await source.listReleases(sourceOwner, sourceRepo, scanLimit);
+  const matchingReleases = fetchedReleases.filter(
+    (release) =>
+      releaseMatchesType(release, releaseType) &&
+      releaseMatchesTagFilters(
+        release.tag_name,
+        includeTagPatterns,
+        excludeTagPatterns
+      )
+  );
+  const limitedReleases = matchingReleases.slice(0, releaseLimit);
+  const filteredOutCount = fetchedReleases.length - matchingReleases.length;
+
+  // Only the patterns that actually compiled are named in the log, so a broken
+  // one cannot look like it is doing something.
+  const filterDescriptions: string[] = [];
+  if (hasTypeFilter) filterDescriptions.push(`only ${releaseType} releases`);
+  const usableIncludeTags = usableTagPatterns(releaseIncludeTags);
+  const usableExcludeTags = usableTagPatterns(releaseExcludeTags);
+  if (usableIncludeTags.length > 0) {
+    filterDescriptions.push(`only tags matching ${usableIncludeTags.join(", ")}`);
+  }
+  if (usableExcludeTags.length > 0) {
+    filterDescriptions.push(`skipping tags matching ${usableExcludeTags.join(", ")}`);
+  }
 
   console.log(
     `[Releases] Found ${limitedReleases.length} releases (limited to latest ${releaseLimit}; ${
+      filterDescriptions.length > 0
+        ? `${filterDescriptions.join(", ")}; ${filteredOutCount} filtered out`
+        : "any release type"
+    }; ${
       releaseAssetLimit === null
         ? "assets for every release"
         : `assets for the newest ${releaseAssetLimit}`
@@ -4062,7 +4526,10 @@ async function mirrorSourceReleasesToGiteaLocked({
 
   if (limitedReleases.length === 0) {
     console.log(`[Releases] No releases to mirror for ${repository.fullName}`);
-    return;
+    // With a filter active the destination may still hold releases the filter
+    // excludes, and the retention pass below is what removes them, so only the
+    // unfiltered case keeps its historical early exit.
+    if (!hasReleaseFilter) return;
   }
 
   let mirroredCount = 0;
@@ -4171,7 +4638,11 @@ async function mirrorSourceReleasesToGiteaLocked({
           totalAssetsFailed += assetResult.failed;
         } else if (release.assets && release.assets.length > 0) {
           console.log(
-            `[Releases] Skipping ${release.assets.length} asset(s) for ${release.tag_name}: outside the newest ${releaseAssetLimit} release(s) that get assets (anything already uploaded is kept)`
+            `[Releases] Skipping ${release.assets.length} asset(s) for ${release.tag_name}: outside the newest ${releaseAssetLimit} release(s) that get assets${
+              pruneOldReleaseAssets
+                ? " (their existing attachments are pruned by the retention pass)"
+                : " (anything already uploaded is kept)"
+            }`
           );
           releasesPastAssetLimit++;
         }
@@ -4245,6 +4716,7 @@ async function mirrorSourceReleasesToGiteaLocked({
       const noteInfo = originalReleaseNote ? ` with ${originalReleaseNote.length} character changelog` : " without changelog";
       console.log(`[Releases] Successfully mirrored release: ${release.tag_name}${noteInfo}`);
     } catch (error) {
+      if (error instanceof RateLimitPausedError) throw error;
       console.error(`[Releases] Failed to mirror release ${release.tag_name}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
@@ -4265,62 +4737,209 @@ async function mirrorSourceReleasesToGiteaLocked({
     );
   }
 
-  // Enforce release retention limit by removing the oldest excess releases from Gitea
+  // Enforce release retention: first drop the releases the type filter excludes,
+  // then the oldest releases past the limit.
   try {
-    // Paginate to fetch ALL Gitea releases (API max is 100 per page)
-    const allGiteaReleases: Array<{ id: number; tag_name: string; created_at: string }> = [];
-    let cleanupPage = 1;
-    while (true) {
-      const pageResponse = await httpGet(
-        `${config.giteaConfig.url}/api/v1/repos/${repoOwner}/${repoName}/releases?per_page=100&page=${cleanupPage}`,
-        {
-          Authorization: `token ${decryptedConfig.giteaConfig.token}`,
+    // A page that fails ends the listing early. Retention still runs on what
+    // was listed, as before, but the storage totals are only recorded from a
+    // complete listing.
+    const { items: allGiteaReleases, complete: listingComplete } = await listDestinationReleases<{
+      id: number;
+      tag_name: string;
+      created_at: string;
+      prerelease?: boolean | null;
+      assets?: Array<{ size?: number }> | null;
+    }>({
+      baseUrl: config.giteaConfig.url,
+      token: decryptedConfig.giteaConfig.token,
+      owner: repoOwner,
+      repo: repoName,
+    });
+
+    const giteaBaseUrl = config.giteaConfig.url;
+    const giteaToken = decryptedConfig.giteaConfig.token;
+    const deletedReleaseIds = new Set<number>();
+
+    const deleteGiteaRelease = async (
+      release: { id: number; tag_name: string },
+      reason: string
+    ) => {
+      try {
+        await httpDelete(
+          `${giteaBaseUrl}/api/v1/repos/${repoOwner}/${repoName}/releases/${release.id}`,
+          {
+            Authorization: `token ${giteaToken}`,
+          }
+        );
+        deletedReleaseIds.add(release.id);
+        console.log(`[Releases] Deleted ${reason} release: ${release.tag_name}`);
+      } catch (deleteError) {
+        console.error(
+          `[Releases] Failed to delete ${reason} release ${release.tag_name}: ${
+            deleteError instanceof Error ? deleteError.message : String(deleteError)
+          }`
+        );
+      }
+    };
+
+    // Releases the filters exclude are no longer mirror candidates, so they leave
+    // the destination the same way releases past the limit do. A release the
+    // destination did not report a pre-release flag for is kept: guessing which
+    // kind it was risks deleting the wrong one. Tag patterns need no such caveat -
+    // they are judged on the tag name, which every release has.
+    let retainedReleases = allGiteaReleases;
+    if (hasReleaseFilter) {
+      const excluded = allGiteaReleases.filter(
+        (rel) =>
+          !releaseMatchesTagFilters(
+            rel.tag_name ?? "",
+            includeTagPatterns,
+            excludeTagPatterns
+          ) ||
+          (hasTypeFilter &&
+            typeof rel.prerelease === "boolean" &&
+            !releaseMatchesType(rel, releaseType))
+      );
+
+      if (excluded.length > 0) {
+        console.log(
+          `[Releases] Enforcing release filters (${filterDescriptions.join(", ")}): removing ${excluded.length} release(s) in Gitea that do not match`
+        );
+        for (const rel of excluded) {
+          await deleteGiteaRelease(rel, "excluded");
         }
-      ).catch(() => null);
 
-      if (!pageResponse?.data || !Array.isArray(pageResponse.data) || pageResponse.data.length === 0) {
-        break;
+        const excludedIds = new Set(excluded.map((rel) => rel.id));
+        retainedReleases = allGiteaReleases.filter(
+          (rel) => !excludedIds.has(rel.id)
+        );
       }
-
-      allGiteaReleases.push(...pageResponse.data);
-
-      if (pageResponse.data.length < 100) {
-        break;
-      }
-      cleanupPage++;
     }
 
-    if (allGiteaReleases.length > releaseLimit) {
-      const excessCount = allGiteaReleases.length - releaseLimit;
+    // The filters emptied a destination that had releases. The sync itself
+    // succeeded, so no job-failure notification would fire; without this the
+    // user would only notice the gone releases on the Gitea site. The activity
+    // log gets its own row (like the force-push alerts) and the push channels
+    // get the same warning through the "Sync errors" switch.
+    if (allGiteaReleases.length > 0 && retainedReleases.length === 0) {
+      const userId = config.userId ?? repository.userId;
+      const removedCount = allGiteaReleases.length;
+
+      void triggerAllReleasesRemovedNotification({
+        userId,
+        repositoryName: repository.name,
+        destination: `${repoOwner}/${repoName}`,
+        removedCount,
+      });
+
+      // skipNotification keeps the row out of the push notification system:
+      // triggerAllReleasesRemovedNotification covers that side with its own
+      // message. skipDuplicateEvent stops the row's `repo-<id>-warning` key
+      // from swallowing the sync's own completion event on the event stream;
+      // the terminal update already refreshes the activity view. The row uses
+      // the activity-only "warning" status so it stands out from plain syncs.
+      await createMirrorJob({
+        userId,
+        repositoryId: repository.id,
+        repositoryName: repository.name,
+        status: "warning",
+        skipNotification: true,
+        skipDuplicateEvent: true,
+        message: `All releases removed from ${repoOwner}/${repoName}`,
+        details:
+          `${removedCount} release${removedCount === 1 ? "" : "s"} deleted by the release filters; the destination now has none.` +
+          " Check the include/exclude tag patterns and the pre-release setting.",
+      }).catch((activityError) => {
+        console.error(
+          `[Releases] Failed to record the all-releases-removed activity for ${repository.fullName}: ${
+            activityError instanceof Error ? activityError.message : String(activityError)
+          }`
+        );
+      });
+    }
+
+    if (retainedReleases.length > releaseLimit) {
+      const excessCount = retainedReleases.length - releaseLimit;
 
       // Sort by created_at ascending (oldest first) so we delete the oldest excess
-      const sorted = [...allGiteaReleases].sort(
+      const sorted = [...retainedReleases].sort(
         (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
       );
 
       const toDelete = sorted.slice(0, excessCount);
 
       console.log(
-        `[Releases] Enforcing retention limit (${releaseLimit}): ${allGiteaReleases.length} releases found, removing ${toDelete.length} oldest excess release(s)`
+        `[Releases] Enforcing retention limit (${releaseLimit}): ${retainedReleases.length} releases found, removing ${toDelete.length} oldest excess release(s)`
       );
 
       for (const excess of toDelete) {
-        try {
-          await httpDelete(
-            `${config.giteaConfig.url}/api/v1/repos/${repoOwner}/${repoName}/releases/${excess.id}`,
-            {
-              Authorization: `token ${decryptedConfig.giteaConfig.token}`,
-            }
-          );
-          console.log(`[Releases] Deleted excess release: ${excess.tag_name}`);
-        } catch (deleteError) {
-          console.error(
-            `[Releases] Failed to delete excess release ${excess.tag_name}: ${
-              deleteError instanceof Error ? deleteError.message : String(deleteError)
-            }`
-          );
-        }
+        await deleteGiteaRelease(excess, "excess");
       }
+    }
+
+    // Opt-in cleanup of what the asset limit left behind. The limit gates
+    // uploads, so releases that got their attachments before the limit was set
+    // or lowered still carry them. Ranked by the same newest-first order the
+    // uploads were gated on, so a destination release the source does not list
+    // keeps its attachments - retention removes the release itself if it is
+    // past the release limit.
+    const prunedReleaseIds = new Set<number>();
+    if (pruneOldReleaseAssets && releaseAssetLimit !== null) {
+      const rankByTag = new Map(
+        limitedReleases.map((rel, index) => [rel.tag_name, index])
+      );
+      const prunable = retainedReleases.filter((rel) => {
+        if (deletedReleaseIds.has(rel.id)) return false;
+        // The listing carries each release's attachments, so a release that
+        // has none (one already pruned on an earlier sync) costs no request.
+        if (Array.isArray(rel.assets) && rel.assets.length === 0) return false;
+        const rank = rankByTag.get(rel.tag_name);
+        return rank !== undefined && !releaseGetsAssets(rank, releaseAssetLimit);
+      });
+
+      if (prunable.length > 0) {
+        console.log(
+          `[Releases] Pruning release assets: ${prunable.length} kept release(s) sit past the newest ${releaseAssetLimit} release(s) that get assets`
+        );
+        let prunedAssets = 0;
+        for (const rel of prunable) {
+          const pruneResult = await pruneReleaseAttachments({
+            baseUrl: giteaBaseUrl,
+            token: giteaToken,
+            repoOwner,
+            repoName,
+            giteaReleaseId: rel.id,
+            tagName: rel.tag_name,
+          });
+          prunedAssets += pruneResult.removed;
+          // Only a release whose attachments actually went is worth zeroing out
+          // in the storage summary below. A failed listing removed nothing, and
+          // a partial failure left some behind; both keep the old totals, which
+          // are closer to the truth than assuming they are gone.
+          if (pruneResult.removed > 0 && pruneResult.failed === 0) {
+            prunedReleaseIds.add(rel.id);
+          }
+        }
+        console.log(
+          `[Releases] Removed ${prunedAssets} attachment(s) from releases past the asset limit for ${repository.fullName}`
+        );
+      }
+    }
+
+    // The listing already carries every asset's size, so the storage page
+    // gets its release numbers without another request (#479). Releases whose
+    // delete failed are still on the destination and still count.
+    if (listingComplete) {
+      await recordReleaseAssetStorage(
+        repository.id,
+        summarizeReleaseAssets(
+          allGiteaReleases
+            .filter((rel) => !deletedReleaseIds.has(rel.id))
+            .map((rel) =>
+              prunedReleaseIds.has(rel.id) ? { ...rel, assets: [] } : rel
+            )
+        )
+      );
     }
   } catch (cleanupError) {
     console.warn(

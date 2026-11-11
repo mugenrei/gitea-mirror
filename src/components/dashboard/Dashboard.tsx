@@ -4,9 +4,11 @@ import { RepositoryList } from "./RepositoryList";
 import { GitFork, Clock, FlipHorizontal, Building2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MirrorJob, Organization, Repository } from "@/lib/db/schema";
+import { readPageCache, writePageCache } from "@/lib/page-cache";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, showErrorToast } from "@/lib/utils";
-import type { DashboardApiResponse } from "@/types/dashboard";
+import { DASHBOARD_LIST_LIMIT, type DashboardApiResponse } from "@/types/dashboard";
+import { useFittingRowCount } from "@/hooks/useFittingRowCount";
 import { useSSE } from "@/hooks/useSEE";
 import { toast } from "sonner";
 import { useEffect as useEffectForToasts } from "react";
@@ -54,8 +56,22 @@ function formatFullTimestamp(date: Date | null): string {
   return formatShortDateTime(date).replace(',', '');
 }
 
+type DashboardPageCache = {
+  repositories: Repository[];
+  organizations: Organization[];
+  activities: MirrorJob[];
+  repoCount: number;
+  orgCount: number;
+  mirroredCount: number;
+  lastSync: Date | null;
+};
+
 export function Dashboard() {
   const { user } = useAuth();
+  // What this page showed last time in this tab, shown again while it refreshes.
+  const [cached] = useState(() => readPageCache<DashboardPageCache>(user?.id, "dashboard"));
+  // True once there is data to show, from the cache or a fetch.
+  const hasLoadedRef = useRef(!!cached);
   const { registerRefreshCallback } = useLiveRefresh();
   const isPageVisible = usePageVisibility();
   const { isFullyConfigured } = useConfigStatus();
@@ -63,14 +79,23 @@ export function Dashboard() {
   // Re-render timestamps when the user changes the 12h/24h preference.
   useTimeFormat();
 
-  const [repositories, setRepositories] = useState<Repository[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [activities, setActivities] = useState<MirrorJob[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [repoCount, setRepoCount] = useState<number>(0);
-  const [orgCount, setOrgCount] = useState<number>(0);
-  const [mirroredCount, setMirroredCount] = useState<number>(0);
-  const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [repositories, setRepositories] = useState<Repository[]>(cached?.repositories ?? []);
+  const [organizations, setOrganizations] = useState<Organization[]>(cached?.organizations ?? []);
+  const [activities, setActivities] = useState<MirrorJob[]>(cached?.activities ?? []);
+  const [isLoading, setIsLoading] = useState(!cached);
+  const [repoCount, setRepoCount] = useState<number>(cached?.repoCount ?? 0);
+  const [orgCount, setOrgCount] = useState<number>(cached?.orgCount ?? 0);
+  const [mirroredCount, setMirroredCount] = useState<number>(cached?.mirroredCount ?? 0);
+  const [lastSync, setLastSync] = useState<Date | null>(cached?.lastSync ?? null);
+
+  // The repository and activity lists end at the bottom of the screen: more
+  // rows on a tall screen, fewer on a short one.
+  const [listsElement, setListsElement] = useState<HTMLDivElement | null>(null);
+  const visibleRows = useFittingRowCount(listsElement, {
+    min: 5,
+    max: DASHBOARD_LIST_LIMIT,
+    fallback: 8,
+  });
 
   // Dashboard auto-refresh timer (30 seconds)
   const dashboardTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -78,11 +103,14 @@ export function Dashboard() {
 
   // Create a stable callback using useCallback
   const handleNewMessage = useCallback((data: MirrorJob) => {
+    // A "warning" entry is an activity alert, never a repository or organization status.
+    const status = data.status;
+    if (status === "warning") return;
     if (data.repositoryId) {
       setRepositories((prevRepos) =>
         prevRepos.map((repo) =>
           repo.id === data.repositoryId
-            ? { ...repo, status: data.status, details: data.details }
+            ? { ...repo, status, details: data.details }
             : repo
         )
       );
@@ -90,7 +118,7 @@ export function Dashboard() {
       setOrganizations((prevOrgs) =>
         prevOrgs.map((org) =>
           org.id === data.organizationId
-            ? { ...org, status: data.status, details: data.details }
+            ? { ...org, status, details: data.details }
             : org
         )
       );
@@ -173,6 +201,7 @@ export function Dashboard() {
       );
 
       if (response.success) {
+        hasLoadedRef.current = true;
         setRepositories(response.repositories);
         setOrganizations(response.organizations);
         setActivities(response.activities);
@@ -199,10 +228,24 @@ export function Dashboard() {
 
   // Initial data fetch and reset loading state when component becomes active
   useEffect(() => {
-    // Reset loading state when component mounts or becomes active
-    setIsLoading(true);
+    // With data from the last visit on screen, refresh it in the background
+    // instead of going back to the skeleton.
+    if (!hasLoadedRef.current) setIsLoading(true);
     fetchDashboardData();
   }, [fetchDashboardData, navigationKey]); // Include navigationKey to trigger on navigation
+
+  useEffect(() => {
+    if (!hasLoadedRef.current) return;
+    writePageCache<DashboardPageCache>(user?.id, "dashboard", {
+      repositories,
+      organizations,
+      activities,
+      repoCount,
+      orgCount,
+      mirroredCount,
+      lastSync,
+    });
+  }, [user?.id, repositories, organizations, activities, repoCount, orgCount, mirroredCount, lastSync]);
 
   // Setup dashboard auto-refresh (30 seconds) and register with live refresh
   useEffect(() => {
@@ -260,7 +303,7 @@ export function Dashboard() {
     );
   }
 
-  return isLoading || !connected ? (
+  return isLoading || (!connected && !hasLoadedRef.current) ? (
     <div className="flex flex-col gap-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         <StatusCardSkeleton />
@@ -327,13 +370,13 @@ export function Dashboard() {
         />
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div ref={setListsElement} className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-1/2">
-          <RepositoryList repositories={repositories.slice(0, 8)} />
+          <RepositoryList repositories={repositories.slice(0, visibleRows)} />
         </div>
 
         <div className="w-full lg:w-1/2">
-          <RecentActivity activities={activities.slice(0, 8)} />
+          <RecentActivity activities={activities.slice(0, visibleRows)} />
         </div>
       </div>
     </div>

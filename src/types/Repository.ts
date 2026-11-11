@@ -19,6 +19,12 @@ export const repoStatusEnum = z.enum([
 
 export type RepoStatus = z.infer<typeof repoStatusEnum>;
 
+// Activity entries carry every repository status plus "warning", an alert
+// (e.g. release filters emptied a destination) that a repository never has.
+export const activityStatusEnum = z.enum([...repoStatusEnum.options, "warning"]);
+
+export type ActivityStatus = z.infer<typeof activityStatusEnum>;
+
 export const repositoryVisibilityEnum = z.enum([
   "public",
   "private",
@@ -38,6 +44,12 @@ export interface RepositoryApiSuccessResponse {
    * list needs it to name a repository's real default (#416).
    */
   organizationDestinations?: Record<string, string>;
+  /**
+   * Repository id -> the destination owner/org the mirror will actually use.
+   * Resolved with the same precedence as the mirror path, so the repositories
+   * page can filter by destination rather than by source organization.
+   */
+  destinationOwners?: Record<string, string>;
 }
 
 export interface RepositoryApiErrorResponse {

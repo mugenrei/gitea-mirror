@@ -18,7 +18,7 @@ mock.module("@/lib/utils/encryption", () => ({
 }));
 
 // Import after mocks are set up — db is already mocked via setup.bun.ts
-import { sendNotification, testNotification, buildNewRepositoriesNotificationEvent, MAX_LISTED_NEW_REPOSITORIES, STARRED_GROUP_LABEL } from "./notification-service";
+import { sendNotification, testNotification, buildNewRepositoriesNotificationEvent, buildAllReleasesRemovedNotificationEvent, triggerAllReleasesRemovedNotification, buildMirrorSyncStalledNotificationEvent, claimMirrorSyncStalledNotification, resetMirrorSyncStalledNotifications, triggerMirrorSyncStalledNotification, MIRROR_SYNC_STALLED_NOTIFICATION_INTERVAL_MS, isNewRepositoryGroupEnabled, MAX_LISTED_NEW_REPOSITORIES, STARRED_GROUP_LABEL } from "./notification-service";
 import type { NotificationConfig } from "@/types/config";
 
 describe("sendNotification", () => {
@@ -29,6 +29,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       ntfy: {
         url: "https://ntfy.sh",
         topic: "test-topic",
@@ -54,6 +57,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       apprise: {
         url: "http://apprise:8000",
         token: "my-token",
@@ -78,6 +84,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       gotify: {
         url: "https://gotify.example.com",
         token: "my-app-token",
@@ -104,6 +113,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       webhook: {
         url: "https://example.com/hooks/gitea-mirror",
       },
@@ -133,6 +145,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       ntfy: {
         url: "https://ntfy.sh",
         topic: "test-topic",
@@ -155,6 +170,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       ntfy: {
         url: "https://ntfy.sh",
         topic: "",
@@ -178,6 +196,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       apprise: {
         url: "",
         token: "my-token",
@@ -200,6 +221,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       gotify: {
         url: "https://gotify.example.com",
         token: "",
@@ -223,6 +247,9 @@ describe("sendNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       webhook: {
         url: "",
       },
@@ -246,6 +273,9 @@ describe("testNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       webhook: {
         url: "",
       },
@@ -263,6 +293,9 @@ describe("testNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       ntfy: {
         url: "https://ntfy.sh",
         topic: "test-topic",
@@ -282,6 +315,9 @@ describe("testNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       ntfy: {
         url: "https://ntfy.sh",
         topic: "",
@@ -306,6 +342,9 @@ describe("testNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
       ntfy: {
         url: "https://ntfy.sh",
         topic: "test-topic",
@@ -325,6 +364,9 @@ describe("testNotification", () => {
       notifyOnSyncError: true,
       notifyOnSyncSuccess: true,
       notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: false,
+      notifyOnNewOrgRepo: false,
+      notifyOnNewStarredRepo: false,
     };
 
     const result = await testNotification(config);
@@ -336,6 +378,7 @@ describe("testNotification", () => {
 describe("buildNewRepositoriesNotificationEvent", () => {
   test("reports the discovered repositories of one owner in a single event", () => {
     const event = buildNewRepositoriesNotificationEvent({
+      kind: "organization",
       groupLabel: "gitea",
       repositoryNames: ["gitea/alpha", "gitea/beta"],
       details: "Discovered during scheduled sync on source github.",
@@ -351,18 +394,19 @@ describe("buildNewRepositoriesNotificationEvent", () => {
 
   test("uses the singular wording for a single repository", () => {
     const event = buildNewRepositoriesNotificationEvent({
-      groupLabel: "gitea",
-      repositoryNames: ["gitea/alpha"],
+      kind: "own",
+      groupLabel: "octocat",
+      repositoryNames: ["octocat/alpha"],
     });
 
-    expect(event.message).toContain("1 new repository discovered for gitea:");
+    expect(event.message).toContain("1 new repository discovered for octocat:");
     expect(event.message).not.toContain("more");
   });
 
   test("labels starred imports without naming an owner", () => {
     // Stars come from any number of owners, so they are reported as one group.
     const event = buildNewRepositoriesNotificationEvent({
-      starred: true,
+      kind: "starred",
       repositoryNames: ["alpha/one", "beta/two"],
     });
 
@@ -374,6 +418,7 @@ describe("buildNewRepositoriesNotificationEvent", () => {
   test("caps the listed repositories so a large import stays readable", () => {
     const names = Array.from({ length: MAX_LISTED_NEW_REPOSITORIES + 5 }, (_, i) => `gitea/repo-${i}`);
     const event = buildNewRepositoriesNotificationEvent({
+      kind: "organization",
       groupLabel: "gitea",
       repositoryNames: names,
     });
@@ -386,9 +431,185 @@ describe("buildNewRepositoriesNotificationEvent", () => {
 
   test("falls back to a placeholder when the group is unknown", () => {
     const event = buildNewRepositoriesNotificationEvent({
+      kind: "own",
       repositoryNames: ["someone/repo"],
     });
 
     expect(event.title).toBe("New Repositories: Unknown");
+  });
+});
+
+describe("isNewRepositoryGroupEnabled", () => {
+  const baseConfig: NotificationConfig = {
+    enabled: true,
+    provider: "ntfy",
+    notifyOnSyncError: true,
+    notifyOnSyncSuccess: false,
+    notifyOnNewRepo: true,
+    notifyOnNewOwnRepo: false,
+    notifyOnNewOrgRepo: false,
+    notifyOnNewStarredRepo: false,
+  };
+
+  test("each group switch enables only its own kind", () => {
+    expect(isNewRepositoryGroupEnabled(baseConfig, "own")).toBe(false);
+    expect(isNewRepositoryGroupEnabled(baseConfig, "organization")).toBe(false);
+    expect(isNewRepositoryGroupEnabled(baseConfig, "starred")).toBe(false);
+
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewOwnRepo: true }, "own")).toBe(true);
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewOwnRepo: true }, "organization")).toBe(false);
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewOwnRepo: true }, "starred")).toBe(false);
+
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewOrgRepo: true }, "organization")).toBe(true);
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewOrgRepo: true }, "own")).toBe(false);
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewOrgRepo: true }, "starred")).toBe(false);
+
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewStarredRepo: true }, "starred")).toBe(true);
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewStarredRepo: true }, "own")).toBe(false);
+    expect(isNewRepositoryGroupEnabled({ ...baseConfig, notifyOnNewStarredRepo: true }, "organization")).toBe(false);
+  });
+
+  test("the master switch gates every group", () => {
+    const allGroupsOn: NotificationConfig = {
+      ...baseConfig,
+      notifyOnNewRepo: false,
+      notifyOnNewOwnRepo: true,
+      notifyOnNewOrgRepo: true,
+      notifyOnNewStarredRepo: true,
+    };
+
+    expect(isNewRepositoryGroupEnabled(allGroupsOn, "own")).toBe(false);
+    expect(isNewRepositoryGroupEnabled(allGroupsOn, "organization")).toBe(false);
+    expect(isNewRepositoryGroupEnabled(allGroupsOn, "starred")).toBe(false);
+
+    const masterOn = { ...allGroupsOn, notifyOnNewRepo: true };
+    expect(isNewRepositoryGroupEnabled(masterOn, "own")).toBe(true);
+    expect(isNewRepositoryGroupEnabled(masterOn, "organization")).toBe(true);
+    expect(isNewRepositoryGroupEnabled(masterOn, "starred")).toBe(true);
+
+    // The provider-wide switch still wins over both discovery switches.
+    expect(isNewRepositoryGroupEnabled({ ...masterOn, enabled: false }, "own")).toBe(false);
+  });
+
+  test("a stored row without the group switches keeps every group on", () => {
+    // Rows saved before the sub-options existed carry the master switch only; a
+    // missing group switch matches the schema default and must not silence a
+    // user who had already turned the discovery alerts on.
+    const legacyRow = {
+      enabled: true,
+      provider: "ntfy",
+      notifyOnSyncError: true,
+      notifyOnSyncSuccess: false,
+      notifyOnNewRepo: true,
+    } as NotificationConfig;
+
+    expect(isNewRepositoryGroupEnabled(legacyRow, "own")).toBe(true);
+    expect(isNewRepositoryGroupEnabled(legacyRow, "organization")).toBe(true);
+    expect(isNewRepositoryGroupEnabled(legacyRow, "starred")).toBe(true);
+  });
+});
+
+describe("buildAllReleasesRemovedNotificationEvent", () => {
+  test("names the repository and the destination that lost its releases", () => {
+    const event = buildAllReleasesRemovedNotificationEvent({
+      repositoryName: "demo",
+      destination: "mirrors/demo",
+      removedCount: 3,
+    });
+
+    expect(event.title).toBe("All Releases Removed: demo");
+    expect(event.type).toBe("sync_error");
+    expect(event.message).toContain("3 releases deleted from mirrors/demo");
+    expect(event.message).toContain("include/exclude tag patterns");
+  });
+
+  test("uses the singular when a single release was removed", () => {
+    const event = buildAllReleasesRemovedNotificationEvent({
+      repositoryName: "demo",
+      destination: "mirrors/demo",
+      removedCount: 1,
+    });
+
+    expect(event.message).toContain("1 release deleted");
+  });
+});
+
+describe("triggerAllReleasesRemovedNotification", () => {
+  test("stays silent when nothing was removed", async () => {
+    await triggerAllReleasesRemovedNotification({
+      userId: "user-1",
+      repositoryName: "demo",
+      destination: "mirrors/demo",
+      removedCount: 0,
+    });
+
+    expect(mockFetch).toHaveBeenCalledTimes(0);
+  });
+
+  test("never throws when the user has no notification config", async () => {
+    // The setup db mock resolves to no rows, so the config lookup finds none
+    // and no provider is contacted.
+    await triggerAllReleasesRemovedNotification({
+      userId: "user-1",
+      repositoryName: "demo",
+      destination: "mirrors/demo",
+      removedCount: 2,
+    });
+
+    expect(mockFetch).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe("buildMirrorSyncStalledNotificationEvent", () => {
+  test("names the destination, how long it waited and where to look in Gitea", () => {
+    const event = buildMirrorSyncStalledNotificationEvent({
+      repositoryName: "demo",
+      destination: "mirrors/demo",
+      waited: "8 hours",
+      mirrorUpdated: "2026-10-20T07:55:12Z",
+    });
+
+    expect(event.title).toBe("Mirror Sync Stalled: demo");
+    expect(event.type).toBe("sync_error");
+    expect(event.message).toContain("sync requested for mirrors/demo 8 hours ago");
+    expect(event.message).toContain("still 2026-10-20T07:55:12Z");
+    expect(event.message).toContain("Site Administration > Monitoring > Queues > mirror");
+  });
+});
+
+describe("claimMirrorSyncStalledNotification", () => {
+  beforeEach(() => resetMirrorSyncStalledNotifications());
+
+  test("allows one alert per user per window", () => {
+    const start = Date.parse("2026-10-20T08:00:00.000Z");
+
+    expect(claimMirrorSyncStalledNotification("user-1", start)).toBe(true);
+    expect(claimMirrorSyncStalledNotification("user-1", start + 1000)).toBe(false);
+    expect(claimMirrorSyncStalledNotification("user-2", start + 1000)).toBe(true);
+    expect(
+      claimMirrorSyncStalledNotification("user-1", start + MIRROR_SYNC_STALLED_NOTIFICATION_INTERVAL_MS - 1)
+    ).toBe(false);
+    expect(
+      claimMirrorSyncStalledNotification("user-1", start + MIRROR_SYNC_STALLED_NOTIFICATION_INTERVAL_MS)
+    ).toBe(true);
+  });
+});
+
+describe("triggerMirrorSyncStalledNotification", () => {
+  beforeEach(() => resetMirrorSyncStalledNotifications());
+
+  test("never throws and keeps the alert slot when the user has no notification config", async () => {
+    await triggerMirrorSyncStalledNotification({
+      userId: "user-1",
+      repositoryName: "demo",
+      destination: "mirrors/demo",
+      waited: "8 hours",
+      mirrorUpdated: "2026-10-20T07:55:12Z",
+    });
+
+    expect(mockFetch).toHaveBeenCalledTimes(0);
+    // Nothing was sent, so the slot is still free for a user who turns
+    // notifications on later.
+    expect(claimMirrorSyncStalledNotification("user-1")).toBe(true);
   });
 });

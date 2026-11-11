@@ -37,7 +37,9 @@ import {
   Plus,
   Users,
   UserX,
-  X
+  X,
+  FlaskConical,
+  Trash2,
 } from "lucide-react";
 import type { GitHubConfig, MirrorOptions, AdvancedOptions, DuplicateNameStrategy, DestinationProvider } from "@/types/config";
 import { DESTINATION_PROVIDER_LABELS, isPushDestinationKind } from "@/lib/destination-kinds";
@@ -58,6 +60,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { githubApi } from "@/lib/api";
+import { withBase } from "@/lib/base-path";
 import {
   sourceKindSupportsReleases,
   SOURCE_PROVIDER_LABELS,
@@ -72,6 +75,7 @@ import {
   CardDivider,
   CardSection,
 } from "./settings-ui";
+import { ReleaseTagRulesDialog } from "./ReleaseTagRulesDialog";
 
 interface GitHubMirrorSettingsProps {
   githubConfig: GitHubConfig;
@@ -133,6 +137,40 @@ export function GitHubMirrorSettings({
   const [loadedStarLists, setLoadedStarLists] = React.useState(false);
   const [attemptedStarListLoad, setAttemptedStarListLoad] = React.useState(false);
 
+  // The tag patterns are edited in a dialog rather than inline: the wildcard
+  // and regex syntax, and the fact that a now-unmatching release is deleted
+  // from Gitea, both need room to explain themselves.
+  const [tagRulesOpen, setTagRulesOpen] = React.useState(false);
+  const tagPatternCount =
+    (mirrorOptions.releaseIncludeTags?.length ?? 0) +
+    (mirrorOptions.releaseExcludeTags?.length ?? 0);
+
+  // Global rules hit every repository, so the tag dialog also offers the
+  // preview picker here, listing the whole account. The list is fetched once,
+  // lazily, the first time the dialog opens.
+  const [globalPreviewRepos, setGlobalPreviewRepos] = React.useState<
+    { id: string; label: string }[] | null
+  >(null);
+  React.useEffect(() => {
+    if (!tagRulesOpen || globalPreviewRepos !== null) return;
+    let cancelled = false;
+    fetch(withBase("/api/repositories/preview-repositories"))
+      .then((res) => (res.ok ? res.json() : null))
+      .then((payload) => {
+        if (cancelled) return;
+        const data = payload?.data ?? payload;
+        setGlobalPreviewRepos(
+          Array.isArray(data?.repositories) ? data.repositories : []
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setGlobalPreviewRepos([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [tagRulesOpen, globalPreviewRepos]);
+
   const normalizeStarListNames = React.useCallback((lists: string[] | undefined): string[] => {
     if (!Array.isArray(lists)) return [];
 
@@ -164,7 +202,10 @@ export function GitHubMirrorSettings({
     onGitHubConfigChange({ ...githubConfig, [field]: value });
   };
 
-  const handleMirrorChange = (field: keyof MirrorOptions, value: boolean | number | null) => {
+  const handleMirrorChange = (
+    field: keyof MirrorOptions,
+    value: boolean | number | string | string[] | null,
+  ) => {
     onMirrorOptionsChange({ ...mirrorOptions, [field]: value });
   };
 
@@ -439,7 +480,7 @@ export function GitHubMirrorSettings({
           <ChevronDown className="ml-2 h-3 w-3 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-64">
+      <PopoverContent align="end" className="w-72">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium">Metadata to mirror</div>
@@ -487,6 +528,63 @@ export function GitHubMirrorSettings({
                 Issues
               </Label>
             </div>
+
+            {isGithubSource && mirrorOptions.metadataComponents.issues && (
+              <div className="ml-8 space-y-2 border-l pl-3">
+                <div className="flex items-center justify-between gap-2">
+                  <Label htmlFor="issue-state-popup" className="text-xs font-normal">
+                    State
+                  </Label>
+                  <Select
+                    value={mirrorOptions.issueState ?? "all"}
+                    onValueChange={(value) =>
+                      handleMirrorChange("issueState", value)
+                    }
+                  >
+                    <SelectTrigger id="issue-state-popup" className="h-8 w-28 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent align="end">
+                      <SelectItem value="all" className="text-xs">All issues</SelectItem>
+                      <SelectItem value="open" className="text-xs">Open only</SelectItem>
+                      <SelectItem value="closed" className="text-xs">Closed only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="issue-comments-popup"
+                    checked={mirrorOptions.issueComments ?? true}
+                    onCheckedChange={(checked) =>
+                      handleMirrorChange("issueComments", !!checked)
+                    }
+                  />
+                  <Label
+                    htmlFor="issue-comments-popup"
+                    className="text-xs font-normal cursor-pointer"
+                  >
+                    Copy comments
+                  </Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="issue-media-popup"
+                    checked={mirrorOptions.issueMedia ?? true}
+                    onCheckedChange={(checked) =>
+                      handleMirrorChange("issueMedia", !!checked)
+                    }
+                  />
+                  <Label
+                    htmlFor="issue-media-popup"
+                    className="text-xs font-normal cursor-pointer"
+                  >
+                    Copy images and attachments
+                  </Label>
+                </div>
+              </div>
+            )}
 
             <div className="flex items-center space-x-3 py-1 px-1 rounded hover:bg-accent">
               <Checkbox
@@ -912,6 +1010,7 @@ export function GitHubMirrorSettings({
 
           <SwitchRow
             icon={Tag}
+            align="start"
             label="Releases & tags"
             description={
               isPushTarget
@@ -927,8 +1026,8 @@ export function GitHubMirrorSettings({
             onCheckedChange={(checked) => handleMirrorChange('mirrorReleases', checked)}
             extra={
               mirrorOptions.mirrorReleases ? (
-                <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
+                <div className="space-y-1.5 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2">
                     <label htmlFor="release-limit">Latest</label>
                     <input
                       id="release-limit"
@@ -945,7 +1044,7 @@ export function GitHubMirrorSettings({
                   </div>
                   {/* Empty means every mirrored release gets its assets (the
                       behaviour before #311); 0 means notes only. */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <label htmlFor="release-asset-limit">Assets for latest</label>
                     <input
                       id="release-asset-limit"
@@ -973,6 +1072,64 @@ export function GitHubMirrorSettings({
               ) : undefined
             }
           />
+
+          {/* Which kind of release counts as a candidate. Its own row because it
+              only means anything once releases are mirrored; the tag patterns
+              live in a dialog because their syntax needs room. */}
+          {mirrorOptions.mirrorReleases && (
+            <SwitchRow
+              icon={FlaskConical}
+              className="pl-6"
+              label="Pre-releases"
+              badge="NEW"
+              description={
+                isPushTarget
+                  ? pushTargetReason
+                  : !isReleaseCapableSource
+                  ? "Release filtering needs a GitHub or Gitea/Forgejo source"
+                  : "Turn off to skip releases the source marks as pre-release. Ones already in Gitea are removed on the next sync"
+              }
+              disabled={!isReleaseCapableSource}
+              checked={mirrorOptions.releaseType !== "stable"}
+              onCheckedChange={(checked) => handleMirrorChange('releaseType', checked ? "all" : "stable")}
+              subContent={
+                <div className="flex items-center gap-2 pt-0.5">
+                  <Button
+                    type="button"
+                    variant="link"
+                    size="sm"
+                    className="h-auto p-0 text-[13px] font-normal"
+                    onClick={() => setTagRulesOpen(true)}
+                  >
+                    Custom tag rules...
+                  </Button>
+                  {tagPatternCount > 0 && (
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                      {tagPatternCount} {tagPatternCount === 1 ? "pattern" : "patterns"}
+                    </span>
+                  )}
+                </div>
+              }
+            />
+          )}
+
+          {/* Deleting what a lowered limit already uploaded is destructive, so it
+              stays off until the user asks for it. */}
+          {mirrorOptions.mirrorReleases && (
+            <SwitchRow
+              icon={Trash2}
+              className="pl-6"
+              label="Remove old release assets"
+              description={
+                isPushTarget
+                  ? pushTargetReason
+                  : "Off by default: attachments stay on the destination even when a release falls outside \u201cAssets for latest\u201d. Turning this on deletes the attachments of every mirrored release past that count"
+              }
+              disabled={!isReleaseCapableSource}
+              checked={mirrorOptions.pruneOldReleaseAssets === true}
+              onCheckedChange={(checked) => handleMirrorChange('pruneOldReleaseAssets', checked)}
+            />
+          )}
 
           <SwitchRow
             icon={HardDrive}
@@ -1004,6 +1161,24 @@ export function GitHubMirrorSettings({
         </CardSection>
       </SettingsCard>
       )}
+
+      <ReleaseTagRulesDialog
+        open={tagRulesOpen}
+        onOpenChange={setTagRulesOpen}
+        includeTags={mirrorOptions.releaseIncludeTags ?? []}
+        excludeTags={mirrorOptions.releaseExcludeTags ?? []}
+        previewRepositories={globalPreviewRepos}
+        releaseType={mirrorOptions.releaseType}
+        onSave={(includeTags, excludeTags) => {
+          // Both fields in one call: handleMirrorChange would spread the same
+          // stale mirrorOptions twice and drop the first list.
+          onMirrorOptionsChange({
+            ...mirrorOptions,
+            releaseIncludeTags: includeTags,
+            releaseExcludeTags: excludeTags,
+          });
+        }}
+      />
     </>
   );
 }

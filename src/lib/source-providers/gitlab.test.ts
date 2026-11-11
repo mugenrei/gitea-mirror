@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 import {
   GitLabSourceProvider,
   mapGitLabProject,
@@ -162,8 +162,104 @@ describe("GitLabSourceProvider", () => {
     );
     expect(calls[0].headers["PRIVATE-TOKEN"]).toBe("glpat-secret");
     expect(calls).toHaveLength(2);
+    // A short page that is not the last one is still followed by the next page.
+    expect(calls[1].url.endsWith("&per_page=100&page=2")).toBe(true);
     expect(repos.map((r) => r.fullName)).toEqual(["me/widget", "acme/tools/tool"]);
     expect(repos[1].organization).toBe("acme");
+  });
+
+  describe("a page that times out", () => {
+    const TOTAL = 230;
+    const all = Array.from({ length: TOTAL }, (_, i) =>
+      project({ id: i + 1, path: `p${i + 1}`, path_with_namespace: `me/p${i + 1}` })
+    );
+    const timeout = () => {
+      throw new DOMException("The operation timed out.", "TimeoutError");
+    };
+    /** A GitLab that serves `all` in id order and times out past `slowAbove` items a page. */
+    function slowGitLab(slowAbove: number, isSlow: (page: number, perPage: number) => boolean = () => true) {
+      installFetch((url) => {
+        const query = new URL(url).searchParams;
+        const perPage = Number(query.get("per_page"));
+        const page = Number(query.get("page"));
+        if (perPage > slowAbove && isSlow(page, perPage)) timeout();
+        const start = (page - 1) * perPage;
+        return json(all.slice(start, start + perPage), {
+          headers: start + perPage < TOTAL ? { "x-next-page": String(page + 1) } : {},
+        });
+      });
+    }
+    const sizes = () => calls.map((c) => Number(new URL(c.url).searchParams.get("per_page")));
+    const ids = (repos: { fullName: string }[]) => repos.map((r) => r.fullName);
+    let warn: ReturnType<typeof spyOn>;
+    beforeEach(() => {
+      warn = spyOn(console, "warn").mockImplementation(() => {});
+    });
+    afterEach(() => warn.mockRestore());
+
+    test("a fast instance is listed 100 a page", async () => {
+      slowGitLab(100);
+      const repos = await new GitLabSourceProvider(connection).listRepositories({});
+      expect(sizes()).toEqual([100, 100, 100]);
+      expect(ids(repos)).toEqual(all.map((p) => p.path_with_namespace!));
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    test("steps down until a page answers and keeps that size (#506)", async () => {
+      slowGitLab(20);
+      const repos = await new GitLabSourceProvider(connection).listRepositories({});
+      expect(sizes().slice(0, 3)).toEqual([100, 50, 20]);
+      expect(sizes().slice(3).every((size) => size === 20)).toBe(true);
+      expect(calls).toHaveLength(2 + Math.ceil(TOTAL / 20));
+      expect(ids(repos)).toEqual(all.map((p) => p.path_with_namespace!));
+      expect(warn).toHaveBeenCalledTimes(2);
+    });
+
+    test("a step down in the middle lists every project once", async () => {
+      // Page 1 of 100 answers, page 2 of 100 does not, page 3 of 50 does not.
+      slowGitLab(20, (page) => page > 1);
+      const repos = await new GitLabSourceProvider(connection).listRepositories({});
+      expect(sizes().slice(0, 4)).toEqual([100, 100, 50, 20]);
+      expect(calls[2].url).toContain("&per_page=50&page=3");
+      expect(calls[3].url).toContain("&per_page=20&page=6");
+      expect(ids(repos)).toEqual(all.map((p) => p.path_with_namespace!));
+    });
+
+    test("drops the items it already has when the new page starts before them", async () => {
+      // 100 at 100, then 50 at 50 (150 listed), then 20 a page: page 8 covers 141 to 160.
+      slowGitLab(20, (page, perPage) => (perPage === 100 && page === 2) || (perPage === 50 && page === 4));
+      const repos = await new GitLabSourceProvider(connection).listRepositories({});
+      expect(sizes().slice(0, 6)).toEqual([100, 100, 50, 50, 20, 20]);
+      expect(calls[4].url).toContain("&per_page=20&page=8");
+      expect(ids(repos)).toEqual(all.map((p) => p.path_with_namespace!));
+    });
+
+    test("gives up with the timeout when 10 a page still times out", async () => {
+      slowGitLab(0);
+      await expect(new GitLabSourceProvider(connection).listRepositories({})).rejects.toMatchObject({
+        name: "TimeoutError",
+      });
+      expect(sizes()).toEqual([100, 50, 20, 10]);
+    });
+
+    test("any other error fails at once", async () => {
+      installFetch(() => json({ message: "boom" }, { status: 500 }));
+      await expect(new GitLabSourceProvider(connection).listRepositories({})).rejects.toBeInstanceOf(SourceApiError);
+      expect(calls).toHaveLength(1);
+    });
+  });
+
+  test("stops at 50,000 items", async () => {
+    installFetch((url) => {
+      const page = Number(new URL(url).searchParams.get("page"));
+      return json(
+        Array.from({ length: 100 }, (_, i) => project({ id: (page - 1) * 100 + i })),
+        { headers: { "x-next-page": String(page + 1) } }
+      );
+    });
+    const repos = await new GitLabSourceProvider(connection).listStarredRepositories({});
+    expect(calls).toHaveLength(500);
+    expect(repos).toHaveLength(50_000);
   });
 
   test("without a token it lists the user's public projects and sends no token header", async () => {

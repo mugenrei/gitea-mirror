@@ -28,9 +28,10 @@ Variables fall into two groups.
 | `HOST` | `localhost` | Interface to bind. The container image sets `0.0.0.0`. |
 | `PORT` | `4321` | Port to listen on. |
 | `BASE_URL` | `/` | Path prefix for subpath deployments, for example `/mirror`. Applied at runtime, so one prebuilt image works under any prefix. |
+| `MCP_INTERNAL_URL` | `http://HOST:PORT` plus `BASE_URL` | Address the [MCP endpoint](/docs/mcp/) tools use to call the app's own API. Only needed when the app is not reachable from itself at `HOST` and `PORT`, for example when it terminates TLS itself. |
 | `DATABASE_URL` | `sqlite://data/gitea-mirror.db` | SQLite database location. The container image sets `file:data/gitea-mirror.db`. |
 
-> **Note:** `DATABASE_URL` accepts the `sqlite://` scheme, the legacy `file:` scheme, or a plain path. Relative paths resolve against the process working directory and the parent directory is created if it is missing. Point it at a mounted volume to relocate the database.
+> **Note:** `DATABASE_URL` accepts the `sqlite://` scheme, the legacy `file:` scheme, or a plain path. Relative paths resolve against the process working directory and the parent directory is created if it is missing. Point it at a mounted volume to relocate the database. gitea-mirror only supports SQLite, so any other scheme, such as `postgresql://`, is ignored with a warning and the default location is used.
 
 ## Authentication and secrets
 
@@ -161,7 +162,11 @@ Only used when `DESTINATION_PROVIDER` is `github` or `gitlab`.
 | `MIRROR_MILESTONES` | `false` | Mirror milestones. |
 | `MIRROR_RELEASES` | `false` | Mirror GitHub releases along with their assets. |
 | `RELEASE_LIMIT` | `10` | Maximum releases mirrored per repository, newest first. |
-| `RELEASE_ASSET_LIMIT` | unset | Upload release assets only for the newest N mirrored releases; older releases still get their notes and tag. Unset means assets for every mirrored release, `0` means notes only. Never deletes assets already uploaded. |
+| `RELEASE_TYPE` | `all` | Which releases are candidates: `all` or `stable` (skip what the source marks as a pre-release). With a filter active the limit counts the releases that match, and releases of the other kind are removed from Gitea on the next sync. |
+| `RELEASE_INCLUDE_TAGS` | empty | Comma separated tag patterns; only releases whose tag matches are mirrored. A pattern is a glob over the whole tag (`v1.*`, `*-rc.*`) or a regular expression in slashes (`/^v\d+\.\d+\.\d+$/`), matched case-insensitively. |
+| `RELEASE_EXCLUDE_TAGS` | empty | Comma separated tag patterns in the same syntax; matching releases are skipped, and an excluded tag wins over `RELEASE_INCLUDE_TAGS`. |
+| `RELEASE_ASSET_LIMIT` | unset | Upload release assets only for the newest N mirrored releases; older releases still get their notes and tag. Unset means assets for every mirrored release, `0` means notes only. Lowering it never deletes assets already uploaded unless `PRUNE_OLD_RELEASE_ASSETS` is on. |
+| `PRUNE_OLD_RELEASE_ASSETS` | `false` | Opt-in cleanup for what the asset limit left behind. On, every sync also deletes the attachments of each mirrored release ranked past `RELEASE_ASSET_LIMIT`; the releases and their notes stay. |
 | `MIRROR_WIKI` | `false` | Clone wiki content. |
 | `MIRROR_ISSUE_CONCURRENCY` | `3` | Issues processed in parallel. |
 | `MIRROR_PULL_REQUEST_CONCURRENCY` | `5` | Pull requests processed in parallel. |

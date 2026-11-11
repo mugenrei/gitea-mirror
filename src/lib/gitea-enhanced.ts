@@ -44,6 +44,13 @@ import {
   strategyNeedsDetection,
 } from "./repo-backup";
 import { detectForcePush } from "./utils/force-push-detection";
+import { destinationSizeColumns } from "./repository-storage";
+import {
+  assessMirrorSyncRequest,
+  formatWaitedTime,
+  STUCK_MIRROR_QUEUE_HINT,
+} from "./mirror-sync-health";
+import { triggerMirrorSyncStalledNotification } from "./notification-service";
 import { sanitizeRepoNameAlphaDashDot, type GiteaMilestoneIds } from "./gitea";
 import {
   parseRepositoryMetadataState,
@@ -75,6 +82,9 @@ export interface GiteaRepoInfo {
   owner: { login: string } | string;
   mirror: boolean;
   mirror_interval?: string;
+  // True until the first commit arrives; with an empty mirror_interval it means
+  // Gitea is still importing the repository (#496).
+  empty?: boolean;
   clone_url?: string;
   // Original migration source URL. Gitea/Forgejo populate this with the
   // upstream clone address for migrated/mirrored repos, so it is the
@@ -86,8 +96,13 @@ export interface GiteaRepoInfo {
   // skip writes that would not change anything.
   description?: string;
   topics?: string[];
+  // KiB, Git plus LFS, recorded for the storage page (#479).
+  size?: number;
   // Set while a transfer waits for the new owner to accept it (issue #400).
   repo_transfer?: { recipient?: { login?: string; username?: string } | null } | null;
+  // Last pull mirror run Gitea processed, failed runs included. Tells whether
+  // the previous mirror-sync request ever ran (#493).
+  mirror_updated?: string;
 }
 
 export interface GiteaTransferResult {
@@ -529,8 +544,8 @@ export async function syncGiteaRepoEnhanced({
     //    archiveGiteaRepo applies to mirror repos (see #331 follow-up).
     //    Repos archived before mirroredLocation was backfilled on rename, or
     //    any lingering false-positive orphan hit, would otherwise be
-    //    unreachable from "Manual Sync" — the UI's documented way to refresh
-    //    an archived mirror — because the recorded/expected name no longer
+    //    unreachable from a manual Sync (the UI's documented way to refresh
+    //    an archived mirror) because the recorded/expected name no longer
     //    exists and Gitea returns HTTP 405 for it.
     const dependencies = deps ?? (await import("./gitea"));
     const expectedOwner = await dependencies.getGiteaRepoOwnerAsync({ config, repository });
@@ -915,8 +930,8 @@ export async function syncGiteaRepoEnhanced({
     //
     // Skipped for archived repos: archiveGiteaRepo deliberately disabled
     // Gitea's own periodic pulling, and the documented contract
-    // (AutomationSettings.tsx: "Archive ... disables automatic syncs—use
-    // Manual Sync when you want to refresh") says a Manual Sync refreshes
+    // (AutomationSettings.tsx: "Archive ... disables automatic syncs ... use
+    // Sync on the Repositories page to refresh") says a manual Sync refreshes
     // once without re-enabling any automatic syncing.
     if (config.giteaConfig?.mirrorInterval && !isArchivedRepo && !repoUsesGitHubApp) {
       try {
@@ -953,6 +968,60 @@ export async function syncGiteaRepoEnhanced({
       const response = await httpPost(apiUrl, undefined, {
         Authorization: `token ${decryptedConfig.giteaConfig.token}`,
       });
+
+      // Gitea queues the pull and answers 200 before running it, so whether
+      // the previous request ever ran shows only in mirror_updated (#493).
+      // repoInfo is from the GET before this request, so the value it holds
+      // is what this request is measured against next time.
+      const mirrorSyncCheck = assessMirrorSyncRequest({
+        previous: metadataState.mirrorSyncRequest,
+        mirrorUpdated: repoInfo.mirror_updated,
+      });
+      const mirrorSyncRequestChanged =
+        JSON.stringify(mirrorSyncCheck.next) !== JSON.stringify(metadataState.mirrorSyncRequest);
+      metadataState.mirrorSyncRequest = mirrorSyncCheck.next;
+
+      if (mirrorSyncCheck.stalled) {
+        const { mirrorUpdated, waitedMs } = mirrorSyncCheck.stalled;
+        const destination = `${repoOwner}/${repoName}`;
+        const waited = formatWaitedTime(waitedMs);
+        console.warn(
+          `[Sync] Gitea has not run the sync requested for ${destination} ${waited} ago (mirror_updated still ${mirrorUpdated})`
+        );
+
+        void triggerMirrorSyncStalledNotification({
+          userId: config.userId,
+          repositoryName: repository.name,
+          destination,
+          waited,
+          mirrorUpdated,
+        });
+
+        // Reported here rather than at the end: the record above is marked as
+        // warned and can be persisted by a metadata pass even if the rest of
+        // the sync fails. Same shape as the all-releases-removed alert: an
+        // activity-only "warning" row, kept out of the job notifications (the
+        // trigger above sends its own) and out of the event stream so it does
+        // not swallow the completion event.
+        await createMirrorJob({
+          userId: config.userId,
+          repositoryId: repository.id,
+          repositoryName: repository.name,
+          status: "warning",
+          skipNotification: true,
+          skipDuplicateEvent: true,
+          message: `Gitea has not run the requested sync for ${destination}`,
+          details:
+            `The sync was requested ${waited} ago, but Gitea's last mirror run is still ${mirrorUpdated}. ` +
+            STUCK_MIRROR_QUEUE_HINT,
+        }).catch((activityError) => {
+          console.error(
+            `[Sync] Failed to record the stalled sync activity for ${repository.name}: ${
+              activityError instanceof Error ? activityError.message : String(activityError)
+            }`
+          );
+        });
+      }
 
       // metadataState + metadataUpdated are hoisted above the backup
       // strategy block so force-push detection can read/write the
@@ -1054,6 +1123,9 @@ export async function syncGiteaRepoEnhanced({
                 giteaRepoName: repoName,
                 releaseLimit: mirrorOptions.releaseLimit,
                 releaseAssetLimit: mirrorOptions.releaseAssetLimit,
+                releaseType: mirrorOptions.releaseType,
+                releaseIncludeTags: mirrorOptions.releaseIncludeTags,
+                releaseExcludeTags: mirrorOptions.releaseExcludeTags,
               });
               mirrored = true;
             }
@@ -1066,14 +1138,17 @@ export async function syncGiteaRepoEnhanced({
               repository,
               // Carries that instance's own decrypted token, so the release
               // listing and the asset downloads authenticate against it.
-              connection: sourceConnectionFromSource(repoSource, {
-                userId: config.userId,
-              }),
-              giteaOwner: repoOwner,
-              giteaRepoName: repoName,
-              releaseLimit: mirrorOptions.releaseLimit,
-              releaseAssetLimit: mirrorOptions.releaseAssetLimit,
-            });
+                connection: sourceConnectionFromSource(repoSource, {
+                  userId: config.userId,
+                }),
+                giteaOwner: repoOwner,
+                giteaRepoName: repoName,
+                releaseLimit: mirrorOptions.releaseLimit,
+                releaseAssetLimit: mirrorOptions.releaseAssetLimit,
+                releaseType: mirrorOptions.releaseType,
+                releaseIncludeTags: mirrorOptions.releaseIncludeTags,
+                releaseExcludeTags: mirrorOptions.releaseExcludeTags,
+              });
             mirrored = true;
           } else {
             console.warn(
@@ -1157,6 +1232,9 @@ export async function syncGiteaRepoEnhanced({
               repository,
               giteaOwner: repoOwner,
               giteaRepoName: repoName,
+              issueState: mirrorOptions.mirrorIssueState,
+              includeComments: mirrorOptions.mirrorIssueComments,
+              includeMedia: mirrorOptions.mirrorIssueMedia,
               syncCursor: metadataState.syncCursors.issues,
               passProgress: metadataState.passProgress.issues,
               onPassProgress: async (progress) => {
@@ -1268,7 +1346,7 @@ export async function syncGiteaRepoEnhanced({
 
       // Mark repo as "synced" in DB — unless it's archived. The documented
       // contract (AutomationSettings.tsx: "Archive ... disables automatic
-      // syncs—use Manual Sync when you want to refresh") means a Manual Sync
+      // syncs ... use Sync on the Repositories page to refresh") means a manual Sync
       // of an archived repo must NOT re-enroll it into the scheduler's
       // auto-sync pool (which selects mirrored/synced/failed/pending) nor
       // clear the archived errorMessage annotation shown in the UI; it still
@@ -1283,9 +1361,12 @@ export async function syncGiteaRepoEnhanced({
           lastMirrored: new Date(),
           ...(isArchivedRepo ? {} : { errorMessage: null }),
           mirroredLocation: `${repoOwner}/${repoName}`,
-          metadata: metadataUpdated
+          metadata: metadataUpdated || mirrorSyncRequestChanged
             ? serializeRepositoryMetadataState(metadataState)
             : repository.metadata ?? null,
+          // From the GET that resolved the target, so before this sync's
+          // fetch: the size lags one sync and costs no request.
+          ...destinationSizeColumns(repoInfo),
         })
         .where(eq(repositories.id, repository.id!));
 

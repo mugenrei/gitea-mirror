@@ -11,7 +11,8 @@ import { isSourceProviderKind, type SourceProviderKind } from '@/lib/source-prov
 import { DESTINATION_PROVIDER_DEFAULT_URLS, isDestinationProviderKind, type DestinationProviderKind } from '@/lib/destination-kinds';
 import { hasDestinationChanged, hasSourceChanged, loadConfigLocks } from '@/lib/config-locks';
 import type { SourceUpdateInput } from '@/lib/sources';
-import { normalizeReleaseAssetLimit } from '@/lib/utils/mirror-overrides';
+import { backupDefaultsFromEnv, storedBackupStrategy } from '@/lib/utils/backup-defaults';
+import { normalizeReleaseAssetLimit, normalizeReleaseTagPatterns, normalizeReleaseType, splitReleaseTagEntries } from '@/lib/utils/mirror-overrides';
 
 interface EnvConfig {
   github: {
@@ -66,6 +67,10 @@ interface EnvConfig {
     mirrorMetadata?: boolean;
     releaseLimit?: number;
     releaseAssetLimit?: number;
+    pruneOldReleaseAssets?: boolean;
+    releaseType?: string;
+    releaseIncludeTags?: string[];
+    releaseExcludeTags?: string[];
     issueConcurrency?: number;
     pullRequestConcurrency?: number;
   };
@@ -117,6 +122,15 @@ function parseEnvConfig(): EnvConfig {
     : undefined;
   const starredLists = process.env.MIRROR_STARRED_LISTS
     ? process.env.MIRROR_STARRED_LISTS.split(',').map((list) => list.trim()).filter(Boolean)
+    : undefined;
+  // Release tag patterns are comma separated, but a comma inside the slash
+  // form belongs to the regular expression (^v\d{1,3}\.\d+$), so the split
+  // skips commas inside /.../ - the same rules the dialog applies.
+  const releaseIncludeTags = process.env.RELEASE_INCLUDE_TAGS
+    ? splitReleaseTagEntries(process.env.RELEASE_INCLUDE_TAGS)
+    : undefined;
+  const releaseExcludeTags = process.env.RELEASE_EXCLUDE_TAGS
+    ? splitReleaseTagEntries(process.env.RELEASE_EXCLUDE_TAGS)
     : undefined;
 
   return {
@@ -185,6 +199,13 @@ function parseEnvConfig(): EnvConfig {
       mirrorMetadata: process.env.MIRROR_METADATA === 'true',
       releaseLimit: process.env.RELEASE_LIMIT ? parseInt(process.env.RELEASE_LIMIT, 10) : undefined,
       releaseAssetLimit: process.env.RELEASE_ASSET_LIMIT ? parseInt(process.env.RELEASE_ASSET_LIMIT, 10) : undefined,
+      pruneOldReleaseAssets:
+        process.env.PRUNE_OLD_RELEASE_ASSETS === undefined
+          ? undefined
+          : process.env.PRUNE_OLD_RELEASE_ASSETS === 'true',
+      releaseType: process.env.RELEASE_TYPE,
+      releaseIncludeTags,
+      releaseExcludeTags,
       issueConcurrency: process.env.MIRROR_ISSUE_CONCURRENCY ? parseInt(process.env.MIRROR_ISSUE_CONCURRENCY, 10) : undefined,
       pullRequestConcurrency: process.env.MIRROR_PULL_REQUEST_CONCURRENCY ? parseInt(process.env.MIRROR_PULL_REQUEST_CONCURRENCY, 10) : undefined,
     },
@@ -350,6 +371,9 @@ export async function initializeConfigFromEnv(): Promise<void> {
     };
 
     // Build Gitea config
+    const storedGitea = existingConfig?.[0]?.giteaConfig;
+    const backupDefaults = backupDefaultsFromEnv();
+    const backupStrategy = storedBackupStrategy(storedGitea) ?? backupDefaults.backupStrategy;
     const giteaConfig = {
       url:
         envConfig.gitea.url ||
@@ -382,6 +406,28 @@ export async function initializeConfigFromEnv(): Promise<void> {
         normalizeReleaseAssetLimit(envConfig.mirror.releaseAssetLimit) ??
         existingConfig?.[0]?.giteaConfig?.releaseAssetLimit ??
         null,
+      // Unset env var keeps what the UI stored; anything but "true" is false,
+      // matching how the other boolean mirror switches here are read.
+      pruneOldReleaseAssets:
+        envConfig.mirror.pruneOldReleaseAssets ??
+        existingConfig?.[0]?.giteaConfig?.pruneOldReleaseAssets ??
+        false,
+      // all | stable. An unusable value (a typo in the env var)
+      // falls through to the stored value rather than storing a filter.
+      releaseType:
+        normalizeReleaseType(envConfig.mirror.releaseType) ??
+        existingConfig?.[0]?.giteaConfig?.releaseType ??
+        'all',
+      // Comma separated glob patterns (or the /regex/ form). An unset or unusable
+      // variable keeps what the UI stored, matching how RELEASE_TYPE behaves.
+      releaseIncludeTags:
+        normalizeReleaseTagPatterns(envConfig.mirror.releaseIncludeTags) ??
+        existingConfig?.[0]?.giteaConfig?.releaseIncludeTags ??
+        [],
+      releaseExcludeTags:
+        normalizeReleaseTagPatterns(envConfig.mirror.releaseExcludeTags) ??
+        existingConfig?.[0]?.giteaConfig?.releaseExcludeTags ??
+        [],
       issueConcurrency: envConfig.mirror.issueConcurrency && envConfig.mirror.issueConcurrency > 0
         ? envConfig.mirror.issueConcurrency
         : existingConfig?.[0]?.giteaConfig?.issueConcurrency ?? 3,
@@ -390,15 +436,20 @@ export async function initializeConfigFromEnv(): Promise<void> {
         : existingConfig?.[0]?.giteaConfig?.pullRequestConcurrency ?? 5,
       mirrorMetadata: envConfig.mirror.mirrorMetadata ?? (envConfig.mirror.mirrorIssues || envConfig.mirror.mirrorPullRequests || envConfig.mirror.mirrorLabels || envConfig.mirror.mirrorMilestones) ?? existingConfig?.[0]?.giteaConfig?.mirrorMetadata ?? false,
       mirrorIssues: envConfig.mirror.mirrorIssues ?? existingConfig?.[0]?.giteaConfig?.mirrorIssues ?? false,
+      // No env vars for these; keep what the UI stored across restarts.
+      mirrorIssueState: existingConfig?.[0]?.giteaConfig?.mirrorIssueState ?? 'all',
+      mirrorIssueComments: existingConfig?.[0]?.giteaConfig?.mirrorIssueComments ?? true,
+      mirrorIssueMedia: existingConfig?.[0]?.giteaConfig?.mirrorIssueMedia ?? true,
       mirrorPullRequests: envConfig.mirror.mirrorPullRequests ?? existingConfig?.[0]?.giteaConfig?.mirrorPullRequests ?? false,
       mirrorLabels: envConfig.mirror.mirrorLabels ?? existingConfig?.[0]?.giteaConfig?.mirrorLabels ?? false,
       mirrorMilestones: envConfig.mirror.mirrorMilestones ?? existingConfig?.[0]?.giteaConfig?.mirrorMilestones ?? false,
-      // Backup options — preserve existing values so UI-configured settings survive restart
-      backupStrategy: existingConfig?.[0]?.giteaConfig?.backupStrategy ?? 'on-force-push',
-      backupBeforeSync: existingConfig?.[0]?.giteaConfig?.backupBeforeSync ?? true,
-      backupRetentionCount: existingConfig?.[0]?.giteaConfig?.backupRetentionCount ?? 5,
-      backupRetentionDays: existingConfig?.[0]?.giteaConfig?.backupRetentionDays ?? 30,
-      backupDirectory: existingConfig?.[0]?.giteaConfig?.backupDirectory || undefined,
+      // Backup options: keep what is stored so UI-configured settings survive a
+      // restart, and start from PRE_SYNC_BACKUP_* when nothing is (#503).
+      backupStrategy,
+      backupBeforeSync: storedGitea?.backupBeforeSync ?? backupStrategy !== 'disabled',
+      backupRetentionCount: storedGitea?.backupRetentionCount ?? backupDefaults.backupRetentionCount,
+      backupRetentionDays: storedGitea?.backupRetentionDays ?? backupDefaults.backupRetentionDays,
+      backupDirectory: storedGitea?.backupDirectory || backupDefaults.backupDirectory,
       blockSyncOnBackupFailure: existingConfig?.[0]?.giteaConfig?.blockSyncOnBackupFailure ?? true,
     };
 

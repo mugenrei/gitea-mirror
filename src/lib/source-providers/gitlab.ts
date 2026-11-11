@@ -27,8 +27,23 @@ import type {
   SourceRepositoryPath,
 } from "./types";
 
-const PAGE_SIZE = 100;
-const MAX_PAGES = 500;
+/**
+ * Listings ask for 100 items a page and step down when a page times out. A
+ * full project object is expensive for GitLab to build, and a busy
+ * self-hosted instance took over 30 seconds, the source request timeout, for
+ * a page of 100 even when cached, while 20 took under 3 seconds (#506).
+ * Waiting and retrying the same page does not help there; asking for less
+ * does. Starting small instead would cost every other instance about twice
+ * the listing time: 300 projects from gitlab.com took 11 s at 100 a page and
+ * 20 s at 20.
+ */
+const PAGE_SIZES = [100, 50, 20, 10];
+/** Stop after this many items, whatever the page size. */
+const MAX_ITEMS = 50_000;
+
+function isTimeout(error: unknown): boolean {
+  return error instanceof Error && error.name === "TimeoutError";
+}
 
 export interface GitLabNamespace {
   id?: number;
@@ -200,16 +215,39 @@ export class GitLabSourceProvider implements SourceProvider {
     params: Record<string, string | number | boolean | undefined> = {}
   ): Promise<T[]> {
     const items: T[] = [];
-    for (let page = 1; page <= MAX_PAGES; page += 1) {
+    let step = 0;
+    let page = 1;
+    // Items at the start of the next page that are already listed. Only
+    // set after a step down, when the smaller page can start before them.
+    let alreadyListed = 0;
+    while (items.length < MAX_ITEMS) {
+      const pageSize = PAGE_SIZES[step];
       const url = withQuery(`${this.apiRoot}${path}`, {
         ...params,
-        per_page: PAGE_SIZE,
+        per_page: pageSize,
         page,
       });
-      const { data, response } = await sourceFetch<T[]>(url, { headers: this.headers() });
+
+      let result: Awaited<ReturnType<typeof sourceFetch<T[]>>>;
+      try {
+        result = await sourceFetch<T[]>(url, { headers: this.headers() });
+      } catch (error) {
+        if (!isTimeout(error) || step === PAGE_SIZES.length - 1) throw error;
+        step += 1;
+        const smaller = PAGE_SIZES[step];
+        console.warn(`[GitLab] ${path} timed out at ${pageSize} per page, continuing at ${smaller} per page`);
+        // The page that holds the next item at the smaller size.
+        page = Math.floor(items.length / smaller) + 1;
+        alreadyListed = items.length % smaller;
+        continue;
+      }
+
+      const { data, response } = result;
       if (!Array.isArray(data) || data.length === 0) break;
-      items.push(...data);
+      items.push(...data.slice(alreadyListed));
+      alreadyListed = 0;
       if (!response.headers.get("x-next-page")) break;
+      page += 1;
     }
     return items;
   }
@@ -275,12 +313,15 @@ export class GitLabSourceProvider implements SourceProvider {
       return { organizations: [], failedOrgs: [] };
     }
 
-    const groups = await this.paginate<GitLabGroup>("/groups", {
-      membership: true,
-      top_level_only: true,
-      order_by: "id",
-      sort: "asc",
-    });
+    const groups = await this.paginate<GitLabGroup>(
+      "/groups",
+      {
+        membership: true,
+        top_level_only: true,
+        order_by: "id",
+        sort: "asc",
+      }
+    );
 
     const organizations: GitOrg[] = [];
     const failedOrgs: SourceFailedOrganization[] = [];

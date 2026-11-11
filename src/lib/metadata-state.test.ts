@@ -44,6 +44,7 @@ describe("sync cursor parsing", () => {
     state.syncCursors.issues = {
       lastPassStartedAt: "2026-09-20T10:00:00.000Z",
       lastFullPassStartedAt: "2026-09-18T10:00:00.000Z",
+      issueState: "open",
     };
     state.syncCursors.pullRequests = {
       lastPassStartedAt: "2026-09-20T11:00:00.000Z",
@@ -261,5 +262,44 @@ describe("unfinished pass progress (#449 follow-up)", () => {
       undefined
     );
     expect(incremental.since).toBe("2026-09-25T08:50:00.000Z");
+  });
+});
+
+describe("mirror sync request record (#493)", () => {
+  test("the record survives a round trip, with and without warnedAt", () => {
+    const state = createDefaultMetadataState();
+    state.mirrorSyncRequest = {
+      requestedAt: "2026-10-20T08:00:00.000Z",
+      mirrorUpdatedBefore: "2026-10-20T07:55:12Z",
+    };
+    expect(
+      parseRepositoryMetadataState(serializeRepositoryMetadataState(state)).mirrorSyncRequest
+    ).toEqual(state.mirrorSyncRequest);
+
+    state.mirrorSyncRequest.warnedAt = "2026-10-20T16:00:00.000Z";
+    expect(
+      parseRepositoryMetadataState(serializeRepositoryMetadataState(state)).mirrorSyncRequest
+    ).toEqual(state.mirrorSyncRequest);
+  });
+
+  test("a row without the record, or with a malformed one, loads without it", () => {
+    expect(parseRepositoryMetadataState({ components: {} }).mirrorSyncRequest).toBeUndefined();
+    expect(
+      parseRepositoryMetadataState({
+        mirrorSyncRequest: { requestedAt: "2026-10-20T08:00:00.000Z", mirrorUpdatedBefore: 0 },
+      }).mirrorSyncRequest
+    ).toBeUndefined();
+    expect(
+      parseRepositoryMetadataState({
+        mirrorSyncRequest: {
+          requestedAt: "2026-10-20T08:00:00.000Z",
+          mirrorUpdatedBefore: "2026-10-20T07:55:12Z",
+          warnedAt: "soon",
+        },
+      }).mirrorSyncRequest
+    ).toEqual({
+      requestedAt: "2026-10-20T08:00:00.000Z",
+      mirrorUpdatedBefore: "2026-10-20T07:55:12Z",
+    });
   });
 });
