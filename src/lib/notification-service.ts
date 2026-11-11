@@ -7,6 +7,7 @@ import { sendWebhookNotification } from "./providers/webhook";
 import { db, configs } from "@/lib/db";
 import { eq, sql } from "drizzle-orm";
 import { decrypt } from "@/lib/utils/encryption";
+import { STUCK_MIRROR_QUEUE_HINT } from "./mirror-sync-health";
 
 function sanitizeTestNotificationError(error: unknown): string {
   if (!(error instanceof Error)) {
@@ -260,29 +261,63 @@ export const MAX_LISTED_NEW_REPOSITORIES = 10;
 /** Label for the single group that collects every starred import. */
 export const STARRED_GROUP_LABEL = "Starred";
 
+/**
+ * Which group of discovered repositories a notification belongs to. Stars come
+ * from any number of owners, so they form one group of their own.
+ */
+export type NewRepositoryGroupKind = "own" | "organization" | "starred";
+
+/**
+ * Whether one group reports. The group switches are sub-options of
+ * notifyOnNewRepo, so a group only reports while the master switch is on. A
+ * stored row that predates them has no group keys, which counts as on.
+ */
+export function isNewRepositoryGroupEnabled(
+  config: Pick<
+    NotificationConfig,
+    | "enabled"
+    | "notifyOnNewRepo"
+    | "notifyOnNewOwnRepo"
+    | "notifyOnNewOrgRepo"
+    | "notifyOnNewStarredRepo"
+  >,
+  kind: NewRepositoryGroupKind,
+): boolean {
+  if (!config.enabled || config.notifyOnNewRepo !== true) {
+    return false;
+  }
+  if (kind === "starred") {
+    return config.notifyOnNewStarredRepo !== false;
+  }
+  if (kind === "organization") {
+    return config.notifyOnNewOrgRepo !== false;
+  }
+  return config.notifyOnNewOwnRepo !== false;
+}
+
 export function buildNewRepositoriesNotificationEvent({
+  kind,
   groupLabel,
-  starred = false,
   repositoryNames,
   details,
 }: {
+  kind: NewRepositoryGroupKind;
   groupLabel?: string | null;
-  /** Starred imports share one group, so the wording drops the owner. */
-  starred?: boolean;
   repositoryNames: string[];
   details?: string;
 }): NotificationEvent {
-  const label = groupLabel || (starred ? STARRED_GROUP_LABEL : "Unknown");
+  const label = kind === "starred" ? STARRED_GROUP_LABEL : groupLabel || "Unknown";
   const count = repositoryNames.length;
+  const noun = count === 1 ? "repository" : "repositories";
   const listed = repositoryNames.slice(0, MAX_LISTED_NEW_REPOSITORIES);
   const overflow = repositoryNames.length - listed.length;
 
   return {
     title: `New Repositories: ${label}`,
     message: [
-      starred
-        ? `${count} new starred ${count === 1 ? "repository" : "repositories"} discovered:`
-        : `${count} new ${count === 1 ? "repository" : "repositories"} discovered for ${label}:`,
+      kind === "starred"
+        ? `${count} new starred ${noun} discovered:`
+        : `${count} new ${noun} discovered for ${label}:`,
       listed.map((name) => `\n- ${name}`).join(""),
       overflow > 0 ? `\n- and ${overflow} more` : "",
       details ? `\nDetails: ${details}` : "",
@@ -293,22 +328,22 @@ export function buildNewRepositoriesNotificationEvent({
 
 /**
  * Notifies the user about repositories that were newly discovered and
- * imported (the "New repository discovered" event). Imports are reported per
- * owner or organization, except starred repositories, which arrive as one
- * group because their owners are arbitrary.
+ * imported. The notifyOnNewRepo switch gates the alerts and the three group
+ * switches (own, organization, starred) select which groups report; each group
+ * arrives as a single notification instead of one per repository.
  *
  * Called fire-and-forget from the discovery passes, so it NEVER throws.
  */
 export async function triggerNewRepositoriesNotification({
   userId,
+  kind,
   groupLabel,
-  starred = false,
   repositoryNames,
   details,
 }: {
   userId: string;
+  kind: NewRepositoryGroupKind;
   groupLabel?: string | null;
-  starred?: boolean;
   /** Full names of the repositories that were imported. */
   repositoryNames: string[];
   details?: string;
@@ -320,13 +355,13 @@ export async function triggerNewRepositoriesNotification({
 
     const notificationConfig = await loadNotificationConfig(userId);
 
-    if (!notificationConfig?.enabled || !notificationConfig.notifyOnNewRepo) {
+    if (!notificationConfig || !isNewRepositoryGroupEnabled(notificationConfig, kind)) {
       return;
     }
 
     const event = buildNewRepositoriesNotificationEvent({
+      kind,
       groupLabel,
-      starred,
       repositoryNames,
       details,
     });
@@ -334,5 +369,152 @@ export async function triggerNewRepositoriesNotification({
     await sendNotification(decryptNotificationConfig(notificationConfig), event);
   } catch (error) {
     console.error("[NotificationService] New repository notification failed:", error);
+  }
+}
+
+/**
+ * The "every mirrored release was removed" event.
+ *
+ * A tag or type filter change makes the retention pass delete the destination
+ * releases that no longer match. When nothing survives, the sync itself
+ * succeeded but the destination lost every release it had, so nothing else
+ * would alert the user.
+ */
+export function buildAllReleasesRemovedNotificationEvent({
+  repositoryName,
+  destination,
+  removedCount,
+}: {
+  repositoryName: string;
+  destination: string;
+  removedCount: number;
+}): NotificationEvent {
+  const plural = removedCount === 1 ? "" : "s";
+  return {
+    title: `All Releases Removed: ${repositoryName}`,
+    message: [
+      `${removedCount} release${plural} deleted from ${destination} by the release filters; the destination now has none.`,
+      " Check the include/exclude tag patterns and the pre-release setting before the next sync.",
+    ].join(""),
+    type: "sync_error",
+  };
+}
+
+/**
+ * Warns that the release filters emptied a destination that previously had
+ * releases. The existing "Sync errors" switch gates the alert.
+ *
+ * Called fire-and-forget from the retention pass, so it NEVER throws.
+ */
+export async function triggerAllReleasesRemovedNotification(args: {
+  userId: string;
+  repositoryName: string;
+  destination: string;
+  removedCount: number;
+}): Promise<void> {
+  try {
+    if (args.removedCount <= 0) {
+      return;
+    }
+
+    const notificationConfig = await loadNotificationConfig(args.userId);
+
+    if (!notificationConfig?.enabled || !notificationConfig.notifyOnSyncError) {
+      return;
+    }
+
+    const event = buildAllReleasesRemovedNotificationEvent(args);
+
+    await sendNotification(decryptNotificationConfig(notificationConfig), event);
+  } catch (error) {
+    console.error("[NotificationService] All-releases-removed notification failed:", error);
+  }
+}
+
+/**
+ * The "Gitea never ran the requested sync" event (#493).
+ *
+ * A stuck mirror queue holds back every repository at once, so the text
+ * points at the queue rather than the one repository that happened to be
+ * checked first.
+ */
+export function buildMirrorSyncStalledNotificationEvent({
+  repositoryName,
+  destination,
+  waited,
+  mirrorUpdated,
+}: {
+  repositoryName: string;
+  destination: string;
+  /** How long ago the request was accepted, already formatted. */
+  waited: string;
+  mirrorUpdated: string;
+}): NotificationEvent {
+  return {
+    title: `Mirror Sync Stalled: ${repositoryName}`,
+    message: [
+      `Gitea has not run the sync requested for ${destination} ${waited} ago; its last mirror run is still ${mirrorUpdated}.`,
+      ` ${STUCK_MIRROR_QUEUE_HINT}`,
+      " Other repositories held back by the same queue are listed in the Activity Log.",
+    ].join(""),
+    type: "sync_error",
+  };
+}
+
+/**
+ * At most one stalled-sync alert per user in this window. Every repository
+ * reports its own stall in the activity log; the push channels only need to
+ * hear that something is wrong.
+ */
+export const MIRROR_SYNC_STALLED_NOTIFICATION_INTERVAL_MS = 6 * 60 * 60 * 1000;
+
+const lastMirrorSyncStalledNotification = new Map<string, number>();
+
+/**
+ * Takes this user's alert slot when the last alert is outside the window.
+ * Kept in memory: a restart allows one more alert, which is fine.
+ */
+export function claimMirrorSyncStalledNotification(userId: string, now: number = Date.now()): boolean {
+  const last = lastMirrorSyncStalledNotification.get(userId);
+  if (last !== undefined && now - last < MIRROR_SYNC_STALLED_NOTIFICATION_INTERVAL_MS) {
+    return false;
+  }
+  lastMirrorSyncStalledNotification.set(userId, now);
+  return true;
+}
+
+/** Test hook: forget when each user was last alerted. */
+export function resetMirrorSyncStalledNotifications(): void {
+  lastMirrorSyncStalledNotification.clear();
+}
+
+/**
+ * Warns that Gitea accepted a sync request but never ran it. The existing
+ * "Sync errors" switch gates the alert.
+ *
+ * Called fire-and-forget from the sync path, so it NEVER throws.
+ */
+export async function triggerMirrorSyncStalledNotification(args: {
+  userId: string;
+  repositoryName: string;
+  destination: string;
+  waited: string;
+  mirrorUpdated: string;
+}): Promise<void> {
+  try {
+    const notificationConfig = await loadNotificationConfig(args.userId);
+
+    if (!notificationConfig?.enabled || !notificationConfig.notifyOnSyncError) {
+      return;
+    }
+    if (!claimMirrorSyncStalledNotification(args.userId)) {
+      return;
+    }
+
+    const event = buildMirrorSyncStalledNotificationEvent(args);
+
+    await sendNotification(decryptNotificationConfig(notificationConfig), event);
+  } catch (error) {
+    console.error("[NotificationService] Mirror sync stalled notification failed:", error);
   }
 }

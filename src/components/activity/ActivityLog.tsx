@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { apiRequest, cn, formatDate, showErrorToast } from '@/lib/utils';
+import { readPageCache, writePageCache } from '@/lib/page-cache';
 import { useAuth } from '@/hooks/useAuth';
 import type { MirrorJob } from '@/lib/db/schema';
 import type { ActivityApiResponse } from '@/types/activities';
@@ -29,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { repoStatusEnum, type RepoStatus } from '@/types/Repository';
+import { activityStatusEnum, type ActivityStatus } from '@/types/Repository';
 import ActivityList, { STATUS_PRESENTATION } from './ActivityList';
 import { ActivityNameCombobox } from './ActivityNameCombobox';
 import { useSSE } from '@/hooks/useSEE';
@@ -84,8 +85,12 @@ export function ActivityLog() {
   const { isFullyConfigured } = useConfigStatus();
   const { navigationKey } = useNavigation();
 
-  const [activities, setActivities] = useState<MirrorJobWithKey[]>([]);
+  // What this page showed last time in this tab, shown again while it refreshes.
+  const [cached] = useState(() => readPageCache<MirrorJobWithKey[]>(user?.id, 'activity-log'));
+  const [activities, setActivities] = useState<MirrorJobWithKey[]>(cached ?? []);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
+  // True once there are rows to show, from the cache or a fetch.
+  const hasLoadedRef = useRef(!!cached);
   const [showCleanupDialog, setShowCleanupDialog] = useState(false);
   const [showCancelPendingDialog, setShowCancelPendingDialog] = useState(false);
   const [isCancelPendingLoading, setIsCancelPendingLoading] = useState(false);
@@ -192,6 +197,7 @@ export function ActivityLog() {
       });
 
       if (isMountedRef.current) {
+        hasLoadedRef.current = true;
         setActivities(data);
       }
       return true;
@@ -211,10 +217,16 @@ export function ActivityLog() {
   }, [user?.id]); // Only depend on user.id, not entire user object
 
   useEffect(() => {
-    // Reset loading state when component becomes active
-    setIsInitialLoading(true);
-    fetchActivities(false); // Manual refresh, not live
+    // With rows from the last visit on screen, refresh them in the background
+    // instead of going back to the skeleton.
+    const showingRows = hasLoadedRef.current;
+    if (!showingRows) setIsInitialLoading(true);
+    fetchActivities(showingRows);
   }, [fetchActivities, navigationKey]); // Include navigationKey to trigger on navigation
+
+  useEffect(() => {
+    if (hasLoadedRef.current) writePageCache(user?.id, 'activity-log', activities);
+  }, [user?.id, activities]);
 
   // Register with global live refresh system
   useEffect(() => {
@@ -413,7 +425,7 @@ export function ActivityLog() {
   const statusCounts = useMemo(() => countLatestStatuses(activities), [activities]);
 
   // Most actionable first, and only statuses that actually occurred.
-  const statChips = ['failed', 'syncing', 'mirroring', 'imported', 'synced', 'mirrored']
+  const statChips = ['failed', 'warning', 'syncing', 'mirroring', 'imported', 'synced', 'mirrored']
     .filter((status) => (statusCounts.get(status) ?? 0) > 0)
     .slice(0, 4);
 
@@ -507,7 +519,7 @@ export function ActivityLog() {
                     onValueChange={(v) =>
                       setFilter((p) => ({
                         ...p,
-                        status: v === 'all' ? '' : (v as RepoStatus),
+                        status: v === 'all' ? '' : (v as ActivityStatus),
                       }))
                     }
                   >
@@ -515,13 +527,14 @@ export function ActivityLog() {
                       <SelectValue placeholder="All statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                      {['all', ...repoStatusEnum.options].map((s) => (
+                      {['all', ...activityStatusEnum.options].map((s) => (
                         <SelectItem key={s} value={s}>
                           <span className="flex items-center gap-2">
                             {s !== 'all' && (
                               <span className={`h-2 w-2 rounded-full ${
                                 s === 'synced' ? 'bg-green-500' :
                                 s === 'failed' ? 'bg-red-500' :
+                                s === 'warning' ? 'bg-amber-500' :
                                 s === 'syncing' ? 'bg-blue-500' :
                                 'bg-yellow-500'
                               }`} />
@@ -735,7 +748,7 @@ export function ActivityLog() {
                 onClick={() =>
                   setFilter((p) => ({
                     ...p,
-                    status: p.status === status ? '' : (status as RepoStatus),
+                    status: p.status === status ? '' : (status as ActivityStatus),
                   }))
                 }
                 className={cn(
@@ -766,7 +779,7 @@ export function ActivityLog() {
             onValueChange={(v) =>
               setFilter((p) => ({
                 ...p,
-                status: v === 'all' ? '' : (v as RepoStatus),
+                status: v === 'all' ? '' : (v as ActivityStatus),
               }))
             }
           >
@@ -774,13 +787,14 @@ export function ActivityLog() {
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
             <SelectContent>
-              {['all', ...repoStatusEnum.options].map((s) => (
+              {['all', ...activityStatusEnum.options].map((s) => (
                 <SelectItem key={s} value={s}>
                   <span className="flex items-center gap-2">
                     {s !== 'all' && (
                       <span className={`h-2 w-2 rounded-full ${
                         s === 'synced' ? 'bg-green-500' :
                         s === 'failed' ? 'bg-red-500' :
+                        s === 'warning' ? 'bg-amber-500' :
                         s === 'syncing' ? 'bg-blue-500' :
                         'bg-yellow-500'
                       }`} />
@@ -831,7 +845,7 @@ export function ActivityLog() {
       <ActivityList
         className="min-h-0 flex-1"
         activities={visibleActivities}
-        isLoading={isInitialLoading || !connected}
+        isLoading={isInitialLoading || (!connected && !hasLoadedRef.current)}
         filter={filter}
         setFilter={setFilter}
       />

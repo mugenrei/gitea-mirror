@@ -17,7 +17,7 @@
  * gitea-org-mirror-destination.test.ts) where the real modules are loaded.
  */
 
-import { afterEach, describe, expect, it, test } from "bun:test";
+import { afterEach, describe, expect, it, mock, test } from "bun:test";
 import type { Config } from "@/types/config";
 import type { Repository } from "@/lib/db/schema";
 import type { SourceConnection } from "@/lib/source-providers/types";
@@ -41,6 +41,60 @@ if (!isChild) {
   }, 60_000);
 }
 
+// Both gitea.ts and helpers.ts bind to the notification service. Replace it in
+// the child before importing them so the all-releases-removed warning can be
+// captured without loading providers or touching the database.
+interface RemovalNotice {
+  userId: string;
+  repositoryName: string;
+  destination: string;
+  removedCount: number;
+}
+let removalNotices: RemovalNotice[] = [];
+
+// gitea.ts is the only module that pulls ./helpers into this import graph and
+// only uses createMirrorJob from it. Capture the activity rows it writes so the
+// all-releases-removed warning can be asserted without touching the database.
+interface ActivityJob {
+  status: string;
+  message?: string;
+  details?: string;
+  skipNotification?: boolean;
+  skipDuplicateEvent?: boolean;
+}
+let activityJobs: ActivityJob[] = [];
+
+// The release asset totals the retention pass records for the storage page.
+interface StorageRecord {
+  repositoryId: string | null | undefined;
+  summary: { count: number; bytes: number };
+}
+let storageRecords: StorageRecord[] = [];
+
+if (isChild) {
+  mock.module("@/lib/repository-storage-store", () => ({
+    recordReleaseAssetStorage: async (
+      repositoryId: string | null | undefined,
+      summary: { count: number; bytes: number }
+    ) => {
+      storageRecords.push({ repositoryId, summary });
+    },
+  }));
+  mock.module("@/lib/notification-service", () => ({
+    triggerAllReleasesRemovedNotification: async (notice: RemovalNotice) => {
+      removalNotices.push(notice);
+    },
+    triggerJobNotification: async () => {},
+  }));
+  mock.module("@/lib/helpers", () => ({
+    createMirrorJob: async (job: ActivityJob) => {
+      activityJobs.push(job);
+      return "activity-job";
+    },
+  }));
+}
+
+const { clearAllRateLimits, markRateLimited, rateLimitGateKey } = await import("@/lib/rate-limit-gate");
 const { mirrorGiteaSourceReleasesToGitea, mirrorGitHubReleasesToGitea } = isChild
   ? await import("@/lib/gitea")
   : ({} as typeof import("@/lib/gitea"));
@@ -54,6 +108,9 @@ const realFetch = globalThis.fetch;
 
 afterEach(() => {
   globalThis.fetch = realFetch;
+  removalNotices = [];
+  activityJobs = [];
+  storageRecords = [];
 });
 
 const config = {
@@ -90,6 +147,23 @@ interface DestinationOptions {
   existingRelease?: { id: number; name: string; body: string; tag_name: string };
   /** Tags the destination already has. Defaults to every source tag. */
   destinationTags?: string[];
+  /** Releases already on the destination, as the retention pass lists them. */
+  destinationReleases?: Array<Record<string, unknown>>;
+  /** The destination answers the retention listing with an error. */
+  destinationListingFails?: boolean;
+  /**
+   * Serve the listing this many releases per page at most, with
+   * X-Total-Count, as Gitea does (30 when asked with `per_page`).
+   */
+  destinationPageCap?: number;
+  /** Destination release ids whose DELETE fails. */
+  failDeleteIds?: number[];
+  /** Attachments a destination release has, keyed by release id. */
+  destinationAssets?: Record<string, Array<{ id: number; name: string; size: number }>>;
+  /** Attachment ids whose DELETE fails. */
+  failAssetDeleteIds?: number[];
+  /** Release ids whose attachment listing answers with an error. */
+  failAssetListingFor?: number[];
 }
 
 function fakeWorld(options: DestinationOptions) {
@@ -117,7 +191,11 @@ function fakeWorld(options: DestinationOptions) {
     }
 
     // Downloading an asset from the source host.
-    if (url.startsWith(`${SOURCE_URL}/attachments/`) || url.startsWith("https://github.com/")) {
+    if (
+      url.startsWith(`${SOURCE_URL}/attachments/`) ||
+      url.startsWith("https://github.com/") ||
+      url.startsWith("https://api.github.com/")
+    ) {
       return new Response(new Uint8Array([1, 2, 3, 4]), { status: 200 });
     }
 
@@ -143,7 +221,19 @@ function fakeWorld(options: DestinationOptions) {
 
     // Existing attachments of a release.
     if (method === "GET" && /\/releases\/\d+\/assets$/.test(url)) {
-      return json([]);
+      const releaseId = Number(url.match(/\/releases\/(\d+)\/assets$/)?.[1]);
+      if (options.failAssetListingFor?.includes(releaseId)) {
+        return new Response("boom", { status: 500 });
+      }
+      return json(options.destinationAssets?.[String(releaseId)] ?? []);
+    }
+
+    // Pruning the attachments of a release that is past the asset limit.
+    if (method === "DELETE" && /\/releases\/\d+\/assets\/\d+$/.test(url)) {
+      const assetId = Number(url.slice(url.lastIndexOf("/") + 1));
+      return options.failAssetDeleteIds?.includes(assetId)
+        ? new Response("boom", { status: 500 })
+        : new Response(null, { status: 204 });
     }
 
     // Uploading an attachment.
@@ -161,9 +251,25 @@ function fakeWorld(options: DestinationOptions) {
       return json({ id: 77 });
     }
 
+    // The retention pass removing a release.
+    if (method === "DELETE" && /\/releases\/\d+$/.test(url)) {
+      const id = Number(url.slice(url.lastIndexOf("/") + 1));
+      return options.failDeleteIds?.includes(id)
+        ? new Response("boom", { status: 500 })
+        : new Response(null, { status: 204 });
+    }
+
     // The retention pass lists everything the destination has.
     if (method === "GET" && url.startsWith(`${DEST_API}/releases?`)) {
-      return json([]);
+      if (options.destinationListingFails) return new Response("boom", { status: 500 });
+      const listed = options.destinationReleases ?? [];
+      if (!options.destinationPageCap) return json(listed);
+      const params = new URL(url).searchParams;
+      const size = Math.min(Number(params.get("limit") ?? "30"), options.destinationPageCap);
+      const page = Number(params.get("page") ?? "1");
+      return new Response(JSON.stringify(listed.slice((page - 1) * size, page * size)), {
+        headers: { "content-type": "application/json", "x-total-count": String(listed.length) },
+      });
     }
 
     throw new Error(`unexpected request: ${method} ${url}`);
@@ -173,11 +279,24 @@ function fakeWorld(options: DestinationOptions) {
     requests,
     creates: () => requests.filter((r) => r.method === "POST" && r.url === `${DEST_API}/releases`),
     patches: () => requests.filter((r) => r.method === "PATCH"),
+    deletes: () => requests.filter((r) => r.method === "DELETE"),
+    /** Tags of every release the mirror created on the destination. */
+    createdTags: () =>
+      requests
+        .filter((r) => r.method === "POST" && r.url === `${DEST_API}/releases`)
+        .map((r) => String(JSON.parse(r.body ?? "{}").tag_name)),
     uploads: () => requests.filter((r) => r.method === "POST" && r.url.includes("/assets?name=")),
     downloads: () =>
       requests.filter(
-        (r) => r.url.startsWith(`${SOURCE_URL}/attachments/`) || r.url.startsWith("https://github.com/")
+        (r) =>
+          r.url.startsWith(`${SOURCE_URL}/attachments/`) ||
+          r.url.startsWith("https://github.com/") ||
+          r.url.startsWith("https://api.github.com/")
       ),
+    assetListings: () =>
+      requests.filter((r) => r.method === "GET" && /\/releases\/\d+\/assets$/.test(r.url)),
+    assetDeletes: () =>
+      requests.filter((r) => r.method === "DELETE" && /\/releases\/\d+\/assets\/\d+$/.test(r.url)),
   };
 }
 
@@ -196,16 +315,37 @@ function giteaRelease(tag: string, extra: Record<string, unknown> = {}) {
   };
 }
 
-function mirrorFromGitea(connection: SourceConnection) {
+function mirrorFromGitea(
+  connection: SourceConnection,
+  overrides: {
+    releaseLimit?: number;
+    releaseType?: "all" | "stable";
+    releaseIncludeTags?: string[];
+    releaseExcludeTags?: string[];
+  } = {}
+) {
   return mirrorGiteaSourceReleasesToGitea({
     config,
     repository,
     connection,
     giteaOwner: DEST_OWNER,
     giteaRepoName: DEST_REPO,
-    releaseLimit: 10,
+    releaseLimit: overrides.releaseLimit ?? 10,
     releaseAssetLimit: null,
+    releaseType: overrides.releaseType,
+    releaseIncludeTags: overrides.releaseIncludeTags,
+    releaseExcludeTags: overrides.releaseExcludeTags,
   });
+}
+
+/** A destination release as the retention pass reads it. */
+function destinationRelease(tag: string, id: number, prerelease: boolean | null) {
+  return {
+    id,
+    tag_name: tag,
+    created_at: `2026-0${Math.max(1, 9 - id % 9)}-01T00:00:00Z`,
+    prerelease,
+  };
 }
 
 describe.skipIf(!isChild)("mirrorGiteaSourceReleasesToGitea", () => {
@@ -330,6 +470,395 @@ describe.skipIf(!isChild)("mirrorGiteaSourceReleasesToGitea", () => {
   });
 });
 
+describe.skipIf(!isChild)("release type filter", () => {
+  it("mirrors only the releases the source does not flag as pre-release", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v2.1.0-beta.1", { prerelease: true }),
+        giteaRelease("v2.0.0"),
+        giteaRelease("v1.0.0"),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(world.createdTags()).toEqual(["v2.0.0", "v1.0.0"]);
+  });
+
+  it("mirrors every release when a stored value names a kind that no longer exists", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v2.1.0-beta.1", { prerelease: true }),
+        giteaRelease("v2.0.0"),
+      ],
+    });
+
+    // A row saved while the filter offered pre-releases on their own must not
+    // turn into a filter nobody asked for; it falls back to no type filter.
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseType: "prerelease" as unknown as "stable",
+    });
+
+    expect(world.createdTags()).toEqual(["v2.1.0-beta.1", "v2.0.0"]);
+  });
+
+  it("looks further back so the limit counts the releases that match", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v3.0.0-rc1", { prerelease: true }),
+        giteaRelease("v2.0.0"),
+        giteaRelease("v1.0.0"),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseLimit: 1,
+      releaseType: "stable",
+    });
+
+    // Asking the source for a single release would leave the pre-release as the
+    // only candidate; the filter widens the scan instead, so "the newest one"
+    // is the newest stable one.
+    expect(world.createdTags()).toEqual(["v2.0.0"]);
+    const listing = world.requests.find((r) => r.url.startsWith(`${SOURCE_URL}/api/v1/`));
+    expect(listing?.url).toContain("limit=50&page=1");
+  });
+
+  it("removes destination releases the filter excludes", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [
+        destinationRelease("v1.9.0-beta", 11, true),
+        destinationRelease("v1.8.0", 12, false),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(world.deletes().map((r) => r.url)).toEqual([`${DEST_API}/releases/11`]);
+  });
+
+  it("keeps a destination release whose pre-release flag is unknown", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [destinationRelease("v1.8.0", 12, null)],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(world.deletes()).toHaveLength(0);
+  });
+
+  it("still runs retention when the filter excludes every source release", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.1.0-beta.1", { prerelease: true })],
+      destinationReleases: [destinationRelease("v2.1.0-beta.1", 21, true)],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(world.creates()).toHaveLength(0);
+    expect(world.deletes().map((r) => r.url)).toEqual([`${DEST_API}/releases/21`]);
+  });
+
+  it("leaves the destination alone when every release is a candidate", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [destinationRelease("v1.9.0-beta", 11, true)],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"));
+
+    expect(world.deletes()).toHaveLength(0);
+  });
+});
+
+describe.skipIf(!isChild)("release asset storage (#479)", () => {
+  const withAssets = (release: Record<string, unknown>, sizes: number[]) => ({
+    ...release,
+    assets: sizes.map((size, index) => ({ id: index + 1, name: `file-${index}`, size })),
+  });
+
+  it("records the assets left on the destination after retention", async () => {
+    fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [
+        withAssets(destinationRelease("v1.9.0-beta", 11, true), [100, 50]),
+        withAssets(destinationRelease("v1.8.0", 12, false), [1000]),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(storageRecords).toEqual([{ repositoryId: "repo-1", summary: { count: 1, bytes: 1000 } }]);
+  });
+
+  it("keeps counting a release whose delete failed", async () => {
+    fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [
+        withAssets(destinationRelease("v1.9.0-beta", 11, true), [100, 50]),
+        withAssets(destinationRelease("v1.8.0", 12, false), [1000]),
+      ],
+      failDeleteIds: [11],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(storageRecords).toEqual([{ repositoryId: "repo-1", summary: { count: 3, bytes: 1150 } }]);
+  });
+
+  it("lists past the first page when the destination pages below what was asked", async () => {
+    // 35 releases, served 30 a page: the old per_page=100 loop stopped at 30.
+    const listed = Array.from({ length: 35 }, (_, i) =>
+      withAssets(destinationRelease(`v1.${i}.0`, 100 + i, false), [10])
+    );
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: listed,
+      destinationPageCap: 30,
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseLimit: 50 });
+
+    expect(storageRecords).toEqual([{ repositoryId: "repo-1", summary: { count: 35, bytes: 350 } }]);
+    expect(world.requests.filter((r) => r.url.startsWith(`${DEST_API}/releases?`))).toHaveLength(2);
+  });
+
+  it("enforces the release limit across every page", async () => {
+    const listed = Array.from({ length: 35 }, (_, i) =>
+      withAssets(destinationRelease(`v1.${i}.0`, 100 + i, false), [10])
+    );
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: listed,
+      destinationPageCap: 30,
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseLimit: 10 });
+
+    // The old loop saw 30 of the 35 and deleted 20, leaving 15.
+    expect(world.requests.filter((r) => r.method === "DELETE")).toHaveLength(25);
+  });
+
+  it("records nothing when the listing fails", async () => {
+    fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationListingFails: true,
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"));
+
+    expect(storageRecords).toEqual([]);
+  });
+
+  it("makes no request of its own", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [withAssets(destinationRelease("v2.0.0", 12, false), [10])],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"));
+
+    const listings = world.requests.filter((r) => r.url.startsWith(`${DEST_API}/releases?`));
+    expect(listings).toHaveLength(1);
+    expect(storageRecords).toEqual([{ repositoryId: "repo-1", summary: { count: 1, bytes: 10 } }]);
+  });
+});
+
+describe.skipIf(!isChild)("all releases removed warning", () => {
+  it("warns when the filters leave the destination with no releases", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.1.0-beta.1", { prerelease: true })],
+      destinationReleases: [
+        destinationRelease("v2.0.0-beta", 21, true),
+        destinationRelease("v1.9.0-beta", 22, true),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(world.deletes()).toHaveLength(2);
+    expect(removalNotices).toEqual([
+      {
+        userId: "user-1",
+        repositoryName: DEST_REPO,
+        destination: `${DEST_OWNER}/${DEST_REPO}`,
+        removedCount: 2,
+      },
+    ]);
+    expect(activityJobs).toHaveLength(1);
+    expect(activityJobs[0]).toMatchObject({
+      status: "warning",
+      message: `All releases removed from ${DEST_OWNER}/${DEST_REPO}`,
+      skipNotification: true,
+      skipDuplicateEvent: true,
+    });
+  });
+
+  it("stays quiet while at least one release survives the filters", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [
+        destinationRelease("v2.0.0-beta", 21, true),
+        destinationRelease("v1.9.0", 22, false),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), { releaseType: "stable" });
+
+    expect(world.deletes().map((r) => r.url)).toEqual([`${DEST_API}/releases/21`]);
+    expect(removalNotices).toHaveLength(0);
+    expect(activityJobs).toHaveLength(0);
+  });
+});
+
+describe.skipIf(!isChild)("release tag pattern filter", () => {
+  it("skips the source releases an exclude pattern names", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v2.1.0-rc.1"),
+        giteaRelease("v2.0.0"),
+        giteaRelease("v1.0.0"),
+      ],
+    });
+
+    // The upstream never flagged anything as a pre-release, which is exactly the
+    // case the tag filter exists for.
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseExcludeTags: ["*-rc.*"],
+    });
+
+    expect(world.createdTags()).toEqual(["v2.0.0", "v1.0.0"]);
+  });
+
+  it("mirrors only the tags an include pattern names", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0"), giteaRelease("v1.2.0"), giteaRelease("v1.0.0")],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseIncludeTags: ["v1.*"],
+    });
+
+    expect(world.createdTags()).toEqual(["v1.2.0", "v1.0.0"]);
+  });
+
+  it("lets exclude win when both lists name a tag", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0"), giteaRelease("v2.0.0-rc.1")],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseIncludeTags: ["v*"],
+      releaseExcludeTags: ["*-rc.*"],
+    });
+
+    expect(world.createdTags()).toEqual(["v2.0.0"]);
+  });
+
+  it("matches case-insensitively", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("V2.0.0"), giteaRelease("v1.0.0")],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseIncludeTags: ["v2*"],
+    });
+
+    expect(world.createdTags()).toEqual(["V2.0.0"]);
+  });
+
+  it("treats a pattern in slashes as a regular expression", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v1.2.3-rc.1"),
+        giteaRelease("v1.2.3"),
+        giteaRelease("nightly-20260101"),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseIncludeTags: ["/^v\\d+\\.\\d+\\.\\d+$/"],
+    });
+
+    expect(world.createdTags()).toEqual(["v1.2.3"]);
+  });
+
+  it("widens the scan window for a tag filter alone", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("nightly-20260201"),
+        giteaRelease("nightly-20260115"),
+        giteaRelease("v2.0.0"),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseLimit: 1,
+      releaseIncludeTags: ["v*"],
+    });
+
+    // A one-release scan would have found only nightlies and mirrored nothing;
+    // the filter looks further back so "the newest one" is the newest match.
+    expect(world.createdTags()).toEqual(["v2.0.0"]);
+    const listing = world.requests.find((r) => r.url.startsWith(`${SOURCE_URL}/api/v1/`));
+    expect(listing?.url).toContain("limit=50&page=1");
+  });
+
+  it("removes destination releases whose tag no longer matches", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0")],
+      destinationReleases: [
+        // No pre-release flag: a tag pattern needs only the tag name, so unlike
+        // the type filter it can still clean these up.
+        destinationRelease("v1.9.0-beta", 11, null),
+        destinationRelease("v1.8.0", 12, null),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseExcludeTags: ["*-beta"],
+    });
+
+    expect(world.deletes().map((r) => r.url)).toEqual([`${DEST_API}/releases/11`]);
+  });
+
+  it("combines with the type filter and the count limit", async () => {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v3.0.0-rc.1", { prerelease: true }),
+        giteaRelease("v2.9.0-beta.2"),
+        giteaRelease("v2.0.0"),
+        giteaRelease("v1.0.0"),
+      ],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseLimit: 1,
+      releaseType: "stable",
+      releaseExcludeTags: ["*-beta*"],
+    });
+
+    expect(world.createdTags()).toEqual(["v2.0.0"]);
+  });
+
+  it("ignores a pattern that cannot compile instead of failing the run", async () => {
+    const world = fakeWorld({
+      sourceReleases: [giteaRelease("v2.0.0"), giteaRelease("v1.0.0")],
+    });
+
+    await mirrorFromGitea(giteaConnection("source-token"), {
+      releaseExcludeTags: ["/v1(/"],
+    });
+
+    // The broken pattern is dropped, which leaves no filter at all rather than a
+    // mirror run that throws.
+    expect(world.createdTags()).toEqual(["v2.0.0", "v1.0.0"]);
+    expect(world.deletes()).toHaveLength(0);
+  });
+});
+
 describe.skipIf(!isChild)("mirrorGitHubReleasesToGitea keeps its own header and credentials", () => {
   function githubOctokit(releases: Array<Record<string, unknown>>) {
     return {
@@ -342,6 +871,75 @@ describe.skipIf(!isChild)("mirrorGitHubReleasesToGitea keeps its own header and 
       },
     } as any;
   }
+
+  function githubReleaseWithAsset(tag: string) {
+    return {
+      tag_name: tag,
+      name: `Release ${tag}`,
+      body: "",
+      draft: false,
+      prerelease: false,
+      created_at: "2026-01-01T00:00:00Z",
+      published_at: "2026-01-01T00:00:00Z",
+      assets: [
+        {
+          name: `${tag}.bin`,
+          size: 4,
+          url: `https://api.github.com/repos/acme/demo/releases/assets/${tag}`,
+          browser_download_url: `https://github.com/acme/demo/releases/download/${tag}/${tag}.bin`,
+        },
+      ],
+    };
+  }
+
+  function mirrorFromGitHub(releases: Array<Record<string, unknown>>, isPrivate: boolean) {
+    return mirrorGitHubReleasesToGitea({
+      config,
+      octokit: githubOctokit(releases),
+      repository: { ...repository, isPrivate } as Repository,
+      giteaOwner: DEST_OWNER,
+      giteaRepoName: DEST_REPO,
+      releaseLimit: 10,
+      releaseAssetLimit: null,
+    });
+  }
+
+  it("downloads a public repository's assets from the browser URL, which spends no API budget", async () => {
+    const world = fakeWorld({ sourceReleases: [], destinationTags: ["v1.0.0"] });
+
+    await mirrorFromGitHub([githubReleaseWithAsset("v1.0.0")], false);
+
+    expect(world.downloads().map((r) => r.url)).toEqual([
+      "https://github.com/acme/demo/releases/download/v1.0.0/v1.0.0.bin",
+    ]);
+  });
+
+  it("downloads a private repository's assets from the REST asset URL", async () => {
+    const world = fakeWorld({ sourceReleases: [], destinationTags: ["v1.0.0"] });
+
+    await mirrorFromGitHub([githubReleaseWithAsset("v1.0.0")], true);
+
+    expect(world.downloads().map((r) => r.url)).toEqual([
+      "https://api.github.com/repos/acme/demo/releases/assets/v1.0.0",
+    ]);
+    expect(world.uploads()).toHaveLength(1);
+  });
+
+  it("stops the whole pass when the rate limit gate closes, instead of trying the next release", async () => {
+    const world = fakeWorld({ sourceReleases: [], destinationTags: ["v2.0.0", "v1.0.0"] });
+    markRateLimited(rateLimitGateKey("user-1"), Date.now() + 3_600_000);
+
+    try {
+      await expect(
+        mirrorFromGitHub([githubReleaseWithAsset("v2.0.0"), githubReleaseWithAsset("v1.0.0")], true)
+      ).rejects.toThrow("rate limit");
+    } finally {
+      clearAllRateLimits();
+    }
+
+    expect(world.downloads()).toHaveLength(0);
+    expect(world.createdTags()).toEqual(["v2.0.0"]);
+  });
 
   it("writes the GitHub header byte for byte and downloads with the GitHub token", async () => {
     const world = fakeWorld({
@@ -458,5 +1056,122 @@ describe.skipIf(!isChild)("mirrorGitHubReleasesToGitea keeps its own header and 
 
     const [download] = world.downloads();
     expect(download.authorization).toBe("token ghes-token");
+  });
+});
+
+describe.skipIf(!isChild)("pruning release assets past the asset limit", () => {
+  function configWithPruning(prune: boolean) {
+    return {
+      ...config,
+      giteaConfig: {
+        ...(config as any).giteaConfig,
+        pruneOldReleaseAssets: prune,
+      },
+    } as unknown as Partial<Config>;
+  }
+
+  const destinationReleases = [
+    {
+      id: 1,
+      tag_name: "v3.0.0",
+      created_at: "2026-03-01T00:00:00Z",
+      prerelease: false,
+      assets: [{ id: 11, name: "new.bin", size: 7 }],
+    },
+    {
+      id: 2,
+      tag_name: "v2.0.0",
+      created_at: "2026-02-01T00:00:00Z",
+      prerelease: false,
+      assets: [{ id: 21, name: "old.bin", size: 5 }],
+    },
+    {
+      id: 3,
+      tag_name: "v1.0.0",
+      created_at: "2026-01-01T00:00:00Z",
+      prerelease: false,
+      assets: [{ id: 31, name: "older.bin", size: 3 }],
+    },
+  ];
+
+  /** Three releases on both sides; an asset limit of 1 covers only v3.0.0. */
+  function run(prune: boolean, extra: Partial<DestinationOptions> = {}) {
+    const world = fakeWorld({
+      sourceReleases: [
+        giteaRelease("v3.0.0"),
+        giteaRelease("v2.0.0"),
+        giteaRelease("v1.0.0"),
+      ],
+      destinationReleases,
+      destinationAssets: {
+        "1": [{ id: 11, name: "new.bin", size: 7 }],
+        "2": [{ id: 21, name: "old.bin", size: 5 }],
+        "3": [{ id: 31, name: "older.bin", size: 3 }],
+      },
+      ...extra,
+    });
+
+    return mirrorGiteaSourceReleasesToGitea({
+      config: configWithPruning(prune),
+      repository,
+      connection: giteaConnection("source-token"),
+      giteaOwner: DEST_OWNER,
+      giteaRepoName: DEST_REPO,
+      releaseLimit: 3,
+      releaseAssetLimit: 1,
+    }).then(() => world);
+  }
+
+  it("keeps attachments a looser limit uploaded before", async () => {
+    const world = await run(false);
+
+    expect(world.assetListings()).toHaveLength(0);
+    expect(world.assetDeletes()).toHaveLength(0);
+    expect(storageRecords.at(-1)?.summary).toEqual({ count: 3, bytes: 15 });
+  });
+
+  it("deletes the attachments of releases past the asset limit when enabled", async () => {
+    const world = await run(true);
+
+    expect(world.assetDeletes().map((r) => r.url)).toEqual([
+      `${DEST_API}/releases/2/assets/21`,
+      `${DEST_API}/releases/3/assets/31`,
+    ]);
+    // The newest release stays inside the limit and keeps its file.
+    expect(world.assetListings().map((r) => r.url)).toEqual([
+      `${DEST_API}/releases/2/assets`,
+      `${DEST_API}/releases/3/assets`,
+    ]);
+    // The storage summary follows the deletions instead of reporting the old total.
+    expect(storageRecords.at(-1)?.summary).toEqual({ count: 1, bytes: 7 });
+  });
+
+  it("skips releases the listing shows without attachments", async () => {
+    // v1.0.0 was pruned on an earlier sync: it is not listed or deleted again.
+    const world = await run(true, {
+      destinationReleases: destinationReleases.map((release) =>
+        release.id === 3 ? { ...release, assets: [] } : release
+      ),
+      destinationAssets: {
+        "1": [{ id: 11, name: "new.bin", size: 7 }],
+        "2": [{ id: 21, name: "old.bin", size: 5 }],
+        "3": [],
+      },
+    });
+
+    expect(world.assetListings().map((r) => r.url)).toEqual([
+      `${DEST_API}/releases/2/assets`,
+    ]);
+    expect(world.assetDeletes().map((r) => r.url)).toEqual([
+      `${DEST_API}/releases/2/assets/21`,
+    ]);
+    expect(storageRecords.at(-1)?.summary).toEqual({ count: 1, bytes: 7 });
+  });
+
+  it("deletes nothing when a release's attachments cannot be listed", async () => {
+    const world = await run(true, { failAssetListingFor: [2, 3] });
+
+    expect(world.assetDeletes()).toHaveLength(0);
+    expect(storageRecords.at(-1)?.summary).toEqual({ count: 3, bytes: 15 });
   });
 });

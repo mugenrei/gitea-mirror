@@ -29,6 +29,11 @@ export interface MetadataSyncCursor {
   lastPassStartedAt: string;
   /** Start of the last full pass that completed cleanly. */
   lastFullPassStartedAt: string;
+  /**
+   * Issue state filter the last completed issues pass ran with, when it was
+   * not "all". Issues a filter left out are only found again by a full pass.
+   */
+  issueState?: string;
 }
 
 export interface MetadataSyncCursors {
@@ -63,12 +68,29 @@ export interface MetadataPassProgressByKind {
   pullRequests?: MetadataPassProgress;
 }
 
+/**
+ * The oldest mirror sync request Gitea has not run yet (#493). Gitea
+ * answers `mirror-sync` by queueing the pull and returns 200 before it
+ * runs, so the only sign that a request was dropped or is stuck is that
+ * the repository's `mirror_updated` never moves past the value read
+ * before the request.
+ */
+export interface MirrorSyncRequestState {
+  /** When the request was accepted, on this host's clock. */
+  requestedAt: string;
+  /** Gitea's `mirror_updated` just before the request, on Gitea's clock. */
+  mirrorUpdatedBefore: string;
+  /** Set once the activity log and notifications have reported this request. */
+  warnedAt?: string;
+}
+
 export interface RepositoryMetadataState {
   components: MetadataComponentsState;
   lastSyncedAt?: string;
   acknowledgedDeletions: AcknowledgedDeletion[];
   syncCursors: MetadataSyncCursors;
   passProgress: MetadataPassProgressByKind;
+  mirrorSyncRequest?: MirrorSyncRequestState;
 }
 
 /**
@@ -115,14 +137,32 @@ function isValidTimestamp(value: unknown): value is string {
 
 function parseSyncCursor(raw: unknown): MetadataSyncCursor | undefined {
   if (!raw || typeof raw !== "object") return undefined;
-  const { lastPassStartedAt, lastFullPassStartedAt } = raw as {
+  const { lastPassStartedAt, lastFullPassStartedAt, issueState } = raw as {
     lastPassStartedAt?: unknown;
     lastFullPassStartedAt?: unknown;
+    issueState?: unknown;
   };
   if (!isValidTimestamp(lastPassStartedAt) || !isValidTimestamp(lastFullPassStartedAt)) {
     return undefined;
   }
-  return { lastPassStartedAt, lastFullPassStartedAt };
+  return typeof issueState === "string"
+    ? { lastPassStartedAt, lastFullPassStartedAt, issueState }
+    : { lastPassStartedAt, lastFullPassStartedAt };
+}
+
+function parseMirrorSyncRequest(raw: unknown): MirrorSyncRequestState | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const { requestedAt, mirrorUpdatedBefore, warnedAt } = raw as {
+    requestedAt?: unknown;
+    mirrorUpdatedBefore?: unknown;
+    warnedAt?: unknown;
+  };
+  if (!isValidTimestamp(requestedAt) || !isValidTimestamp(mirrorUpdatedBefore)) {
+    return undefined;
+  }
+  return isValidTimestamp(warnedAt)
+    ? { requestedAt, mirrorUpdatedBefore, warnedAt }
+    : { requestedAt, mirrorUpdatedBefore };
 }
 
 /**
@@ -380,6 +420,9 @@ export function parseRepositoryMetadataState(
     if (issues) base.passProgress.issues = issues;
     if (pullRequests) base.passProgress.pullRequests = pullRequests;
   }
+
+  const mirrorSyncRequest = parseMirrorSyncRequest(parsed.mirrorSyncRequest);
+  if (mirrorSyncRequest) base.mirrorSyncRequest = mirrorSyncRequest;
 
   return base;
 }

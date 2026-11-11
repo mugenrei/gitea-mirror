@@ -11,6 +11,8 @@ import { mintSessionFromHeaders } from './lib/auth-header-bridge';
 import { initializeConfigFromEnv } from './lib/env-config-loader';
 import { db, users } from './lib/db';
 import { getBasePath } from './lib/base-path';
+import { apiNotFoundResponse, isApiNotFoundPage } from './lib/api-not-found';
+import { refuseReadOnlyApiKey } from './lib/api-key-access';
 
 const ASTRO_INTERNAL_ASSET_PATH_PATTERN = /(["'])\/(_astro\/|_server-islands\/|_image\b)/g;
 
@@ -52,6 +54,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (requestPath === `${basePath === "/" ? "" : basePath}/api/health/live`) {
     return next();
   }
+
 
   // Set-Cookie headers we mint during the header-auth bridge below.
   // Forwarded onto the outbound response after `next()` so the browser
@@ -285,17 +288,28 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
+  // A read only API key may look but not change anything.
+  const readOnlyRefusal = await refuseReadOnlyApiKey({
+    request: context.request,
+    pathname: context.url.pathname,
+    sessionId: context.locals.session?.id,
+  });
+  if (readOnlyRefusal) return readOnlyRefusal;
+
   // Continue with the request
   const handlerStartedAt = performance.now();
   let response: Response;
   try {
     response = await next();
+    if (isApiNotFoundPage(context.url.pathname, response)) {
+      response = apiNotFoundResponse(context.request.method, context.url.pathname);
+    }
   } finally {
     const totalMs = performance.now() - requestStartedAt;
     if (totalMs >= 2_000) {
       const middlewareMs = handlerStartedAt - requestStartedAt;
       const handlerMs = performance.now() - handlerStartedAt;
-      // Log the pathname only, never query parameters, cookies or API keys.
+      // Log pathname only; never include query, cookies, or API keys.
       console.warn(`[HTTP Slow] ${context.request.method} ${requestPath} total=${Math.round(totalMs)}ms middleware=${Math.round(middlewareMs)}ms handler=${Math.round(handlerMs)}ms`);
     }
   }

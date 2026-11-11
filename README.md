@@ -240,7 +240,9 @@ Transfer complete repository metadata from GitHub to Gitea/Forgejo:
 - **Wiki** - Mirror wiki content
 - **Releases** - Transfer GitHub releases with assets
 
-Releases have two limits. The release limit keeps only the newest N releases in Gitea/Forgejo. The release asset limit uploads assets only for the newest N of those, so a repository with years of releases can keep every release note and tag while only the recent binaries take up space. Leave the asset limit empty to upload assets for every mirrored release, or set it to 0 for release notes only. Both limits can be overridden per organization and per repository, and lowering the asset limit never deletes assets that were already uploaded.
+Releases have two limits and two filters. The release limit keeps only the newest N releases in Gitea/Forgejo. The release asset limit uploads assets only for the newest N of those, so a repository with years of releases can keep every release note and tag while only the recent binaries take up space. Leave the asset limit empty to upload assets for every mirrored release, or set it to 0 for release notes only. The **Pre-releases** switch skips everything the source marks as a pre-release, and **Custom tag rules** narrows releases by tag name (`v1.*`, `*-rc.*`, or a regular expression in slashes) for projects that ship candidates without marking them.
+
+All of it can be overridden per organization and per repository in the **Mirror options** dialog, and lowering the asset limit never deletes assets that were already uploaded. Enable **Remove old release assets** if you want each sync to delete the attachments of releases past that count instead.
 
 Enable in Settings → Mirror Options → Mirror metadata
 
@@ -307,7 +309,7 @@ CLEANUP_DRY_RUN=false                 # Set to true to test without changes
   - Regular repositories: Made read-only using Gitea/Forgejo's archive feature
   - Mirror repositories: Renamed with `archived-` prefix (Gitea/Forgejo API limitation prevents archiving mirrors)
   - Failed operations: Repository remains fully accessible even if marking as archived fails
-- **Manual Sync on Demand**: Archived mirrors stay in Gitea/Forgejo with automatic syncs disabled; trigger `Manual Sync` from the Repositories page whenever you need fresh data.
+- **Sync on Demand**: Archived mirrors stay in Gitea/Forgejo with automatic syncs disabled; use `Sync` on the Repositories page whenever you need fresh data.
 - **The Whole Point of Backups**: Your Gitea/Forgejo mirrors are preserved even when GitHub sources disappear - that's why you have backups!
 - **Strongly Recommended**: Always use `CLEANUP_ORPHANED_REPO_ACTION=archive` (default) instead of `delete`
 

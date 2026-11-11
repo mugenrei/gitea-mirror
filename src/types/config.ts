@@ -1,4 +1,8 @@
-import { type Config as ConfigType } from "@/lib/db/schema";
+import {
+  type Config as ConfigType,
+  type IssueStateFilter,
+  type ReleaseType,
+} from "@/lib/db/schema";
 
 export type GiteaOrgVisibility = "public" | "private" | "limited";
 export type MirrorStrategy = "preserve" | "single-org" | "flat-user" | "mixed";
@@ -86,6 +90,10 @@ export interface MirrorOptions {
   mirrorReleases: boolean;
   releaseLimit?: number;  // Limit number of releases to mirror (default: 10)
   releaseAssetLimit?: number | null;  // Upload assets only for the newest N releases; null or absent means all, 0 means none
+  pruneOldReleaseAssets?: boolean;  // Also delete attachments already on releases past releaseAssetLimit (default: false)
+  releaseType?: ReleaseType;  // "all" | "stable": which releases are mirror candidates before the limit applies
+  releaseIncludeTags?: string[];  // Glob or /regex/ tag patterns; when set, only matching tags are mirror candidates
+  releaseExcludeTags?: string[];  // Glob or /regex/ tag patterns; matching tags are skipped, and exclude wins over include
   mirrorLFS: boolean;  // Mirror Git LFS objects
   mirrorMetadata: boolean;
   metadataComponents: {
@@ -95,6 +103,12 @@ export interface MirrorOptions {
     milestones: boolean;
     wiki: boolean;
   };
+  /** Which source issues are listed: all, open only, or closed only. */
+  issueState: IssueStateFilter;
+  /** Copy comments along with each issue. */
+  issueComments: boolean;
+  /** Keep images, videos and attachment links in issue bodies and comments. */
+  issueMedia: boolean;
 }
 
 export interface AdvancedOptions {
@@ -187,7 +201,11 @@ export interface NotificationConfig {
   provider: "ntfy" | "apprise" | "gotify" | "webhook";
   notifyOnSyncError: boolean;
   notifyOnSyncSuccess: boolean;
+  /** Master switch for the discovery alerts below. */
   notifyOnNewRepo: boolean;
+  notifyOnNewOwnRepo: boolean;
+  notifyOnNewOrgRepo: boolean;
+  notifyOnNewStarredRepo: boolean;
   ntfy?: NtfyConfig;
   apprise?: AppriseConfig;
   gotify?: GotifyConfig;

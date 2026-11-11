@@ -53,6 +53,17 @@ export const backupStrategyEnum = z.enum([
   "block-on-force-push",
 ]);
 
+// Which releases are mirror candidates: every one, or only the ones the source
+// does not flag as a pre-release.
+export const releaseTypeEnum = z.enum(["all", "stable"]);
+export type ReleaseType = z.infer<typeof releaseTypeEnum>;
+
+// Which source issues are candidates for mirroring. "all" keeps the historical
+// behavior; the other values narrow the GitHub listing before anything is
+// created in the destination.
+export const issueStateFilterEnum = z.enum(["all", "open", "closed"]);
+export type IssueStateFilter = z.infer<typeof issueStateFilterEnum>;
+
 /**
  * Per-object overrides for the global mirror options in `giteaConfigSchema`.
  *
@@ -73,6 +84,27 @@ export const backupStrategyEnum = z.enum([
  * assets are uploaded only for the newest N mirrored releases. 0 is a real
  * value (notes only); null/absent means inherit.
  *
+ * `releaseType` sits alongside those limits and decides which releases are
+ * candidates at all (`all`, or `stable` = everything the source does not flag as
+ * a pre-release). It is a plain optional string rather than a strict enum for
+ * the same reason as the limits: a stored typo must degrade to "inherit" for
+ * that field alone. `normalizeReleaseType` does the sanitizing, and the global
+ * default is `giteaConfigSchema.releaseType`.
+ *
+ * `releaseIncludeTags` and `releaseExcludeTags` filter by tag name on top of
+ * that, for the many projects that never set the pre-release flag but tag
+ * `v1.2.3-rc.1`. They are `z.unknown()` rather than `z.array(z.string())`
+ * because a hand-written `"releaseExcludeTags": "*-rc*"` (a bare string, not a
+ * list) would otherwise fail the parse of the whole object and silently drop
+ * the LFS opt-out stored next to it. `normalizeReleaseTagPatterns` accepts a
+ * list of strings and ignores everything else, and an empty list is not a pin:
+ * clearing the field means inherit.
+ *
+ * `mirrorIssueState` follows the same lenient-string rule as `releaseType`
+ * (`normalizeIssueState` sanitizes it). `mirrorIssueComments` and
+ * `mirrorIssueMedia` narrow what an issue pass copies; both default to on when
+ * no tier pins them.
+ *
  * `skipForks` is organization-tier only: it opts an organization out of
  * importing and mirroring forked repositories without touching the global
  * `githubConfig.skipForks` switch. Null/absent inherits that global value.
@@ -86,11 +118,17 @@ export const mirrorOverridesSchema = z.object({
   mirrorReleases: z.boolean().nullable().optional(),
   mirrorMetadata: z.boolean().nullable().optional(),
   mirrorIssues: z.boolean().nullable().optional(),
+  mirrorIssueComments: z.boolean().nullable().optional(),
+  mirrorIssueMedia: z.boolean().nullable().optional(),
+  mirrorIssueState: z.string().nullable().optional(),
   mirrorPullRequests: z.boolean().nullable().optional(),
   mirrorLabels: z.boolean().nullable().optional(),
   mirrorMilestones: z.boolean().nullable().optional(),
   releaseLimit: z.number().nullable().optional(),
   releaseAssetLimit: z.number().nullable().optional(),
+  releaseType: z.string().nullable().optional(),
+  releaseIncludeTags: z.unknown().nullable().optional(),
+  releaseExcludeTags: z.unknown().nullable().optional(),
   skipForks: z.boolean().nullable().optional(),
 });
 
@@ -129,8 +167,29 @@ export const giteaConfigSchema = z.object({
   // Upload assets only for the newest N mirrored releases. null/absent means
   // every mirrored release gets its assets; 0 means release notes only.
   releaseAssetLimit: z.number().nullable().optional(),
+  // Opt-in cleanup for what that limit left behind. Off by default, because
+  // the limit alone only gates uploads: attachments a release already has are
+  // never removed. Turning this on deletes the attachments of every mirrored
+  // release ranked past `releaseAssetLimit`. Global only - there is no
+  // per-repository tier for it, the ranks still come from that repository's
+  // own effective asset limit.
+  pruneOldReleaseAssets: z.boolean().default(false),
+  // Which releases are candidates: every one, or only the ones not flagged as a
+  // pre-release. The limit is applied after filtering.
+  releaseType: releaseTypeEnum.default("all"),
+  // Tag patterns narrowing that further: include keeps only matching tags,
+  // exclude drops matching ones. Applied after `releaseType`, before the limit.
+  // Empty list means no filter, which is what every config stored before this
+  // option existed behaves.
+  releaseIncludeTags: z.array(z.string()).default([]),
+  releaseExcludeTags: z.array(z.string()).default([]),
   mirrorMetadata: z.boolean().default(false),
   mirrorIssues: z.boolean().default(false),
+  // Which issues the pass lists, and how much of each one it copies. Defaults
+  // preserve the behavior from before these options existed.
+  mirrorIssueState: issueStateFilterEnum.default("all"),
+  mirrorIssueComments: z.boolean().default(true),
+  mirrorIssueMedia: z.boolean().default(true),
   mirrorPullRequests: z.boolean().default(false),
   mirrorLabels: z.boolean().default(false),
   mirrorMilestones: z.boolean().default(false),
@@ -212,7 +271,11 @@ export const notificationConfigSchema = z.object({
   provider: z.enum(["ntfy", "apprise", "gotify", "webhook"]).default("ntfy"),
   notifyOnSyncError: z.boolean().default(true),
   notifyOnSyncSuccess: z.boolean().default(false),
+  // Master switch; the three group switches below only apply while it is on.
   notifyOnNewRepo: z.boolean().default(false),
+  notifyOnNewOwnRepo: z.boolean().default(true),
+  notifyOnNewOrgRepo: z.boolean().default(true),
+  notifyOnNewStarredRepo: z.boolean().default(true),
   ntfy: ntfyConfigSchema.optional(),
   apprise: appriseConfigSchema.optional(),
   gotify: gotifyConfigSchema.optional(),
@@ -285,6 +348,10 @@ export const repositorySchema = z.object({
   size: z.number().default(0),
   hasLFS: z.boolean().default(false),
   hasSubmodules: z.boolean().default(false),
+  destinationSize: z.number().optional().nullable(),
+  releaseAssetsSize: z.number().optional().nullable(),
+  releaseAssetsCount: z.number().optional().nullable(),
+  storageCheckedAt: z.coerce.date().optional().nullable(),
   language: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   defaultBranch: z.string(),
@@ -337,6 +404,7 @@ export const mirrorJobSchema = z.object({
       "synced",
       "archived",
       "pending-approval",
+      "warning", // Activity-log alert (e.g. release filters emptied a destination); never a repository status
     ])
     .default("imported"),
   message: z.string(),
@@ -471,6 +539,9 @@ export const configs = sqliteTable("configs", {
     .$type<z.infer<typeof cleanupConfigSchema>>()
     .notNull(),
 
+  // Do not add the group switches to this default: SQLite can only change a column
+  // default by rebuilding the configs table, and the schema defaults already cover a
+  // row written without them.
   notificationConfig: text("notification_config", { mode: "json" })
     .$type<z.infer<typeof notificationConfigSchema>>()
     .notNull()
@@ -581,6 +652,15 @@ export const repositories = sqliteTable("repositories", {
   hasSubmodules: integer("has_submodules", { mode: "boolean" })
     .notNull()
     .default(false),
+
+  // What the mirror takes up on the destination, in bytes, recorded from
+  // responses a sync already fetches (#479). NULL until a sync has seen it.
+  // destinationSize is Git plus LFS as the destination reports it; the release
+  // asset totals come from the listing the release retention pass reads.
+  destinationSize: integer("destination_size"),
+  releaseAssetsSize: integer("release_assets_size"),
+  releaseAssetsCount: integer("release_assets_count"),
+  storageCheckedAt: integer("storage_checked_at", { mode: "timestamp" }),
 
   language: text("language"),
   description: text("description"),

@@ -35,6 +35,7 @@ Essential application settings required for running Gitea Mirror.
 | `HOST` | Server host binding | `0.0.0.0` | No |
 | `PORT` | Server port | `4321` | No |
 | `BASE_URL` | Application base path. Use `/` for root deployments, or a prefix such as `/mirror` when serving behind a reverse-proxy path prefix. | `/` | No |
+| `MCP_INTERNAL_URL` | Address the [MCP endpoint](../mcp/README.md) tools use to call the app's own API, including any `BASE_URL` prefix. Only needed when the app is not reachable from itself at `HOST` and `PORT`, for example when it terminates TLS itself (`https://127.0.0.1:4321`). | `http://HOST:PORT` plus `BASE_URL` | No |
 | `DATABASE_URL` | Database connection URL | `sqlite://data/gitea-mirror.db` | No |
 | `BETTER_AUTH_SECRET` | Secret key for session signing (generate with: `openssl rand -base64 32`) | - | Yes |
 | `BETTER_AUTH_URL` | Authentication origin (scheme + host only, e.g. `https://git.example.com`). Do **not** include a path — any path is automatically stripped, and `BASE_URL` is applied separately. | `http://localhost:4321` | No |
@@ -213,7 +214,11 @@ Control what content gets mirrored from GitHub to Gitea.
 |----------|-------------|---------|---------|
 | `MIRROR_RELEASES` | Mirror GitHub releases | `false` | `true`, `false` |
 | `RELEASE_LIMIT` | Maximum number of releases to mirror per repository | `10` | Number (1-100) |
-| `RELEASE_ASSET_LIMIT` | Upload release assets only for the newest N mirrored releases. Older releases still get their notes and tag. Unset means assets for every mirrored release, `0` means release notes only. Lowering it never deletes assets already uploaded | unset (all) | Number (0 or more) |
+| `RELEASE_TYPE` | Which releases are candidates: `all` mirrors everything, `stable` skips what the source marks as a pre-release. With a filter active the release limit counts the releases that match, and releases of the other kind are removed from Gitea on the next sync | `all` | `all`, `stable` |
+| `RELEASE_INCLUDE_TAGS` | Comma separated tag patterns; only releases whose tag matches are mirrored. A pattern is a glob over the whole tag (`v1.*`, `*-rc.*`, `?` for one character) or a regular expression in slashes (`/^v\d+\.\d+\.\d+$/`), matched case-insensitively. Commas inside the slashes belong to the expression (`/^v\d{1,3}\.\d+$/`) | empty | any list of globs or `/regex/` |
+| `RELEASE_EXCLUDE_TAGS` | Comma separated tag patterns in the same syntax; releases whose tag matches are skipped, and an excluded tag wins over `RELEASE_INCLUDE_TAGS` | empty | any list of globs or `/regex/` |
+| `RELEASE_ASSET_LIMIT` | Upload release assets only for the newest N mirrored releases. Older releases still get their notes and tag. Unset means assets for every mirrored release, `0` means release notes only. Lowering it never deletes assets already uploaded unless `PRUNE_OLD_RELEASE_ASSETS` is on | unset (all) | Number (0 or more) |
+| `PRUNE_OLD_RELEASE_ASSETS` | Opt-in cleanup for what the asset limit left behind. Off, a sync only ever uploads and attachments already on Gitea stay. On, every sync also deletes the attachments of each mirrored release ranked past `RELEASE_ASSET_LIMIT`; the releases themselves and their notes stay | `false` | `true`, `false` |
 | `MIRROR_WIKI` | Mirror wiki content | `false` | `true`, `false` |
 | `MIRROR_METADATA` | Master toggle for metadata mirroring | `false` | `true`, `false` |
 | `MIRROR_ISSUES` | Mirror issues (requires MIRROR_METADATA=true) | `false` | `true`, `false` |
@@ -329,7 +334,7 @@ Configure automatic cleanup of old events and data.
   - Description updated with preservation notice and timestamp
   - Mirror interval set to 8760h (1 year) to minimize sync attempts
   - Repository remains fully accessible and cloneable
-- **Manual Sync Option**: Archived mirrors are still available on the Repositories page with automatic syncs disabled—use the `Manual Sync` action to refresh them on demand.
+- **Sync on Demand**: Archived mirrors are still available on the Repositories page with automatic syncs disabled; use the `Sync` action to refresh them on demand.
 
 ### Execution Settings
 

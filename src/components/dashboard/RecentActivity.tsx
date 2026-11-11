@@ -29,6 +29,8 @@ function activityIcon(status: MirrorJob["status"]) {
       return { Icon: Sparkles, color: "text-muted-foreground" };
     case "failed":
       return { Icon: TriangleAlert, color: "text-red-500" };
+    case "warning":
+      return { Icon: TriangleAlert, color: "text-amber-500" };
     default:
       return { Icon: Activity, color: "text-muted-foreground" };
   }
@@ -67,7 +69,7 @@ export function RecentActivity({ activities }: RecentActivityProps) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-border">
+          <div data-fit-rows className="flex flex-col divide-y divide-border">
             {activities.map((activity, index) => {
               const { Icon, color } = activityIcon(activity.status);
               return (
