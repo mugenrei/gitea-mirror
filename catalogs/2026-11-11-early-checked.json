@@ -110,6 +110,66 @@
       "url": "https://github.com/angelof-exe/ygo-tf-5-decomp",
       "destinationOrg": "decomps",
       "category": "psp-decompilation"
+    },
+    {
+      "url": "https://github.com/gamboozino/ng2recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/hibikifukui22/Dead-or-Alive-Xtreme-2-Recompilation",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/KamiTK2/openNG2",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/santiquiroz/gears-of-war-2-pc-port",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/hk21x/007eon-recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/Teraflopping/xrevive",
+      "destinationOrg": "decomps",
+      "category": "xbox-static-recomp"
+    },
+    {
+      "url": "https://github.com/seedds/nxnative",
+      "destinationOrg": "decomps",
+      "category": "switch-native-runtime"
+    },
+    {
+      "url": "https://github.com/c22dev/mush8",
+      "destinationOrg": "decomps",
+      "category": "switch-native-runtime"
+    },
+    {
+      "url": "https://github.com/chasem-dev/colosseum-launcher",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/Odrannnn/MetroidPrime2Port",
+      "destinationOrg": "decomps",
+      "category": "gamecube-decompilation"
+    },
+    {
+      "url": "https://github.com/josiahg2502-glitch/Smash4PC",
+      "destinationOrg": "decomps",
+      "category": "wiiu-static-recomp"
+    },
+    {
+      "url": "https://github.com/beanieaxolotl/shinen-gax-decomp",
+      "destinationOrg": "decomps",
+      "category": "gba-decompilation"
     }
   ]
 }
