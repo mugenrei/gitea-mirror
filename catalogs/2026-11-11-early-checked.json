@@ -223,6 +223,52 @@
       "url": "https://github.com/DreaXer/TheGreatRecomp",
       "destinationOrg": "decomps",
       "category": "dreamcast-static-recomp"
+    },
+    {
+      "url": "https://github.com/danielalves96/gow-pc-port",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/GTTeancum/Timesplitters",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/LunarLaurus/adams-ant-farm-recomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/wootbeer/snprecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/8bitninja64/HangtimeRecomp",
+      "destinationOrg": "decomps",
+      "category": "n64-static-recomp"
+    },
+    {
+      "url": "https://github.com/saulob/el-chavo-kart-recompiled",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/shaneomac1337/Top-Spin-4-Recomp",
+      "destinationOrg": "decomps",
+      "category": "xbox360-static-recomp"
+    },
+    {
+      "url": "https://github.com/aboood40091/sead",
+      "destinationOrg": "mirrors",
+      "category": "tooling-tool",
+      "mirror": false
+    },
+    {
+      "url": "https://github.com/0x1F9F1/Open1560",
+      "destinationOrg": "decomps",
+      "category": "pc-engines-reimplementation"
     }
   ]
 }
