@@ -60,6 +60,56 @@
       "destinationOrg": "mirrors",
       "category": "tooling-tool",
       "mirror": false
+    },
+    {
+      "url": "https://github.com/dannyowelch/deception2-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps1-static-recomp"
+    },
+    {
+      "url": "https://github.com/moesuito/gt4-staticrecomp",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/C-GBL/P3FES-Decompilation",
+      "destinationOrg": "decomps",
+      "category": "ps2-static-recomp"
+    },
+    {
+      "url": "https://github.com/Re-TeRo17/ratchet-tod-recomp",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/undecuple/project-helghast",
+      "destinationOrg": "decomps",
+      "category": "ps3-static-recomp"
+    },
+    {
+      "url": "https://github.com/mateussmeneses/theorder1886-port",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/razzconnect/basara4-native-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/saulob/13-sentinels-aegis-rim-pc",
+      "destinationOrg": "decomps",
+      "category": "ps4-native-runtime"
+    },
+    {
+      "url": "https://github.com/AlessioGiacobbe/pataport",
+      "destinationOrg": "decomps",
+      "category": "psp-static-recomp"
+    },
+    {
+      "url": "https://github.com/angelof-exe/ygo-tf-5-decomp",
+      "destinationOrg": "decomps",
+      "category": "psp-decompilation"
     }
   ]
 }
